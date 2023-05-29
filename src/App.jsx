@@ -11,6 +11,7 @@ const App = () => (
     <Routes>
       <Route path="/" element={<LayoutInitSession />}>
         <Route index element={<Login />} />
+        <Route path="register" element={<Signin />} />
       </Route>
     </Routes>
   </BrowserRouter>
