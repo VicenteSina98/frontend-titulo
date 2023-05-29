@@ -24,8 +24,8 @@ const Login = () => (
         <h2 className="text-md text-center dark:text-gray-200 lg:text-lg">
           Inicia sesión para predecir qué enfermedad puedes padecer
         </h2>
-        <form className="flex flex-col sm:mx-auto sm:w-96 md:w-80">
-          <div className="mt-4 flex flex-col">
+        <form className="mt-2 flex flex-col gap-2 sm:mx-auto sm:w-96 md:w-80">
+          <div className="flex flex-col">
             <label
               htmlFor="email"
               className="text-md dark:text-gray-200 lg:text-lg"
@@ -40,7 +40,7 @@ const Login = () => (
               className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
             />
           </div>
-          <div className="mt-4 flex flex-col">
+          <div className="flex flex-col">
             <label
               htmlFor="password"
               className="text-md dark:text-gray-200 lg:text-lg"
@@ -58,12 +58,15 @@ const Login = () => (
           <input
             type="submit"
             value="Iniciar sesión"
-            className="text-md mt-6 rounded-md bg-blue-700 p-2 text-white hover:cursor-pointer hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 lg:text-lg"
+            className="text-md mt-4 rounded-md bg-blue-700 p-2 text-white hover:cursor-pointer hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 lg:text-lg"
           />
         </form>
         <p className="mt-6 text-center text-xs dark:text-gray-200 lg:text-sm">
           ¿No tienes una cuenta?{" "}
-          <Link to="/register" className="text-blue-600 hover:cursor-pointer dark:text-blue-400 lg:text-sm">
+          <Link
+            to="/register"
+            className="text-blue-600 hover:cursor-pointer dark:text-blue-400 lg:text-sm"
+          >
             Regístrate aquí
           </Link>
         </p>
