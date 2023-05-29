@@ -12,10 +12,14 @@ const Login = () => (
           ¿Qué es HealthDiagAI?
         </h1>
         <p className="text-center text-sm text-white">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque iste
-          quidem eos nisi ratione, perspiciatis porro cupiditate, nostrum animi
-          obcaecati incidunt enim architecto maiores cum quasi aperiam numquam
-          eligendi!
+          HealthDiagAI es una aplicación impulsada por inteligencia artificial
+          que ofrece diagnóstico de enfermedades. Utiliza algoritmos avanzados
+          para analizar datos médicos y síntomas. Permite ingresar información
+          relevante y brinda recomendaciones preliminares. No reemplaza la
+          opinión de un profesional médico, pero es una herramienta
+          complementaria. Permite un acceso rápido y confiable a diagnósticos.
+          Facilita la toma de decisiones informada y la atención médica
+          eficiente.
         </p>
       </div>
     </section>
