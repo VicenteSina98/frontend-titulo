@@ -63,7 +63,6 @@ const PersonalDataForm = ({
               type="text"
               name="name"
               id="name"
-              r
               className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
             />
             {errors.name && touched.name ? (

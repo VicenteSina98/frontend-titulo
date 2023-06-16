@@ -1,20 +1,10 @@
-// librerias para el routing
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-// plantillas
-import LayoutInitSession from "./layout/LayoutInitSession";
-// vistas
-import Login from "./pages/Login";
-import Signin from "./pages/Signin";
+import { QuoterProvider } from "./context/QuoterProvider";
+import SafeApp from "./pages/SafeApp";
 
 const App = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<LayoutInitSession />}>
-        <Route index element={<Login />} />
-        <Route path="register" element={<Signin />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>
+  <QuoterProvider>
+    <SafeApp />
+  </QuoterProvider>
 );
 
 export default App;
