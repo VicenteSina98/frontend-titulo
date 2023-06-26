@@ -1,9 +1,8 @@
-// librerias
 import { Link } from "react-router-dom";
-// logo
 import Logo from "../img/logo.png";
 
 const Login = () => (
+  // TODO: Implementar sesiones
   <main className="flex h-full flex-col gap-2 rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-800 lg:grid lg:grid-cols-2">
     <section className="rounded-md bg-cyan-700 p-4 dark:bg-cyan-900 lg:flex lg:items-center lg:justify-center">
       <div className="mx-auto flex flex-col items-center gap-2">

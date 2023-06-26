@@ -1,8 +1,5 @@
-// librerias para el routing
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// plantillas
 import LayoutInitSession from "../layout/LayoutInitSession";
-// vistas
 import Login from "./Login";
 import Signin from "./Signin";
 import Home from "./Home";

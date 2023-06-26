@@ -62,7 +62,7 @@ export const generateData = (
             ha_viajado: null,
             paises: null,
           },
-          estado_animo: chatData[14].answer
+          estado_animo: chatData[14].answer,
         };
         return data;
       } else {
@@ -73,7 +73,7 @@ export const generateData = (
             ha_viajado: true,
             paises: chatData[14].answer,
           },
-          estado_animo: chatData[15].answer
+          estado_animo: chatData[15].answer,
         };
         return data;
       }
@@ -95,7 +95,7 @@ export const generateData = (
             ha_viajado: null,
             paises: null,
           },
-          estado_animo: chatData[15].answer
+          estado_animo: chatData[15].answer,
         };
         return data;
       } else {
@@ -106,7 +106,7 @@ export const generateData = (
             ha_viajado: true,
             paises: chatData[15].answer,
           },
-          estado_animo: chatData[16].answer
+          estado_animo: chatData[16].answer,
         };
         return data;
       }
@@ -140,7 +140,7 @@ export const generateData = (
             ha_viajado: null,
             paises: null,
           },
-          estado_animo: chatData[16].answer
+          estado_animo: chatData[16].answer,
         };
         return data;
       } else {
@@ -151,7 +151,7 @@ export const generateData = (
             ha_viajado: true,
             paises: chatData[16].answer,
           },
-          estado_animo: chatData[17].answer
+          estado_animo: chatData[17].answer,
         };
         return data;
       }
@@ -173,7 +173,7 @@ export const generateData = (
             ha_viajado: null,
             paises: null,
           },
-          estado_animo: chatData[17].answer
+          estado_animo: chatData[17].answer,
         };
         return data;
       } else {
@@ -184,7 +184,7 @@ export const generateData = (
             ha_viajado: true,
             paises: chatData[17].answer,
           },
-          estado_animo: chatData[18].answer
+          estado_animo: chatData[18].answer,
         };
         return data;
       }

@@ -1,7 +1,8 @@
 import useQuoter from "../hooks/useQuoter";
 
 const Sidebar = () => {
-  const { name, isDark, showSidebar, setShowSidebar } = useQuoter();
+  // TODO: agregar perfil e historial
+  const { informacionPersonal, isDark, showSidebar, setShowSidebar } = useQuoter();
   return (
     <>
       {showSidebar ? (
@@ -41,7 +42,7 @@ const Sidebar = () => {
           showSidebar ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <h2 className="tran text-xl font-bold text-white">{name}</h2>
+        <h2 className="tran text-xl font-bold text-white">{informacionPersonal.nombre}</h2>
       </aside>
     </>
   );

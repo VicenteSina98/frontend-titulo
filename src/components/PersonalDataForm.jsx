@@ -1,18 +1,16 @@
-// desde librerias
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import Error from "./Error";
+import useQuoter from "../hooks/useQuoter";
 
-const PersonalDataForm = ({
-  personalData,
-  setPersonalData,
-  setNextSection,
-}) => {
+const PersonalDataForm = ({ setNextSection }) => {
+  const { data } = useQuoter();
   // continuar con los datos medicos
   const handleSubmit = async (values) => {
+    // TODO: change to true
     console.log(values);
-    // setNextSection(true);
+    setNextSection(false);
   };
   // definir esquema para validacion
   const personalDataSchema = Yup.object().shape({
@@ -36,13 +34,13 @@ const PersonalDataForm = ({
     <Formik
       enableReinitialize={true}
       initialValues={{
-        name: personalData?.name,
-        lastname: personalData?.lastname,
-        email: personalData?.email,
-        password: personalData?.password,
-        height: personalData?.height,
-        weight: personalData?.weight,
-        sex: personalData?.sex,
+        name: data.informacion_personal?.name,
+        lastname: data.informacion_personal?.lastname,
+        email: data.informacion_personal?.email,
+        password: data.informacion_personal?.password,
+        height: data.informacion_personal?.height,
+        weight: data.informacion_personal?.weight,
+        sex: data.informacion_personal?.sex,
       }}
       onSubmit={async (values, { resetForm }) => {
         await handleSubmit(values);

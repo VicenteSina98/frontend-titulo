@@ -1,27 +1,10 @@
-import { createContext, useState, useRef, useEffect } from "react";
+import { createContext, useState } from "react";
 import PropTypes from "prop-types";
 
 const QuoterContext = createContext();
 
-const personalData = {
-  nombre: "Usuario",
-  fecha_nacimiento: "29 de julio de 1998",
-  altura: 1.8,
-  peso: 80.0,
-  sexo: "M",
-  antecedentes_medicos: {
-    enfermedadesCronicas: null,
-    historialAlergias: null,
-    historialCirugias: null,
-    historialMedicamentos: null,
-    historialEnfermedadesFamilia: null,
-    historialEnfermedadesInfecciosas: null,
-    historialHabitosSalud: null,
-  },
-};
-
 const QuoterProvider = ({ children }) => {
-  const [data, setData] = useState({ informacion_personal: personalData });
+  // constants
   const questionsArray = [
     "¿Tiene alergía a algun/os de los siguientes medicamentos? Especifique penicilina, sulfonamidas, aspirina, anestésicos, cefalosporinas, antiinflamatorios no esteroides, insulina u otros.",
     "¿Tiene alergía a algun/os de los siguientes alimentos? Especifique frutos secos, mariscos, lácteos, huevos, trigo, frutas o verduras, soja, gluten u otros.",
@@ -44,97 +27,69 @@ const QuoterProvider = ({ children }) => {
     "¿Cómo define su estado de ánimo? Especifique decaido, cansado, ansioso, normal, falta de apetito, etc.",
   ];
   const URL = "http://127.0.0.1:8000/prediccion";
+
   // states
-  const [contrario, setContrario] = useState(true);
+  const informacionPersonal = {
+    nombre: "Usuario",
+    fecha_nacimiento: "29 de julio de 1998",
+    altura: 1.8,
+    peso: 80.0,
+    sexo: "M",
+    antecedentes_medicos: {
+      enfermedadesCronicas: null,
+      historialAlergias: null,
+      historialCirugias: null,
+      historialMedicamentos: null,
+      historialEnfermedadesFamilia: null,
+      historialEnfermedadesInfecciosas: null,
+      historialHabitosSalud: null,
+    },
+  };
   const [finish, setFinish] = useState(false);
   const [ok, setOk] = useState(false);
   const [questions, setQuestions] = useState([questionsArray[0]]);
   const [answers, setAnswers] = useState([]);
   const [chatStarted, setChatStarted] = useState(false);
   const [answer, setAnswer] = useState("");
-  const [prediction, setPrediction] = useState("");
+  const [prediction, setPrediction] = useState({});
   const [spinner, setSpinner] = useState(false);
   const [isDark, setIsDark] = useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches ? true : false
   );
   const [showSidebar, setShowSidebar] = useState(false);
-  // refs
-  const chatDataEndRef = useRef(null);
-  // functions
-  const scrollToBottom = () => {
-    chatDataEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-  const transformToText = (data) => {
-    let text = "5 enfermedades que, probablemente, puedes tener:<br>";
-    data["posibles_enfermedades"].forEach((d) => (text += d));
-    text += "Además, puedes recurrir a los siguientes profesionales: ";
-    data["posibles_profesionales"].forEach((d) => (text += d));
-    return text;
-  };
-  useEffect(() => {
-    if (answers.length === 19) {
-      setData({
-        ...data,
-        alergias_medicamentos: answers[0],
-        alergias_alimentos: answers[1],
-        sintomas: answers[2],
-        problemas_sentidos: answers[3],
-        inflamacion: answers[4],
-        manchas: answers[5],
-        comezon: answers[6],
-        dolor: answers[7],
-        tiempo_sintomas: answers[8],
-        frecuencia_sintomas: answers[9],
-        consumo_medicamentos: answers[10],
-        contacto_enfermo: {
-          ha_tenido_contacto: answers[11],
-          diagnostico: answers[12],
-          sintomas_relacionados: answers[13],
-        },
-        contacto_toxico: {
-          ha_tenido_contacto: answers[14],
-          tipo: answers[15],
-        },
-        viaje_extranjero: {
-          ha_viajado: answers[16],
-          paises: answers[17],
-        },
-        estado_animo: answers[18],
-      });
-    }
-  }, [answers]);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   return (
     <QuoterContext.Provider
       value={{
-        contrario,
-        setContrario,
-        ok,
-        setOk,
-        finish,
-        setFinish,
-        data,
-        setData,
+        URL,
+        informacionPersonal,
         isDark,
         setIsDark,
         showSidebar,
         setShowSidebar,
-        questionsArray,
-        questions,
-        setQuestions,
-        answers,
-        setAnswers,
         chatStarted,
         setChatStarted,
-        answer,
-        setAnswer,
-        prediction,
-        setPrediction,
+        finish,
+        setFinish,
         spinner,
         setSpinner,
-        chatDataEndRef,
-        URL,
-        scrollToBottom,
-        transformToText,
+        answers,
+        setAnswers,
+        error,
+        setError,
+        errorMessage,
+        setErrorMessage,
+        prediction,
+        setPrediction,
+        ok,
+        setOk,
+        answer,
+        setAnswer,
+        questions,
+        setQuestions,
+        questionsArray,
       }}
     >
       {children}
