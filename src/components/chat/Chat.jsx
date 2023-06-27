@@ -28,11 +28,13 @@ const Chat = () => {
     setPrediction,
     ok,
     setOk,
-    answer,
     setAnswer,
     questions,
     setQuestions,
     questionsArray,
+    optionsArray,
+    checked,
+    setChecked,
   } = useQuoter();
 
   // ref
@@ -94,20 +96,11 @@ const Chat = () => {
   // save answers
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (answer === "") return;
-    setAnswers([...answers, answer]);
-  };
-
-  // save unique answer
-  const handleChange = (event) => setAnswer(event.target.value);
-
-  // save answers
-  const onEnterPress = (event) => {
-    if (event.key === "Enter" && event.shiftKey == false) {
-      event.preventDefault();
-      if (answer === "") return;
-      setAnswers([...answers, answer]);
-    }
+    if (checked.checked.length === 0) return;
+    // save data
+    let saveAnswer = checked.checked.join(", ");
+    setChecked({ index: checked.index + 1, checked: [] });
+    setAnswers([...answers, saveAnswer]);
   };
 
   // reset states
@@ -118,6 +111,19 @@ const Chat = () => {
     setAnswers([]);
     setAnswer("");
     setPrediction({});
+    setChecked({ index: 0, checked: [] });
+    setError(false);
+  };
+
+  // save the option selected
+  const handleCheck = (event) => {
+    let updatedList = [...checked.checked];
+    if (event.target.checked) {
+      updatedList = [...checked.checked, event.target.value];
+    } else {
+      updatedList.splice(checked.checked.indexOf(event.target.value), 1);
+    }
+    setChecked({ ...checked, checked: updatedList });
   };
 
   // finish chat
@@ -231,17 +237,42 @@ const Chat = () => {
               }`}
               onSubmit={handleSubmit}
             >
-              <textarea
-                className="h-36 w-full resize-none rounded-md border-2 border-cyan-800 p-2 shadow-md focus:border-cyan-600 focus:outline-none dark:border-cyan-700 dark:bg-neutral-600 dark:text-white md:w-3/4"
-                name="answer"
-                id="answer"
-                placeholder="Escriba su respuesta..."
-                onChange={handleChange}
-                value={answer}
-                onKeyDown={onEnterPress}
-              ></textarea>
+              <div
+                className={`grid grid-cols-2 ${
+                  optionsArray[checked.index] % 2 === 0
+                    ? "md:grid-cols-2"
+                    : "md:grid-cols-3"
+                } md:text-md gap-4 text-xs sm:text-sm lg:text-lg`}
+              >
+                {optionsArray[checked.index]?.map((option, index) => (
+                  <div className={`flex gap-2 overflow-clip `} key={index}>
+                    <input
+                      type="checkbox"
+                      name={`option-${index}`}
+                      id={`option-${index}`}
+                      onChange={handleCheck}
+                      value={option}
+                      className="absolute h-8 w-8 opacity-0"
+                    />
+                    <label
+                      htmlFor={`option-${index}`}
+                      className={`rounded-lg px-2 py-2 hover:cursor-pointer ${
+                        checked.checked.includes(option)
+                          ? "bg-cyan-700 font-bold text-white shadow-md"
+                          : "border-2 border-neutral-400 bg-transparent text-neutral-300"
+                      }`}
+                    >
+                      {option}
+                    </label>
+                  </div>
+                ))}
+              </div>
               <input
-                className="text-md w-full rounded-sm bg-cyan-700 py-4 text-lg font-bold text-white hover:cursor-pointer dark:bg-cyan-800 md:w-auto md:px-16"
+                className={`text-md w-full rounded-sm bg-cyan-700 py-4 text-lg font-bold text-white dark:bg-cyan-800 md:w-auto md:px-16 ${
+                  checked.checked.length === 0
+                    ? "hover:cursor-not-allowed"
+                    : "hover:cursor-pointer"
+                }`}
                 type="submit"
                 value="Enviar respuesta"
               />
