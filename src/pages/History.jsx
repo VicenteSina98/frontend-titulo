@@ -25,13 +25,13 @@ const History = () => {
       </h2>
       {predictionHistory.length > 0 ? (
         predictionHistory.map((prediction, index) => (
-          <div key={index} className="flex flex-col gap-4">
+          <div key={index} className="flex flex-col gap-4 p-2 border-b-2">
             <h3 className="text-left text-xl font-bold dark:text-white">
               Predicción {prediction.id}
             </h3>
             <Link
               className="w-fit rounded-md bg-cyan-700 p-2 text-lg text-white"
-              to={`/home/prediction?user=${prediction.usuario}&pred=${prediction.id}`}
+              to={`/home/prediction?pred=${prediction.id}`}
             >
               Ver predicción
             </Link>

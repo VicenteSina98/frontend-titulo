@@ -105,11 +105,22 @@ const Chat = () => {
     };
     try {
       const responseGeneracion = await api.post("/prediccion/generar", data);
-      setPrediction(responseGeneracion.data);
+      const dataResponse = responseGeneracion.data;
+      setPrediction(dataResponse);
       const responseGuardado = await api.post("/prediccion/guardar", {
         id: informacionPersonal.user,
         preguntas: questions,
         respuestas: answers,
+        enfermedad1: dataResponse.posibles_enfermedades[0] ?? "",
+        enfermedad2: dataResponse.posibles_enfermedades[1] ?? "",
+        enfermedad3: dataResponse.posibles_enfermedades[2] ?? "",
+        enfermedad4: dataResponse.posibles_enfermedades[3] ?? "",
+        enfermedad5: dataResponse.posibles_enfermedades[4] ?? "",
+        profesional1: dataResponse.posibles_profesionales[0] ?? "",
+        profesional2: dataResponse.posibles_profesionales[1] ?? "",
+        profesional3: dataResponse.posibles_profesionales[2] ?? "",
+        profesional4: dataResponse.posibles_profesionales[3] ?? "",
+        profesional5: dataResponse.posibles_profesionales[4] ?? "",
       });
       setPredictionHistory([...predictionHistory, responseGuardado]);
     } catch (error) {
@@ -162,7 +173,7 @@ const Chat = () => {
   }, []);
 
   return (
-    <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col gap-8 justify-between">
+    <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col justify-between gap-8">
       {/* mensajes del chat */}
       <section ref={scrollRef} className="flex flex-col gap-4 overflow-y-auto">
         <div className={chatStarted ? "hidden" : ""}>

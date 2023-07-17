@@ -7,7 +7,7 @@ import Signin from "./pages/Signin";
 import Home from "./pages/Home";
 import History from "./pages/History";
 import LayoutMain from "./layout/LayoutMain";
-import Prediction from "./components/Prediction";
+import PredictionUI from "./components/PredictionUI";
 
 const SafeApp = () => (
   <BrowserRouter>
@@ -40,7 +40,7 @@ const SafeApp = () => (
             path="prediction"
             element={
               <PrivateRoute>
-                <Prediction />
+                <PredictionUI />
               </PrivateRoute>
             }
           />
