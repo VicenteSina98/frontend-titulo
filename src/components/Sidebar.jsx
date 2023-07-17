@@ -1,8 +1,16 @@
+import { useNavigate } from "react-router-dom";
+import { logout } from "../helpers/auth";
 import useQuoter from "../hooks/useQuoter";
 
 const Sidebar = () => {
   // TODO: agregar perfil e historial
-  const { informacionPersonal, isDark, showSidebar, setShowSidebar } = useQuoter();
+  const { informacionPersonal, isDark, showSidebar, setShowSidebar } =
+    useQuoter();
+  const navigate = useNavigate();
+  const handleClick = (path) => {
+    setShowSidebar(false);
+    navigate(path);
+  };
   return (
     <>
       {showSidebar ? (
@@ -42,7 +50,37 @@ const Sidebar = () => {
           showSidebar ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <h2 className="tran text-xl font-bold text-white">{informacionPersonal.nombre}</h2>
+        <h2 className="mb-4 text-xl font-bold text-white">
+          {`${informacionPersonal.nombres} ${informacionPersonal.primer_apellido} ${informacionPersonal.segundo_apellido}`}
+        </h2>
+        <div
+          className={
+            "mt-4 rounded-sm px-2 text-lg transition-all " +
+            "text-white hover:cursor-pointer hover:text-neutral-300"
+          }
+        >
+          <p onClick={() => handleClick("/home")}>Predicciones</p>
+        </div>
+        <div
+          className={
+            "mt-4 rounded-sm px-2 text-lg transition " +
+            "text-white hover:cursor-pointer hover:text-neutral-300"
+          }
+        >
+          <p onClick={() => handleClick("/home/history")}>
+            Historial de predicciones
+          </p>
+        </div>
+        <p
+          className={
+            "mt-4 rounded-md   px-2 text-lg " +
+            "text-white hover:cursor-pointer " +
+            "hover:text-red-300"
+          }
+          onClick={() => logout()}
+        >
+          Cerrar sesión
+        </p>
       </aside>
     </>
   );

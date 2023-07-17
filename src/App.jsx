@@ -1,5 +1,5 @@
 import { QuoterProvider } from "./context/QuoterProvider";
-import SafeApp from "./pages/SafeApp";
+import SafeApp from "./SafeApp";
 
 const App = () => (
   <QuoterProvider>

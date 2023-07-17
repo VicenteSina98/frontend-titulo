@@ -1,7 +1,7 @@
 import Logo from "../../img/logo.png";
 
 const Welcome = () => (
-  <>
+  <div className="flex flex-col gap-4">
     <img src={Logo} alt="logo" className="mx-auto w-24 rounded-full" />
     <h2 className="text-center text-2xl font-bold dark:text-white">
       HealthDiagAI
@@ -16,7 +16,7 @@ const Welcome = () => (
       es solo una predicción utilizando inteligencia artificial, lo que no
       reemplaza el diagnóstico de un profesional de la salud.
     </p>
-  </>
+  </div>
 );
 
 export default Welcome;

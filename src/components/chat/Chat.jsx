@@ -1,11 +1,13 @@
 import Welcome from "./Welcome";
-import Error from "../Error";
+// import Error from "../SigninFormError";
 import Spinner from "../Spinner";
 import Message from "./Message";
 import useQuoter from "../../hooks/useQuoter";
 import { useEffect, useRef } from "react";
-import axios from "axios";
 import Prediction from "./Prediction";
+import useAxios from "../../hooks/useAxios";
+import BlockError from "../error/BlockError";
+import { OPTIONS_ARRAY, QUESTIONS_ARRAY } from "../../helpers/constants";
 
 const Chat = () => {
   // states
@@ -14,8 +16,8 @@ const Chat = () => {
     setChatStarted,
     finish,
     setFinish,
-    URL,
     informacionPersonal,
+    antecedentesMedicos,
     spinner,
     setSpinner,
     answers,
@@ -31,20 +33,50 @@ const Chat = () => {
     setAnswer,
     questions,
     setQuestions,
-    questionsArray,
-    optionsArray,
     checked,
     setChecked,
+    predictionHistory,
+    setPredictionHistory,
   } = useQuoter();
 
   // ref
   const scrollRef = useRef(null);
 
+  // hooks
+  const api = useAxios();
+
+  // handlers
+  const handleClick = async () => {
+    await queryAPI();
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (checked.checked.length === 0) return;
+    // save data
+    let saveAnswer = checked.checked.join(", ");
+    setChecked({ index: checked.index + 1, checked: [] });
+    setAnswers([...answers, saveAnswer]);
+  };
+
+  const handleCheck = (event) => {
+    let updatedList = [...checked.checked];
+    if (event.target.checked) {
+      updatedList = [...checked.checked, event.target.value];
+    } else {
+      updatedList.splice(checked.checked.indexOf(event.target.value), 1);
+    }
+    setChecked({ ...checked, checked: updatedList });
+  };
+
   // consult API
   const queryAPI = async () => {
     setSpinner(true);
     const data = {
-      informacion_personal: informacionPersonal,
+      informacion_personal: {
+        ...informacionPersonal,
+        antecedentes_medicos: antecedentesMedicos,
+      },
       alergias_medicamentos: answers[0],
       alergias_alimentos: answers[1],
       sintomas: answers[2],
@@ -71,43 +103,32 @@ const Chat = () => {
       },
       estado_animo: answers[18],
     };
-    await axios
-      .post(URL, data)
-      .catch((er) => {
-        if (er.response.status !== 200) {
-          setError(true);
-          setErrorMessage(
-            "Ha ocurrido un error de servidor. Por favor inténtelo más tarde"
-          );
-        }
-      })
-      .then((response) => {
-        if (response !== undefined) setPrediction(response.data);
+    try {
+      const responseGeneracion = await api.post("/generar_prediccion", data);
+      setPrediction(responseGeneracion.data);
+      const responseGuardado = await api.post("/guardar_prediccion", {
+        id: informacionPersonal.user,
+        preguntas: questions,
+        respuestas: answers,
       });
+      setPredictionHistory([...predictionHistory, responseGuardado]);
+    } catch (error) {
+      console.log(error);
+      setError(true);
+      setErrorMessage(
+        "Ha ocurrido un error de servidor. Por favor inténtelo más tarde"
+      );
+    }
     setSpinner(false);
     setFinish(true);
     setOk(true);
-  };
-
-  const handleClick = async () => {
-    await queryAPI();
-  };
-
-  // save answers
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (checked.checked.length === 0) return;
-    // save data
-    let saveAnswer = checked.checked.join(", ");
-    setChecked({ index: checked.index + 1, checked: [] });
-    setAnswers([...answers, saveAnswer]);
   };
 
   // reset states
   const newPrediction = () => {
     setFinish(false);
     setOk(false);
-    setQuestions([questionsArray[0]]);
+    setQuestions([QUESTIONS_ARRAY[0]]);
     setAnswers([]);
     setAnswer("");
     setPrediction({});
@@ -115,35 +136,22 @@ const Chat = () => {
     setError(false);
   };
 
-  // save the option selected
-  const handleCheck = (event) => {
-    let updatedList = [...checked.checked];
-    if (event.target.checked) {
-      updatedList = [...checked.checked, event.target.value];
-    } else {
-      updatedList.splice(checked.checked.indexOf(event.target.value), 1);
-    }
-    setChecked({ ...checked, checked: updatedList });
-  };
-
-  // finish chat
+  // effects
   useEffect(() => {
     if (answers.length === 19) setFinish(true);
   }, [answers]);
 
-  // save questions
   useEffect(() => {
     if (
       answers.length > 0 &&
-      !questions.includes(questionsArray[questions.length])
+      !questions.includes(QUESTIONS_ARRAY[questions.length])
     ) {
       setAnswer("");
-      if (questionsArray[questions.length] !== undefined)
-        setQuestions([...questions, questionsArray[questions.length]]);
+      if (QUESTIONS_ARRAY[questions.length] !== undefined)
+        setQuestions([...questions, QUESTIONS_ARRAY[questions.length]]);
     }
   }, [answers]);
 
-  // scroll to bottom
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.addEventListener("DOMNodeInserted", (event) => {
@@ -154,7 +162,7 @@ const Chat = () => {
   }, []);
 
   return (
-    <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col justify-end gap-8">
+    <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col gap-8 justify-between">
       {/* mensajes del chat */}
       <section ref={scrollRef} className="flex flex-col gap-4 overflow-y-auto">
         <div className={chatStarted ? "hidden" : ""}>
@@ -163,7 +171,7 @@ const Chat = () => {
         <div className={!chatStarted ? "hidden" : ""}>
           {/* mensaje de error en caso de que la API muera */}
           <div className={!error ? "hidden" : ""}>
-            <Error message={errorMessage} />
+            <BlockError message={errorMessage} />
           </div>
           {/* chat */}
           <div className={error ? "hidden" : ""}>
@@ -239,12 +247,12 @@ const Chat = () => {
             >
               <div
                 className={`grid grid-cols-2 ${
-                  optionsArray[checked.index] % 2 === 0
+                  OPTIONS_ARRAY[checked.index] % 2 === 0
                     ? "md:grid-cols-2"
                     : "md:grid-cols-3"
                 } md:text-md gap-4 text-xs sm:text-sm lg:text-lg`}
               >
-                {optionsArray[checked.index]?.map((option, index) => (
+                {OPTIONS_ARRAY[checked.index]?.map((option, index) => (
                   <div className={`flex gap-2 overflow-clip `} key={index}>
                     <input
                       type="checkbox"
