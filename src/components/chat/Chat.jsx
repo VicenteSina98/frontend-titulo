@@ -104,9 +104,9 @@ const Chat = () => {
       estado_animo: answers[18],
     };
     try {
-      const responseGeneracion = await api.post("/generar_prediccion", data);
+      const responseGeneracion = await api.post("/prediccion/generar", data);
       setPrediction(responseGeneracion.data);
-      const responseGuardado = await api.post("/guardar_prediccion", {
+      const responseGuardado = await api.post("/prediccion/guardar", {
         id: informacionPersonal.user,
         preguntas: questions,
         respuestas: answers,
