@@ -119,12 +119,23 @@ const PersonalDataForm = ({ setPassword, setNextSection }) => {
               >
                 Sexo
               </label>
-              <Field
+              <select
+                name="sexo"
+                id="sexo"
+                className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
+              >
+                <option value="" selected disabled>
+                  -- Seleccione una opción --
+                </option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+              </select>
+              {/* <Field
                 type="text"
                 name="sexo"
                 id="sexo"
                 className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
-              />
+              /> */}
               {errors.sexo && touched.sexo ? (
                 <FormError message={errors.sexo} />
               ) : null}

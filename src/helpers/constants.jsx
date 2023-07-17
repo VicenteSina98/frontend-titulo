@@ -1,17 +1,17 @@
 export const API_BASE_URL = "http://localhost:8000";
 export const QUESTIONS_ARRAY = [
-  "¿Tiene alergía a algun/os de los siguientes medicamentos?",
-  "¿Tiene alergía a algun/os de los siguientes alimentos?",
-  "¿Presenta algun/os de los siguientes síntomas?",
-  "¿Presenta problemas en algun/os de los 5 sentidos?",
-  "¿Presenta inflamación en algun/as de las siguientes partes de su cuerpo?",
-  "¿Presenta manchas en algun/as de las siguientes partes de su cuerpo?",
-  "¿Presenta comezón en algun/as de las siguientes partes de su cuerpo?",
-  "¿Siente algun/os de los siguientes tipos de dolor?",
-  "¿Hace cuánto experimenta los síntomas?",
-  "¿Con qué frecuencia experimenta los síntomas?",
-  "¿Cuál/es de los siguientes medicamentos consume?",
-  "¿Ha tenido contacto con algún enfermo?",
+  "¿Tiene alergía a algun/os de los siguientes medicamentos?", // 0
+  "¿Tiene alergía a algun/os de los siguientes alimentos?", // 1
+  "¿Presenta algun/os de los siguientes síntomas?", // 3
+  "¿Presenta problemas en algun/os de los 5 sentidos?", // 4
+  "¿Presenta inflamación en algun/as de las siguientes partes de su cuerpo?", // 5
+  "¿Presenta manchas en algun/as de las siguientes partes de su cuerpo?", // 6
+  "¿Presenta comezón en algun/as de las siguientes partes de su cuerpo?", // 7
+  "¿Siente algun/os de los siguientes tipos de dolor?", // 8
+  "¿Hace cuánto experimenta los síntomas?", // 9
+  "¿Con qué frecuencia experimenta los síntomas?", // 10
+  "¿Cuál/es de los siguientes medicamentos consume?", // 11
+  "¿Ha tenido contacto con algún enfermo?", // 12
   "¿Qué diagnóstico tenía el enfermo?",
   "¿Tenía síntomas relacionados a los suyos?",
   "¿Ha tenido contacto con algún agente infeccioso o tóxico?",
@@ -31,7 +31,7 @@ export const OPTIONS_ARRAY = [
     "Insulina",
     "Ninguno",
     "Otros",
-  ],
+  ], // 0
   [
     "Frutos secos",
     "Mariscos",
@@ -43,7 +43,7 @@ export const OPTIONS_ARRAY = [
     "Gluten",
     "Ninguno",
     "Otros",
-  ],
+  ], // 1
   [
     "Fiebre",
     "Tos",
@@ -52,8 +52,8 @@ export const OPTIONS_ARRAY = [
     "Alteración del sueño",
     "Fatiga",
     "Ninguna",
-  ],
-  ["Audición", "Gusto", "Olfato", "Tacto", "Vista"],
+  ], // 2
+  ["Audición", "Gusto", "Olfato", "Tacto", "Vista"], // 3
   [
     "Cabeza",
     "Extremidades superiores",
@@ -63,7 +63,7 @@ export const OPTIONS_ARRAY = [
     "Abdomen",
     "Ninguno",
     "Otros",
-  ],
+  ], // 4
   [
     "Cabeza",
     "Extremidades superiores",
@@ -74,7 +74,7 @@ export const OPTIONS_ARRAY = [
     "Abdomen",
     "Ninguno",
     "Otros",
-  ],
+  ], // 5
   [
     "Cabeza",
     "Extremidades superiores",
@@ -85,15 +85,15 @@ export const OPTIONS_ARRAY = [
     "Abdomen",
     "Ninguno",
     "Otros",
-  ],
+  ], // 6
   [
     "Dolor de cabeza",
     "Dolor en extremidades",
     "Dolor muscular",
     "Dolor abdominal",
     "Ninguno",
-  ],
-  ["Un día", "2 - 7 días", "Más de una semana", "Más de un mes"],
+  ], // 7
+  ["Un día", "2 - 7 días", "Más de una semana", "Más de un mes"], // 8
   [
     "Varias veces al día",
     "Una vez al día",
@@ -101,7 +101,7 @@ export const OPTIONS_ARRAY = [
     "Una vez a la semana",
     "Varias veces al mes",
     "Una vez al mes",
-  ],
+  ], // 9
   [
     "Anticoagulantes",
     "Analgésicos",
@@ -111,13 +111,21 @@ export const OPTIONS_ARRAY = [
     "Estatinas",
     "Ninguno",
     "Otros",
-  ],
-  ["Si", "No"],
-  ["No aplica"],
-  ["No aplica"],
+  ], // 10
+  ["Si", "No"], // 11
+  ["Covid-19", "Gripe", "ITS", "Otros", "No aplica"], // 12
+  ["Si", "No", "No aplica"],
   ["Si", "No"],
   ["Químico", "Biológico", "No aplica", "Otro"],
   ["Si", "No"],
-  ["No aplica"],
-  ["Decaido", "Cansado", "Ansioso", "Normal", "Falta de apetito", "Otros"],
+  ["Australia", "Brasil", "China", "India", "Sudáfrica", "Otros", "No aplica"],
+  [
+    "Decaido",
+    "Cansado",
+    "Ansioso",
+    "Normal",
+    "Falta de apetito",
+    "Otros",
+    "Ninguno",
+  ],
 ];

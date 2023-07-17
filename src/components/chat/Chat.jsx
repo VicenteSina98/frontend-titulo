@@ -3,11 +3,12 @@ import Welcome from "./Welcome";
 import Spinner from "../Spinner";
 import Message from "./Message";
 import useQuoter from "../../hooks/useQuoter";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Prediction from "./Prediction";
 import useAxios from "../../hooks/useAxios";
 import BlockError from "../error/BlockError";
 import { OPTIONS_ARRAY, QUESTIONS_ARRAY } from "../../helpers/constants";
+import { objHasOnlyEmpty } from "../../helpers/functions";
 
 const Chat = () => {
   // states
@@ -38,7 +39,19 @@ const Chat = () => {
     predictionHistory,
     setPredictionHistory,
   } = useQuoter();
-
+  // state para otros
+  const [showOtros, setShowOtros] = useState(false);
+  const [otros, setOtros] = useState({
+    alergiaMedicamentos: "", // index = 0
+    alergiaAlimentos: "", // index = 1
+    inflamacion: "", // index = 4
+    manchas: "", // index = 5
+    comezon: "", // index = 6
+    consumeMedicamentos: "", // index = 10
+    agenteInfeccioso: "", // index = 15
+    estadoAnimo: "", // index = 18
+  });
+  const [typeQuestion, setTypeQuestion] = useState("");
   // ref
   const scrollRef = useRef(null);
 
@@ -53,10 +66,98 @@ const Chat = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (checked.checked.length === 0) return;
+    // check otros
+    if (checked.checked.includes("Otros") || checked.checked.includes("Otro")) {
+      setChecked(checked.checked.splice(checked.checked.indexOf("Otros"), 1));
+      setChecked(checked.checked.push(otros[typeQuestion]));
+    }
     // save data
     let saveAnswer = checked.checked.join(", ");
     setChecked({ index: checked.index + 1, checked: [] });
     setAnswers([...answers, saveAnswer]);
+    // clean otros
+    setShowOtros(false);
+    setOtros({
+      alergiaMedicamentos: "", // index = 0
+      alergiaAlimentos: "", // index = 1
+      inflamacion: "", // index = 4
+      manchas: "", // index = 5
+      comezon: "", // index = 6
+      consumeMedicamentos: "", // index = 10
+      agenteInfeccioso: "", // index = 15
+      estadoAnimo: "", // index = 18
+    });
+    setTypeQuestion("");
+  };
+
+  const configTypeQuestions = () => {
+    switch (checked.index) {
+      case 0:
+        setTypeQuestion("alergiaMedicamentos");
+        break;
+      case 1:
+        setTypeQuestion("alergiaAlimentos");
+        break;
+      case 4:
+        setTypeQuestion("inflamacion");
+        break;
+      case 5:
+        setTypeQuestion("manchas");
+        break;
+      case 6:
+        setTypeQuestion("comezon");
+        break;
+      case 10:
+        setTypeQuestion("consumeMedicamentos");
+        break;
+      case 15:
+        setTypeQuestion("agenteInfeccioso");
+        break;
+      case 18:
+        setTypeQuestion("estadoAnimo");
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleChange = (event) => {
+    switch (checked.index) {
+      case 0:
+        setOtros({ ...otros, alergiaMedicamentos: event.target.value });
+        setTypeQuestion("alergiaMedicamentos");
+        break;
+      case 1:
+        setOtros({ ...otros, alergiaAlimentos: event.target.value });
+        setTypeQuestion("alergiaAlimentos");
+        break;
+      case 4:
+        setOtros({ ...otros, inflamacion: event.target.value });
+        setTypeQuestion("inflamacion");
+        break;
+      case 5:
+        setOtros({ ...otros, manchas: event.target.value });
+        setTypeQuestion("manchas");
+        break;
+      case 6:
+        setOtros({ ...otros, comezon: event.target.value });
+        setTypeQuestion("comezon");
+        break;
+      case 10:
+        setOtros({ ...otros, consumeMedicamentos: event.target.value });
+        setTypeQuestion("consumeMedicamentos");
+        break;
+      case 15:
+        setOtros({ ...otros, agenteInfeccioso: event.target.value });
+        setTypeQuestion("agenteInfeccioso");
+        break;
+      case 18:
+        setOtros({ ...otros, estadoAnimo: event.target.value });
+        setTypeQuestion("estadoAnimo");
+        break;
+      default:
+        break;
+    }
   };
 
   const handleCheck = (event) => {
@@ -67,6 +168,10 @@ const Chat = () => {
       updatedList.splice(checked.checked.indexOf(event.target.value), 1);
     }
     setChecked({ ...checked, checked: updatedList });
+    // mostrar input texto otros
+    if (updatedList.includes("Otros") || checked.checked.includes("Otro")) setShowOtros(true);
+    else setShowOtros(false);
+    configTypeQuestions()
   };
 
   // consult API
@@ -249,6 +354,7 @@ const Chat = () => {
               Generando la predicción...
             </p>
           </div>
+          {/* opciones */}
           <div className={finish ? "hidden" : ""}>
             <form
               className={`flex flex-col items-center justify-center gap-8 ${
@@ -287,8 +393,21 @@ const Chat = () => {
                 ))}
               </div>
               <input
+                type="text"
+                name={OPTIONS_ARRAY[checked.index]}
+                id={OPTIONS_ARRAY[checked.index]}
+                placeholder="Especifique"
+                onChange={handleChange}
+                value={otros[typeQuestion]}
+                className={
+                  "w-full rounded-lg border-2 p-4 text-lg focus:border-blue-600 focus:outline-none " +
+                  "dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 " +
+                  `md:w-auto lg:text-lg ${!showOtros ? "hidden" : ""}`
+                }
+              />
+              <input
                 className={`text-md w-full rounded-sm bg-cyan-700 py-4 text-lg font-bold text-white dark:bg-cyan-800 md:w-auto md:px-16 ${
-                  checked.checked.length === 0
+                  checked.checked.length === 0 || objHasOnlyEmpty(otros)
                     ? "hover:cursor-not-allowed"
                     : "hover:cursor-pointer"
                 }`}

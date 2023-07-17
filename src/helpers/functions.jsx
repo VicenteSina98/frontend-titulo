@@ -191,3 +191,12 @@ export const generateData = (
     }
   }
 };
+
+export const objHasOnlyEmpty = (obj) => {
+  let cont = 0;
+  Object.values(obj).every((value) => {
+    if (value === "") cont++;
+  });
+  if (cont == Object.values(obj)) return true;
+  return false;
+};

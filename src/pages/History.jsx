@@ -17,6 +17,7 @@ const History = () => {
         setIsDark(event.matches ? true : false)
       );
   }, [setIsDark]);
+
   console.log(predictionHistory);
   return (
     <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col justify-start gap-8">
@@ -25,13 +26,13 @@ const History = () => {
       </h2>
       {predictionHistory.length > 0 ? (
         predictionHistory.map((prediction, index) => (
-          <div key={index} className="flex flex-col gap-4 p-2 border-b-2">
+          <div key={index} className="flex flex-col gap-4 border-b-2 p-2">
             <h3 className="text-left text-xl font-bold dark:text-white">
-              Predicción {prediction.id}
+              Predicción {index + 1}
             </h3>
             <Link
               className="w-fit rounded-md bg-cyan-700 p-2 text-lg text-white"
-              to={`/home/prediction?pred=${prediction.id}`}
+              to={`/home/prediction?pred=${prediction.id}&ind=${index + 1}`}
             >
               Ver predicción
             </Link>

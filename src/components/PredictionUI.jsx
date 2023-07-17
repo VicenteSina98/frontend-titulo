@@ -8,6 +8,7 @@ const PredictionUI = () => {
   const { predictionHistory } = useQuoter();
   const [queryParameters] = useSearchParams();
   const id = queryParameters.get("pred");
+  const correlative = queryParameters.get("ind");
   const filterPrediction = predictionHistory.filter(
     (prediction) => prediction.id == id
   );
@@ -32,7 +33,7 @@ const PredictionUI = () => {
   return (
     <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col justify-between gap-8">
       <h1 className="text-left text-2xl font-bold dark:text-white">
-        Predicción {id}
+        Predicción {correlative}
       </h1>
       <section className="flex flex-col gap-4 overflow-y-auto">
         {mensajes.map((mensaje, index) => (

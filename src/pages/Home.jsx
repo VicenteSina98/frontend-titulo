@@ -22,6 +22,7 @@ const Home = () => {
     setAntecedentesMedicos(dataUser.antecedentes_medicos);
     return dataUser.informacion_personal.user;
   };
+  // get predicciones
   const setPredHistory = async (id) => {
     const predicciones = await getPredictionHistory(id);
     setPredictionHistory(predicciones.data);
