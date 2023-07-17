@@ -40,7 +40,7 @@ const QuoterProvider = ({ children }) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [checked, setChecked] = useState({ index: 0, checked: [] });
-  const [predictionHistory, setPredictionHistory] = useState({});
+  const [predictionHistory, setPredictionHistory] = useState([]);
 
   return (
     <QuoterContext.Provider

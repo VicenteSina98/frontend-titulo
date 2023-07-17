@@ -59,7 +59,7 @@ const Sidebar = () => {
             "text-white hover:cursor-pointer hover:text-neutral-300"
           }
         >
-          <p onClick={() => handleClick("/home")}>Predicciones</p>
+          <p onClick={() => handleClick("/home")}>Realizar una predicción</p>
         </div>
         <div
           className={

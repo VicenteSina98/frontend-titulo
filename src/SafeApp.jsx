@@ -7,6 +7,7 @@ import Signin from "./pages/Signin";
 import Home from "./pages/Home";
 import History from "./pages/History";
 import LayoutMain from "./layout/LayoutMain";
+import Prediction from "./components/Prediction";
 
 const SafeApp = () => (
   <BrowserRouter>
@@ -32,6 +33,14 @@ const SafeApp = () => (
             element={
               <PrivateRoute>
                 <History />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="prediction"
+            element={
+              <PrivateRoute>
+                <Prediction />
               </PrivateRoute>
             }
           />

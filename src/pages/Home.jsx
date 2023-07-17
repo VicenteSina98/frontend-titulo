@@ -7,7 +7,6 @@ import { getPredictionHistory, getUserFromToken } from "../helpers/auth";
 
 const Home = () => {
   const {
-    informacionPersonal,
     setIsDark,
     setInformacionPersonal,
     setAntecedentesMedicos,
@@ -21,16 +20,18 @@ const Home = () => {
     const dataUser = await getUserFromToken();
     setInformacionPersonal(dataUser.informacion_personal);
     setAntecedentesMedicos(dataUser.antecedentes_medicos);
+    return dataUser.informacion_personal.user;
   };
-  const setPredHistory = async () => {
-    const predicciones = await getPredictionHistory(
-      informacionPersonal.informacion_personal["user"]
-    );
-    setPredictionHistory(predicciones);
+  const setPredHistory = async (id) => {
+    const predicciones = await getPredictionHistory(id);
+    setPredictionHistory(predicciones.data);
+  };
+  const setBaseData = async () => {
+    const id = await setInfoPersonal();
+    await setPredHistory(id);
   };
   useEffect(() => {
-    setInfoPersonal();
-    setPredHistory();
+    setBaseData();
   }, []);
   // dark mode
   useEffect(() => {
