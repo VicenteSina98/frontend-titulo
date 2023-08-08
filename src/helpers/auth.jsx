@@ -1,23 +1,23 @@
 import { useAuthStore } from "../store/Auth";
-import axios from "./axios";
+import axios from "axios";
 import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
 
 export const getPredictionHistory = async (idUsuario) =>
-  await axios.get(`prediccion/${idUsuario}`);
+  await axios.get(`${import.meta.env.VITE_API_URL}/prediccion/${idUsuario}`);
 
 export const getUserFromToken = async () => {
   const token = Cookies.get("access_token");
   const user = jwt_decode(token) ?? null;
   if (user) {
-    const data = await axios.get(`usuario/${user["username"]}`);
+    const data = await axios.get(`${import.meta.env.VITE_API_URL}/usuario/${user["username"]}`);
     if (data) return data.data;
   }
 };
 
 export const login = async (username, password) => {
   try {
-    const { data, status } = await axios.post("token", {
+    const { data, status } = await axios.post(`${import.meta.env.VITE_API_URL}/token`, {
       username,
       password,
     });
@@ -38,7 +38,7 @@ export const login = async (username, password) => {
 
 export const register = async (userData) => {
   console.log(axios.getUri())
-  const { data, status } = await axios.post("register", userData);
+  const { data, status } = await axios.post(`${import.meta.env.VITE_API_URL}/register`, userData);
   if (status === 201)
     return {
       data: data,
@@ -92,7 +92,7 @@ export const setAuthUser = (access_token, refresh_token) => {
 
 export const getRefreshToken = async () => {
   const refresh_token = Cookies.get("refresh_token");
-  const response = await axios.post("token/refresh", {
+  const response = await axios.post(`${import.meta.env.VITE_API_URL}/token/refresh`, {
     refresh: refresh_token,
   });
   return response.data;

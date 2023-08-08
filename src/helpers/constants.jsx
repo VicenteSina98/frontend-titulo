@@ -1,4 +1,3 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL;
 export const QUESTIONS_ARRAY = [
   "¿Tiene alergía a algun/os de los siguientes medicamentos?", // 0
   "¿Tiene alergía a algun/os de los siguientes alimentos?", // 1
