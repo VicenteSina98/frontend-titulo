@@ -37,6 +37,7 @@ export const login = async (username, password) => {
 };
 
 export const register = async (userData) => {
+  console.log(axios.getUri())
   const { data, status } = await axios.post("register", userData);
   if (status === 201)
     return {
