@@ -37,7 +37,7 @@ export const login = async (username, password) => {
 };
 
 export const register = async (userData) => {
-  console.log(import.meta.env.VITE_API_URL)
+  console.log(userData)
   const { data, status } = await axios.post(`${import.meta.env.VITE_API_URL}/register`, userData);
   if (status === 201)
     return {
