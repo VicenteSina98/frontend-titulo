@@ -81,12 +81,14 @@ export const setUser = async () => {
 export const setAuthUser = (access_token, refresh_token) => {
   Cookies.set("access_token", access_token, {
     expires: 1,
-    secure: true,
+    httpOnly: false,
+    secure: false,
   });
 
   Cookies.set("refresh_token", refresh_token, {
     expires: 7,
-    secure: true,
+    httpOnly: false,
+    secure: false,
   });
 
   const user = jwt_decode(access_token) ?? null;
