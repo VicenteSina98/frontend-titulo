@@ -10,17 +10,21 @@ export const getUserFromToken = async () => {
   const token = Cookies.get("access_token");
   const user = jwt_decode(token) ?? null;
   if (user) {
-    const data = await axios.get(`${import.meta.env.VITE_API_URL}/usuario/${user["username"]}`);
+    const data = await axios.get(
+      `${import.meta.env.VITE_API_URL}/usuario/${user["username"]}`
+    );
     if (data) return data.data;
   }
 };
 
 export const login = async (username, password) => {
+  const input = { username, password };
+  console.log(input);
   try {
-    const { data, status } = await axios.post(`${import.meta.env.VITE_API_URL}/token`, {
-      username,
-      password,
-    });
+    const { data, status } = await axios.post(
+      `${import.meta.env.VITE_API_URL}/token`,
+      input
+    );
     if (status === 200) {
       setAuthUser(data.access, data.refresh);
     }
@@ -37,8 +41,11 @@ export const login = async (username, password) => {
 };
 
 export const register = async (userData) => {
-  console.log(userData)
-  const { data, status } = await axios.post(`${import.meta.env.VITE_API_URL}/register`, userData);
+  console.log(userData);
+  const { data, status } = await axios.post(
+    `${import.meta.env.VITE_API_URL}/register`,
+    userData
+  );
   if (status === 201)
     return {
       data: data,
@@ -92,9 +99,12 @@ export const setAuthUser = (access_token, refresh_token) => {
 
 export const getRefreshToken = async () => {
   const refresh_token = Cookies.get("refresh_token");
-  const response = await axios.post(`${import.meta.env.VITE_API_URL}/token/refresh`, {
-    refresh: refresh_token,
-  });
+  const response = await axios.post(
+    `${import.meta.env.VITE_API_URL}/token/refresh`,
+    {
+      refresh: refresh_token,
+    }
+  );
   return response.data;
 };
 
