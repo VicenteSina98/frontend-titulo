@@ -3,35 +3,61 @@ import Message from "./chat/Message";
 import PropTypes from "prop-types";
 import useQuoter from "../hooks/useQuoter";
 import Prediction from "./chat/Prediction";
+import { useAuthStore } from "../store/Auth";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import useAxios from "../hooks/useAxios";
+import Spinner from "./Spinner";
+import { getUserFromToken } from "../helpers/auth";
 
 const PredictionUI = () => {
-  const { predictionHistory } = useQuoter();
+  const { setInformacionPersonal, setAntecedentesMedicos } = useQuoter();
+  // check user session
+  const [isLoggedIn] = useAuthStore((state) => [state.isLoggedIn]);
+  const navigate = useNavigate();
+  if (!isLoggedIn()) navigate("/");
+  const [loading, setLoading] = useState(true);
+  const [mensajes, setMensajes] = useState([]);
+  const [correlative, setCorrelative] = useState(0);
+  const [data, setData] = useState({});
   const [queryParameters] = useSearchParams();
-  const id = queryParameters.get("pred");
-  const correlative = queryParameters.get("ind");
-  const filterPrediction = predictionHistory.filter(
-    (prediction) => prediction.id == id
-  );
-  const prediction = filterPrediction[0];
-  const mensajes = prediction.mensajes;
-  const data = {
-    posibles_enfermedades: [
-      prediction.enfermedad1,
-      prediction.enfermedad2,
-      prediction.enfermedad3,
-      prediction.enfermedad4,
-      prediction.enfermedad5,
-    ],
-    posibles_profesionales: [
-      prediction.profesional1,
-      prediction.profesional2,
-      prediction.profesional3,
-      prediction.profesional4,
-      prediction.profesional5,
-    ],
+  const api = useAxios();
+  const setInfoPersonal = async () => {
+    const dataUser = await getUserFromToken();
+    setInformacionPersonal(dataUser.informacion_personal);
+    setAntecedentesMedicos(dataUser.antecedentes_medicos);
+    const predictions = await api.get(
+      "/prediccion/" + dataUser.informacion_personal.user
+    );
+    const id = queryParameters.get("pred");
+    setCorrelative(queryParameters.get("ind"));
+    const filterPrediction = predictions.data.filter(
+      (prediction) => prediction.id == id
+    );
+    const prediction = filterPrediction[0];
+    setMensajes(prediction.mensajes);
+    setData({
+      posibles_enfermedades: [
+        prediction.enfermedad1,
+        prediction.enfermedad2,
+        prediction.enfermedad3,
+        prediction.enfermedad4,
+        prediction.enfermedad5,
+      ],
+    });
+    setLoading(false);
   };
-  return (
-    <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col justify-between gap-8">
+  const setBaseData = async () => {
+    await setInfoPersonal();
+  };
+  useEffect(() => {
+    setBaseData();
+  }, []);
+
+  return loading ? (
+    <Spinner />
+  ) : (
+    <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col justify-between gap-8 dark:bg-neutral-800">
       <h1 className="text-left text-2xl font-bold dark:text-white">
         Predicción {correlative}
       </h1>

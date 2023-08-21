@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 import Chat from "../components/chat/Chat";
 import useQuoter from "../hooks/useQuoter";
 import { useAuthStore } from "../store/Auth";
-import { getPredictionHistory, getUserFromToken } from "../helpers/auth";
+import { getUserFromToken } from "../helpers/auth";
 
 const Home = () => {
   const {
     setIsDark,
     setInformacionPersonal,
     setAntecedentesMedicos,
-    setPredictionHistory,
   } = useQuoter();
   // check user session
   const [isLoggedIn] = useAuthStore((state) => [state.isLoggedIn]);
@@ -22,14 +21,8 @@ const Home = () => {
     setAntecedentesMedicos(dataUser.antecedentes_medicos);
     return dataUser.informacion_personal.user;
   };
-  // get predicciones
-  const setPredHistory = async (id) => {
-    const predicciones = await getPredictionHistory(id);
-    setPredictionHistory(predicciones.data);
-  };
   const setBaseData = async () => {
-    const id = await setInfoPersonal();
-    await setPredHistory(id);
+    await setInfoPersonal();
   };
   useEffect(() => {
     setBaseData();

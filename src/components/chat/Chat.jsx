@@ -36,8 +36,6 @@ const Chat = () => {
     setQuestions,
     checked,
     setChecked,
-    predictionHistory,
-    setPredictionHistory,
   } = useQuoter();
   // state para otros
   const [showOtros, setShowOtros] = useState(false);
@@ -151,9 +149,10 @@ const Chat = () => {
     }
     setChecked({ ...checked, checked: updatedList });
     // mostrar input texto otros
-    if (updatedList.includes("Otros") || checked.checked.includes("Otro")) setShowOtros(true);
+    if (updatedList.includes("Otros") || checked.checked.includes("Otro"))
+      setShowOtros(true);
     else setShowOtros(false);
-    configTypeQuestions()
+    configTypeQuestions();
   };
 
   // consult API
@@ -186,13 +185,13 @@ const Chat = () => {
         ha_viajado: answers[14],
         paises: answers[15],
       },
-      estado_animo: answers[16 ],
+      estado_animo: answers[16],
     };
     try {
       const responseGeneracion = await api.post("/prediccion/generar", data);
       const dataResponse = responseGeneracion.data;
       setPrediction(dataResponse);
-      const responseGuardado = await api.post("/prediccion/guardar", {
+      await api.post("/prediccion/guardar", {
         id: informacionPersonal.user,
         preguntas: questions,
         respuestas: answers,
@@ -202,7 +201,6 @@ const Chat = () => {
         enfermedad4: dataResponse.response[4] ?? "",
         enfermedad5: dataResponse.response[5] ?? "",
       });
-      setPredictionHistory([...predictionHistory, responseGuardado]);
     } catch (error) {
       console.log(error);
       setError(true);
@@ -253,7 +251,7 @@ const Chat = () => {
   }, []);
 
   return (
-    <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col justify-between gap-8">
+    <main className="mx-auto mb-8 mt-20 flex w-3/4 flex-col justify-between gap-8">
       {/* mensajes del chat */}
       <section ref={scrollRef} className="flex flex-col gap-4 overflow-y-auto">
         <div className={chatStarted ? "hidden" : ""}>
@@ -332,17 +330,17 @@ const Chat = () => {
           {/* opciones */}
           <div className={finish ? "hidden" : ""}>
             <form
-              className={`flex flex-col items-center justify-center gap-8 ${
+              className={`flex h-max flex-col items-center justify-center gap-8 ${
                 ok ? "hidden" : ""
               }`}
               onSubmit={handleSubmit}
             >
               <div
-                className={`grid grid-cols-2 ${
+                className={`grid items-center justify-center ${
                   OPTIONS_ARRAY[checked.index] % 2 === 0
-                    ? "md:grid-cols-2"
-                    : "md:grid-cols-3"
-                } md:text-md gap-4 text-xs sm:text-sm lg:text-lg`}
+                    ? "grid-cols-4"
+                    : "grid-cols-3"
+                } md:text-md gap-4 text-center text-xs sm:text-sm md:gap-6 lg:gap-x-8 lg:gap-y-6 lg:text-lg`}
               >
                 {OPTIONS_ARRAY[checked.index]?.map((option, index) => (
                   <div className={`flex gap-2 overflow-clip `} key={index}>
@@ -356,7 +354,7 @@ const Chat = () => {
                     />
                     <label
                       htmlFor={`option-${index}`}
-                      className={`rounded-lg px-2 py-2 hover:cursor-pointer ${
+                      className={`w-full rounded-lg px-2 py-2 hover:cursor-pointer ${
                         checked.checked.includes(option)
                           ? "bg-cyan-700 font-bold text-white shadow-md"
                           : "border-2 border-neutral-400 bg-transparent text-neutral-300"
