@@ -23,7 +23,8 @@ export const login = async (username, password) => {
   try {
     const { data, status } = await axios.post(
       `${import.meta.env.VITE_API_URL}/token`,
-      input
+      input,
+      { "Access-Control-Allow-Origin": true }
     );
     if (status === 200) {
       setAuthUser(data.access, data.refresh);
@@ -34,7 +35,7 @@ export const login = async (username, password) => {
     return {
       data: null,
       error:
-        error.response.data?.detail ||
+        error.response?.data?.detail ||
         "Lo sentimos, ha ocurrido un error en el inicio de sesión",
     };
   }
