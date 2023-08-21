@@ -1,21 +1,21 @@
 export const QUESTIONS_ARRAY = [
-  "¿Presenta algun/os de los siguientes síntomas?", // 3
-  "¿Presenta problemas en algun/os de los 5 sentidos?", // 4
-  "¿Presenta inflamación en algun/as de las siguientes partes de su cuerpo?", // 5
-  "¿Presenta manchas en algun/as de las siguientes partes de su cuerpo?", // 6
-  "¿Presenta comezón en algun/as de las siguientes partes de su cuerpo?", // 7
-  "¿Siente algun/os de los siguientes tipos de dolor?", // 8
-  "¿Hace cuánto experimenta los síntomas?", // 9
-  "¿Con qué frecuencia experimenta los síntomas?", // 10
-  "¿Cuál/es de los siguientes medicamentos consume?", // 11
-  "¿Ha tenido contacto con algún enfermo?", // 12
-  "¿Qué diagnóstico tenía el enfermo?",
-  "¿Tenía síntomas relacionados a los suyos?",
-  "¿Ha tenido contacto con algún agente infeccioso o tóxico?",
-  "¿De qué tipo era dicho agente?",
-  "¿Ha viajado al extranjero recientemente?",
-  "¿A qué país/es viajó?",
-  "¿Cómo define su estado de ánimo? Especifique decaido, cansado, ansioso, normal, falta de apetito, etc.",
+  "¿Presenta alguno/s de los siguientes síntomas?", // 0
+  "¿Presenta problemas en alguno/s de los 5 sentidos?", // 1
+  "¿Presenta inflamación en alguna/s de las siguientes partes de su cuerpo?", // 2
+  "¿Presenta manchas en alguna/s de las siguientes partes de su cuerpo?", // 3
+  "¿Presenta comezón en alguna/s de las siguientes partes de su cuerpo?", // 4
+  "¿Siente alguno/s de los siguientes tipos de dolor?", // 5
+  "¿Hace cuánto experimenta los síntomas?", // 6
+  "¿Con qué frecuencia experimenta los síntomas?", // 7
+  "¿Cuál/es de los siguientes medicamentos consume?", // 8
+  "¿Ha tenido contacto con algún enfermo?", // 9
+  "¿Qué diagnóstico tenía el enfermo?", // 10
+  "¿Tenía síntomas relacionados a los suyos?", // 11
+  "¿Ha tenido contacto con algún agente infeccioso o tóxico?", // 12
+  "¿De qué tipo era dicho agente?", // 13
+  "¿Ha viajado al extranjero recientemente?", // 14
+  "¿A qué país/es viajó?", // 15
+  "¿Cómo define su estado de ánimo? Especifique decaido, cansado, ansioso, normal, falta de apetito, etc.", // 16
 ];
 export const OPTIONS_ARRAY = [
   [
@@ -25,9 +25,10 @@ export const OPTIONS_ARRAY = [
     "Pérdida del conocimiento",
     "Alteración del sueño",
     "Fatiga",
-    "Ninguna",
-  ], // 2
-  ["Audición", "Gusto", "Olfato", "Tacto", "Vista"], // 3
+    "Otros",
+    "Ninguno",
+  ], // 0
+  ["Audición", "Gusto", "Olfato", "Tacto", "Vista", "Ninguno"], // 1
   [
     "Cabeza",
     "Extremidades superiores",
@@ -35,39 +36,40 @@ export const OPTIONS_ARRAY = [
     "Amígdalas",
     "Aparato reproductor",
     "Abdomen",
-    "Ninguno",
     "Otros",
+    "Ninguno",
+  ], // 2
+  [
+    "Cabeza",
+    "Extremidades superiores",
+    "Extremidades inferiores",
+    "Cuello",
+    "Espalda",
+    "Aparato reproductor",
+    "Abdomen",
+    "Otros",
+    "Ninguno",
+  ], // 3
+  [
+    "Cabeza",
+    "Extremidades superiores",
+    "Extremidades inferiores",
+    "Cuello",
+    "Espalda",
+    "Aparato reproductor",
+    "Abdomen",
+    "Otros",
+    "Ninguno",
   ], // 4
-  [
-    "Cabeza",
-    "Extremidades superiores",
-    "Extremidades inferiores",
-    "Cuello",
-    "Espalda",
-    "Aparato reproductor",
-    "Abdomen",
-    "Ninguno",
-    "Otros",
-  ], // 5
-  [
-    "Cabeza",
-    "Extremidades superiores",
-    "Extremidades inferiores",
-    "Cuello",
-    "Espalda",
-    "Aparato reproductor",
-    "Abdomen",
-    "Ninguno",
-    "Otros",
-  ], // 6
   [
     "Dolor de cabeza",
     "Dolor en extremidades",
     "Dolor muscular",
     "Dolor abdominal",
+    "Otros",
     "Ninguno",
-  ], // 7
-  ["Un día", "2 - 7 días", "Más de una semana", "Más de un mes"], // 8
+  ], // 5
+  ["Un día", "2 - 7 días", "Más de una semana", "Más de un mes"], // 6
   [
     "Varias veces al día",
     "Una vez al día",
@@ -75,7 +77,7 @@ export const OPTIONS_ARRAY = [
     "Una vez a la semana",
     "Varias veces al mes",
     "Una vez al mes",
-  ], // 9
+  ], // 7
   [
     "Anticoagulantes",
     "Analgésicos",
@@ -83,16 +85,16 @@ export const OPTIONS_ARRAY = [
     "Antihipertensivos",
     "Antidiabéticos",
     "Estatinas",
-    "Ninguno",
     "Otros",
-  ], // 10
-  ["Si", "No"], // 11
-  ["Covid-19", "Gripe", "ITS", "Otros", "No aplica"], // 12
-  ["Si", "No", "No aplica"],
-  ["Si", "No"],
-  ["Químico", "Biológico", "No aplica", "Otro"],
-  ["Si", "No"],
-  ["Australia", "Brasil", "China", "India", "Sudáfrica", "Otros", "No aplica"],
+    "Ninguno",
+  ], // 8
+  ["Si", "No"], // 9
+  ["Covid-19", "Gripe", "ITS", "Otros", "Ninguno", "No aplica"], // 10
+  ["Si", "No", "No aplica"], // 11
+  ["Si", "No"], // 12
+  ["Químico", "Biológico", "Otro", "No aplica"], // 13
+  ["Si", "No"], // 14
+  ["Australia", "Brasil", "China", "India", "Sudáfrica", "Otros", "No aplica"], // 15
   [
     "Decaido",
     "Cansado",
@@ -101,5 +103,5 @@ export const OPTIONS_ARRAY = [
     "Falta de apetito",
     "Otros",
     "Ninguno",
-  ],
+  ], // 16
 ];

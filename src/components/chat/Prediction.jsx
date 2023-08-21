@@ -6,7 +6,7 @@ const Prediction = ({ data }) => (
     <img src={Logo} alt="logo" className="w-8 rounded-full" />
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <p className="text-left text-sm font-bold dark:text-white">
+        <p className="text-left text-sm dark:text-white">
           Basándome en los antecedentes médicos y los síntomas presentados, las
           cinco patologías con mayor probabilidad de que pueda padecer son:
         </p>
