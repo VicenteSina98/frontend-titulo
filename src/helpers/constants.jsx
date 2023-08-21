@@ -1,6 +1,4 @@
 export const QUESTIONS_ARRAY = [
-  "¿Tiene alergía a algun/os de los siguientes medicamentos?", // 0
-  "¿Tiene alergía a algun/os de los siguientes alimentos?", // 1
   "¿Presenta algun/os de los siguientes síntomas?", // 3
   "¿Presenta problemas en algun/os de los 5 sentidos?", // 4
   "¿Presenta inflamación en algun/as de las siguientes partes de su cuerpo?", // 5
@@ -20,29 +18,6 @@ export const QUESTIONS_ARRAY = [
   "¿Cómo define su estado de ánimo? Especifique decaido, cansado, ansioso, normal, falta de apetito, etc.",
 ];
 export const OPTIONS_ARRAY = [
-  [
-    "Penicilina",
-    "Sulfonamidas",
-    "Aspirina",
-    "Anestésicos",
-    "Cefalosporiinas",
-    "Antiinflamatorios",
-    "Insulina",
-    "Ninguno",
-    "Otros",
-  ], // 0
-  [
-    "Frutos secos",
-    "Mariscos",
-    "Lácteos",
-    "Huevos",
-    "Trigo",
-    "Frutas o verduras",
-    "Soja",
-    "Gluten",
-    "Ninguno",
-    "Otros",
-  ], // 1
   [
     "Fiebre",
     "Tos",

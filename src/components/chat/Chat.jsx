@@ -42,14 +42,12 @@ const Chat = () => {
   // state para otros
   const [showOtros, setShowOtros] = useState(false);
   const [otros, setOtros] = useState({
-    alergiaMedicamentos: "", // index = 0
-    alergiaAlimentos: "", // index = 1
-    inflamacion: "", // index = 4
-    manchas: "", // index = 5
-    comezon: "", // index = 6
-    consumeMedicamentos: "", // index = 10
-    agenteInfeccioso: "", // index = 15
-    estadoAnimo: "", // index = 18
+    inflamacion: "", // index = 2
+    manchas: "", // index = 3
+    comezon: "", // index = 4
+    consumeMedicamentos: "", // index = 8
+    agenteInfeccioso: "", // index = 13
+    estadoAnimo: "", // index = 16
   });
   const [typeQuestion, setTypeQuestion] = useState("");
   // ref
@@ -78,42 +76,34 @@ const Chat = () => {
     // clean otros
     setShowOtros(false);
     setOtros({
-      alergiaMedicamentos: "", // index = 0
-      alergiaAlimentos: "", // index = 1
-      inflamacion: "", // index = 4
-      manchas: "", // index = 5
-      comezon: "", // index = 6
-      consumeMedicamentos: "", // index = 10
-      agenteInfeccioso: "", // index = 15
-      estadoAnimo: "", // index = 18
+      inflamacion: "", // index = 2
+      manchas: "", // index = 3
+      comezon: "", // index = 4
+      consumeMedicamentos: "", // index = 8
+      agenteInfeccioso: "", // index = 13
+      estadoAnimo: "", // index = 16
     });
     setTypeQuestion("");
   };
 
   const configTypeQuestions = () => {
     switch (checked.index) {
-      case 0:
-        setTypeQuestion("alergiaMedicamentos");
-        break;
-      case 1:
-        setTypeQuestion("alergiaAlimentos");
-        break;
-      case 4:
+      case 2:
         setTypeQuestion("inflamacion");
         break;
-      case 5:
+      case 3:
         setTypeQuestion("manchas");
         break;
-      case 6:
+      case 4:
         setTypeQuestion("comezon");
         break;
-      case 10:
+      case 8:
         setTypeQuestion("consumeMedicamentos");
         break;
-      case 15:
+      case 13:
         setTypeQuestion("agenteInfeccioso");
         break;
-      case 18:
+      case 16:
         setTypeQuestion("estadoAnimo");
         break;
       default:
@@ -123,35 +113,27 @@ const Chat = () => {
 
   const handleChange = (event) => {
     switch (checked.index) {
-      case 0:
-        setOtros({ ...otros, alergiaMedicamentos: event.target.value });
-        setTypeQuestion("alergiaMedicamentos");
-        break;
-      case 1:
-        setOtros({ ...otros, alergiaAlimentos: event.target.value });
-        setTypeQuestion("alergiaAlimentos");
-        break;
-      case 4:
+      case 2:
         setOtros({ ...otros, inflamacion: event.target.value });
         setTypeQuestion("inflamacion");
         break;
-      case 5:
+      case 3:
         setOtros({ ...otros, manchas: event.target.value });
         setTypeQuestion("manchas");
         break;
-      case 6:
+      case 4:
         setOtros({ ...otros, comezon: event.target.value });
         setTypeQuestion("comezon");
         break;
-      case 10:
+      case 8:
         setOtros({ ...otros, consumeMedicamentos: event.target.value });
         setTypeQuestion("consumeMedicamentos");
         break;
-      case 15:
+      case 13:
         setOtros({ ...otros, agenteInfeccioso: event.target.value });
         setTypeQuestion("agenteInfeccioso");
         break;
-      case 18:
+      case 16:
         setOtros({ ...otros, estadoAnimo: event.target.value });
         setTypeQuestion("estadoAnimo");
         break;
@@ -179,34 +161,32 @@ const Chat = () => {
     setSpinner(true);
     const data = {
       informacion_personal: {
-        ...informacionPersonal,
+        informacion_personal: informacionPersonal,
         antecedentes_medicos: antecedentesMedicos,
       },
-      alergias_medicamentos: answers[0],
-      alergias_alimentos: answers[1],
-      sintomas: answers[2],
-      problemas_sentidos: answers[3],
-      inflamacion: answers[4],
-      manchas: answers[5],
-      comezon: answers[6],
-      dolor: answers[7],
-      tiempo_sintomas: answers[8],
-      frecuencia_sintomas: answers[9],
-      consumo_medicamentos: answers[10],
+      sintomas: answers[0],
+      problemas_sentidos: answers[1],
+      inflamacion: answers[2],
+      manchas: answers[3],
+      comezon: answers[4],
+      dolor: answers[5],
+      tiempo_sintomas: answers[6],
+      frecuencia_sintomas: answers[7],
+      consumo_medicamentos: answers[8],
       contacto_enfermo: {
-        ha_tenido_contacto: answers[11],
-        diagnostico: answers[12],
-        sintomas_relacionados: answers[13],
+        ha_tenido_contacto: answers[9],
+        diagnostico: answers[10],
+        sintomas_relacionados: answers[11],
       },
       contacto_toxico: {
-        ha_tenido_contacto: answers[14],
-        tipo: answers[15],
+        ha_tenido_contacto: answers[12],
+        tipo: answers[13],
       },
       viaje_extranjero: {
-        ha_viajado: answers[16],
-        paises: answers[17],
+        ha_viajado: answers[14],
+        paises: answers[15],
       },
-      estado_animo: answers[18],
+      estado_animo: answers[16 ],
     };
     try {
       const responseGeneracion = await api.post("/prediccion/generar", data);
@@ -216,16 +196,11 @@ const Chat = () => {
         id: informacionPersonal.user,
         preguntas: questions,
         respuestas: answers,
-        enfermedad1: dataResponse.posibles_enfermedades[0] ?? "",
-        enfermedad2: dataResponse.posibles_enfermedades[1] ?? "",
-        enfermedad3: dataResponse.posibles_enfermedades[2] ?? "",
-        enfermedad4: dataResponse.posibles_enfermedades[3] ?? "",
-        enfermedad5: dataResponse.posibles_enfermedades[4] ?? "",
-        profesional1: dataResponse.posibles_profesionales[0] ?? "",
-        profesional2: dataResponse.posibles_profesionales[1] ?? "",
-        profesional3: dataResponse.posibles_profesionales[2] ?? "",
-        profesional4: dataResponse.posibles_profesionales[3] ?? "",
-        profesional5: dataResponse.posibles_profesionales[4] ?? "",
+        enfermedad1: dataResponse.response[1] ?? "",
+        enfermedad2: dataResponse.response[2] ?? "",
+        enfermedad3: dataResponse.response[3] ?? "",
+        enfermedad4: dataResponse.response[4] ?? "",
+        enfermedad5: dataResponse.response[5] ?? "",
       });
       setPredictionHistory([...predictionHistory, responseGuardado]);
     } catch (error) {
@@ -254,7 +229,7 @@ const Chat = () => {
 
   // effects
   useEffect(() => {
-    if (answers.length === 19) setFinish(true);
+    if (answers.length === 17) setFinish(true);
   }, [answers]);
 
   useEffect(() => {
