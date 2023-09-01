@@ -1,19 +1,15 @@
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
-import FormError from "../error/FormError";
-import useQuoter from "../../hooks/useQuoter";
 import PropTypes from "prop-types";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import InputPersonalDataForm from "./InputPersonalDataForm";
 
-const PersonalDataForm = ({ setPassword, setNextSection }) => {
-  const { informacionPersonal, setInformacionPersonal } = useQuoter();
-  // continuar con los datos medicos
-  const handleSubmit = async (values) => {
-    setPassword(values.password);
-    delete values.password;
-    setInformacionPersonal(values);
-    setNextSection(true);
-  };
-  // definir esquema para validacion
+const PersonalDataForm = ({
+  informacionPersonal,
+  setPassword,
+  setNextSection,
+  setInformacionPersonal,
+}) => {
+  // schemas
   const personalDataSchema = Yup.object().shape({
     email: Yup.string()
       .email("Email no válido")
@@ -37,9 +33,22 @@ const PersonalDataForm = ({ setPassword, setNextSection }) => {
       "La fecha de nacimiento es obligatoria"
     ),
   });
+
+  // states
+  const cleanStates = async (values) => {
+    setPassword(values.password);
+    delete values.password;
+    setInformacionPersonal(values);
+    setNextSection(true);
+  };
+
+  // handlers
+  const handleSubmit = async (values) => {
+    await cleanStates(values);
+  };
   return (
-    <>
-      <h2 className="mb-4 text-center text-lg font-bold dark:text-white">
+    <div className="mx-auto flex flex-col gap-1 sm:w-5/6  md:w-2/3 lg:w-1/2 xl:w-5/12 2xl:w-1/3">
+      <h2 className="text-md text-center font-bold dark:text-white sm:text-xl">
         Información Personal
       </h2>
       <Formik
@@ -63,179 +72,106 @@ const PersonalDataForm = ({ setPassword, setNextSection }) => {
       >
         {({ errors, touched }) => {
           return (
-            <Form className="flex flex-col gap-2 sm:mx-auto sm:w-96 md:w-80">
-              {/* nombres */}
-              <label
-                htmlFor="nombres"
-                className="text-md dark:text-gray-200 lg:text-lg"
-              >
-                Nombres
-              </label>
-              <Field
-                type="text"
-                name="nombres"
-                id="nombres"
-                className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
-              />
-              {errors.nombres && touched.nombres ? (
-                <FormError message={errors.nombres} />
-              ) : null}
-              {/* primer apellido */}
-              <label
-                htmlFor="primerApellido"
-                className="text-md dark:text-gray-200 lg:text-lg"
-              >
-                Primer apellido
-              </label>
-              <Field
-                type="text"
-                name="primerApellido"
-                id="primerApellido"
-                className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
-              />
-              {errors.primerApellido && touched.primerApellido ? (
-                <FormError message={errors.primerApellido} />
-              ) : null}
-              {/* segundo apellido */}
-              <label
-                htmlFor="segundoApellido"
-                className="text-md dark:text-gray-200 lg:text-lg"
-              >
-                Segundo apellido
-              </label>
-              <Field
-                type="text"
-                name="segundoApellido"
-                id="segundoApellido"
-                className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
-              />
-              {errors.segundoApellido && touched.segundoApellido ? (
-                <FormError message={errors.segundoApellido} />
-              ) : null}
-              {/* sexo */}
-              <label
-                htmlFor="sexo"
-                className="text-md dark:text-gray-200 lg:text-lg"
-              >
-                Sexo
-              </label>
-              <Field
-                as="select"
-                name="sexo"
-                id="sexo"
-                className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
-              >
-                <option value="" selected disabled>
-                  -- Seleccione una opción --
-                </option>
-                <option value="M">Masculino</option>
-                <option value="F">Femenino</option>
-              </Field>
-              {/* <Field
-                type="text"
-                name="sexo"
-                id="sexo"
-                className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
-              /> */}
-              {errors.sexo && touched.sexo ? (
-                <FormError message={errors.sexo} />
-              ) : null}
-              {/* fecha de nacimiento */}
-              <label
-                htmlFor="fechaNacimiento"
-                className="text-md dark:text-gray-200 lg:text-lg"
-              >
-                Fecha de nacimiento
-              </label>
-              <Field
-                type="date"
-                name="fechaNacimiento"
-                id="fechaNacimiento"
-                className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
-              />
-              {errors.fechaNacimiento && touched.fechaNacimiento ? (
-                <FormError message={errors.fechaNacimiento} />
-              ) : null}
-              {/* email */}
-              <label
-                htmlFor="email"
-                className="text-md dark:text-gray-200 lg:text-lg"
-              >
-                Email
-              </label>
-              <Field
-                type="email"
-                name="email"
-                id="email"
-                className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
-              />
-              {errors.email && touched.email ? (
-                <FormError message={errors.email} />
-              ) : null}
-              {/* password */}
-              <label
-                htmlFor="password"
-                className="text-md dark:text-gray-200 lg:text-lg"
-              >
-                Contraseña
-              </label>
-              <Field
-                type="password"
-                name="password"
-                id="password"
-                className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
-              />
-              {errors.password && touched.password ? (
-                <FormError message={errors.password} />
-              ) : null}
-              {/* altura */}
-              <label
-                htmlFor="altura"
-                className="text-md dark:text-gray-200 lg:text-lg"
-              >
-                Altura
-              </label>
-              <Field
-                type="number"
-                name="altura"
-                id="altura"
-                className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
-              />
-              {errors.altura && touched.altura ? (
-                <FormError message={errors.altura} />
-              ) : null}
-              {/* peso */}
-              <label
-                htmlFor="peso"
-                className="text-md dark:text-gray-200 lg:text-lg"
-              >
-                Peso
-              </label>
-              <Field
-                type="number"
-                name="peso"
-                id="peso"
-                className="text-md w-full border-2 px-2 focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 md:w-auto lg:text-lg"
-              />
-              {errors.peso && touched.peso ? (
-                <FormError message={errors.peso} />
-              ) : null}
+            <Form className="flex flex-col gap-4">
+              {/* nombre completo */}
+              <div className="flex flex-col gap-4">
+                <InputPersonalDataForm
+                  labelContent={"Nombres"}
+                  nameField={"nombres"}
+                  typeField={"text"}
+                  errors={errors}
+                  touched={touched}
+                />
+                <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 sm:gap-8">
+                  <InputPersonalDataForm
+                    labelContent={"Primer apellido"}
+                    nameField={"primerApellido"}
+                    typeField={"text"}
+                    errors={errors}
+                    touched={touched}
+                  />
+                  <InputPersonalDataForm
+                    labelContent={"Segundo apellido"}
+                    nameField={"segundoApellido"}
+                    typeField={"text"}
+                    errors={errors}
+                    touched={touched}
+                  />
+                </div>
+              </div>
+              {/* email y contraseña */}
+              <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 sm:gap-8">
+                <InputPersonalDataForm
+                  labelContent={"Email"}
+                  nameField={"email"}
+                  typeField={"email"}
+                  errors={errors}
+                  touched={touched}
+                />
+                <InputPersonalDataForm
+                  labelContent={"Contraseña"}
+                  nameField={"password"}
+                  typeField={"password"}
+                  errors={errors}
+                  touched={touched}
+                />
+              </div>
+              {/* sexo y fecha de nacimiento */}
+              <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 sm:gap-8">
+                <InputPersonalDataForm
+                  labelContent={"Sexo"}
+                  nameField={"sexo"}
+                  typeField={"select"}
+                  errors={errors}
+                  touched={touched}
+                  options={[
+                    { valueOption: "M", contentOption: "Masuclino" },
+                    { valueOption: "F", contentOption: "Femenino" },
+                  ]}
+                />
+                <InputPersonalDataForm
+                  labelContent={"Fecha de nacimiento"}
+                  nameField={"fechaNacimiento"}
+                  typeField={"date"}
+                  errors={errors}
+                  touched={touched}
+                />
+              </div>
+              {/* peso y altura */}
+              <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 sm:gap-8">
+                <InputPersonalDataForm
+                  labelContent={"Altura"}
+                  nameField={"altura"}
+                  typeField={"number"}
+                  errors={errors}
+                  touched={touched}
+                />
+                <InputPersonalDataForm
+                  labelContent={"Peso"}
+                  nameField={"peso"}
+                  typeField={"number"}
+                  errors={errors}
+                  touched={touched}
+                />
+              </div>
               <input
                 type="submit"
                 value="Continuar con mis datos médicos"
-                className="text-md mt-4 rounded-md bg-blue-700 p-2 text-white hover:cursor-pointer hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 lg:text-lg"
+                className="rounded-md bg-blue-700 px-1 py-2 text-xs text-white hover:cursor-pointer hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 sm:text-base"
               />
             </Form>
           );
         }}
       </Formik>
-    </>
+    </div>
   );
 };
 
 PersonalDataForm.propTypes = {
   setNextSection: PropTypes.func,
   setPassword: PropTypes.func,
+  setInformacionPersonal: PropTypes.func,
+  informacionPersonal: PropTypes.object,
 };
 
 export default PersonalDataForm;

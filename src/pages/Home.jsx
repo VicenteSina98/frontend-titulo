@@ -19,7 +19,6 @@ const Home = () => {
     const dataUser = await getUserFromToken();
     setInformacionPersonal(dataUser.informacion_personal);
     setAntecedentesMedicos(dataUser.antecedentes_medicos);
-    return dataUser.informacion_personal.user;
   };
   const setBaseData = async () => {
     await setInfoPersonal();

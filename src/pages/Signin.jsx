@@ -1,27 +1,75 @@
-import { Link } from "react-router-dom";
-import PersonalDataForm from "../components/signinForm/PersonalDataForm";
-import Logo from "../img/logo.png";
-import MedicalDataForm from "../components/signinForm/MedicalDataForm";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import PersonalDataForm from "../components/signinForm/PersonalDataForm";
+import MedicalDataForm from "../components/signinForm/MedicalDataForm";
 import Success from "../components/Success";
+import BlockError from "../components/error/BlockError";
+import Logo from "../img/logo.png";
 
 const Signin = () => {
+  // states
   const [password, setPassword] = useState("");
   const [nextSection, setNextSection] = useState(false);
   const [accountCreated, setAccountCreated] = useState(false);
+  const [sessionError, setSessionError] = useState({});
+  const [informacionPersonal, setInformacionPersonal] = useState({
+    email: "",
+    nombres: "",
+    primerApellido: "",
+    segundoApellido: "",
+    fechaNacimiento: "",
+    altura: "",
+    peso: "",
+    sexo: "",
+  });
+  const [antecedentesMedicos, setAntecedentesMedicos] = useState({
+    enfermedadesCronicas: "",
+    historialAlergias: "",
+    historialCirugias: "",
+    historialMedicamentos: "",
+    historialEnfermedadesFamilia: "",
+    historialEnfermedadesInfecciosas: "",
+    historialHabitosSalud: "",
+  });
+
+  const cleanStates = async () => {
+    setPassword("");
+    setNextSection("");
+    setAccountCreated(false);
+    setSessionError(false);
+    setInformacionPersonal({});
+    setAntecedentesMedicos({});
+  };
+
+  // hooks
+  const navigate = useNavigate();
+
+  // handlers
+  const handleClick = async () => {
+    await cleanStates();
+    navigate("/");
+  };
+
   return (
     <main className="flex h-full flex-col gap-4 rounded-lg bg-white p-1 shadow-lg dark:bg-neutral-800">
-      <section className="flex flex-col items-center justify-center gap-2">
+      <section className="flex flex-col items-center justify-center gap-1">
         <img src={Logo} alt="logo" className="w-24 rounded-full" />
-        <h1 className="text-2xl font-bold text-black dark:text-gray-200">
+        <h1 className="text-xl font-bold text-black dark:text-gray-200">
           HealthDiagAI
         </h1>
-      </section>
-      <h2 className="text-center text-lg text-black dark:text-gray-200">
-        Regístrate y obtén predicciones de enfermedades
-      </h2>
-      <section className="overflow-y-auto p-4">
+        <h2 className="text-center text-sm text-black dark:text-gray-200">
+          Regístrate y obtén predicciones de enfermedades
+        </h2>
         <div>
+          {sessionError?.email?.map((error, index) => (
+            <BlockError key={index} message={`Error en el correo: ${error}`} />
+          ))}
+          {sessionError?.password?.map((error, index) => (
+            <BlockError
+              key={index}
+              message={`Error en la contraseña: ${error}`}
+            />
+          ))}
           {accountCreated ? (
             <Success
               message={
@@ -30,27 +78,38 @@ const Signin = () => {
             />
           ) : null}
         </div>
+      </section>
+      <section className="overflow-auto">
         {nextSection ? (
           <MedicalDataForm
+            informacionPersonal={informacionPersonal}
+            password={password}
+            antecedentesMedicos={antecedentesMedicos}
+            sessionError={sessionError}
+            setInformacionPersonal={setInformacionPersonal}
+            setPassword={setPassword}
+            setAntecedentesMedicos={setAntecedentesMedicos}
+            setSessionError={setSessionError}
             setNextSection={setNextSection}
             setAccountCreated={setAccountCreated}
-            password={password}
           />
         ) : (
           <PersonalDataForm
+            informacionPersonal={informacionPersonal}
             setNextSection={setNextSection}
             setPassword={setPassword}
+            setInformacionPersonal={setInformacionPersonal}
           />
         )}
       </section>
-      <p className="mt-6 text-center text-xs dark:text-gray-200 lg:text-sm">
+      <p className="text-center text-xs dark:text-gray-200 lg:text-sm">
         ¿Ya tienes una cuenta?{" "}
-        <Link
-          to="/"
+        <span
+          onClick={() => handleClick()}
           className="text-blue-600 hover:cursor-pointer dark:text-blue-400 lg:text-sm"
         >
           Inicia sesión aquí
-        </Link>
+        </span>
       </p>
     </main>
   );

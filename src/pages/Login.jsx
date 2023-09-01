@@ -1,16 +1,21 @@
-import { Link } from "react-router-dom";
-import Logo from "../img/logo.png";
-import { login } from "../helpers/auth";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../helpers/auth";
 import { useAuthStore } from "../store/Auth";
 import BlockError from "../components/error/BlockError";
+import Logo from "../img/logo.png";
 
 const Login = () => {
   // states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [sessionError, setSessionError] = useState("");
+
+  const cleanStates = async () => {
+    setEmail("");
+    setPassword("");
+    setSessionError("");
+  };
 
   // hooks
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -20,8 +25,10 @@ const Login = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     const { error } = await login(email, password);
-    if (!error) navigate("/home");
-    else setSessionError(error);
+    if (!error) {
+      await cleanStates();
+      navigate("/home");
+    } else setSessionError(error);
   };
 
   // effects
@@ -32,11 +39,10 @@ const Login = () => {
   }, []);
 
   return (
-    // TODO: Implementar sesiones
-    <main className="flex h-full flex-col gap-2 rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-800 lg:grid lg:grid-cols-2">
-      <section className="rounded-md bg-cyan-700 p-4 dark:bg-cyan-900 lg:flex lg:items-center lg:justify-center">
+    <main className="overflow-auto flex h-full flex-col items-cente justify-start gap-2 rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-800 lg:grid-cols-2">
+      <section className="overflow-auto rounded-md bg-cyan-700 p-4 dark:bg-cyan-900 lg:flex lg:items-center lg:justify-center">
         <div className="mx-auto flex flex-col items-center gap-2">
-          <img src={Logo} alt="logo" className="w-24 rounded-full" />
+          <img src={Logo} alt="logo" className="w-12 rounded-full lg:w-24" />
           <h1 className="text-center text-lg font-bold text-white">
             ¿Qué es HealthDiagAI?
           </h1>
