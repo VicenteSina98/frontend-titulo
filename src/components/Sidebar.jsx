@@ -1,15 +1,70 @@
 import { useNavigate } from "react-router-dom";
-import { logout } from "../helpers/auth";
 import useQuoter from "../hooks/useQuoter";
+import { logout } from "../helpers/auth";
+import { QUESTIONS_ARRAY } from "../helpers/constants";
 
 const Sidebar = () => {
-  // TODO: agregar perfil e historial
-  const { informacionPersonal, isDark, showSidebar, setShowSidebar } =
-    useQuoter();
+  // states
+  const {
+    setInformacionPersonal,
+    showSidebar,
+    isDark,
+    informacionPersonal,
+    setAntecedentesMedicos,
+    setShowSidebar,
+    setChatStarted,
+    setFinish,
+    setAnswers,
+    setError,
+    setErrorMessage,
+    setPrediction,
+    setOk,
+    setAnswer,
+    setQuestions,
+    setChecked,
+  } = useQuoter();
+  const cleanStates = async () => {
+    setInformacionPersonal({
+      email: "",
+      nombres: "",
+      primerApellido: "",
+      segundoApellido: "",
+      fechaNacimiento: "",
+      altura: "",
+      peso: "",
+      sexo: "",
+    });
+    setAntecedentesMedicos({
+      enfermedadesCronicas: "",
+      historialAlergias: "",
+      historialCirugias: "",
+      historialMedicamentos: "",
+      historialEnfermedadesFamilia: "",
+      historialEnfermedadesInfecciosas: "",
+      historialHabitosSalud: "",
+    });
+    setShowSidebar(false);
+    setChatStarted(false);
+    setFinish(false);
+    setAnswers([]);
+    setError(false);
+    setErrorMessage("");
+    setPrediction({});
+    setOk(false);
+    setAnswer("");
+    setQuestions([QUESTIONS_ARRAY[0]]);
+    setChecked({ index: 0, checked: [] });
+  };
+  // hooks
   const navigate = useNavigate();
+  // handlers
   const handleClick = (path) => {
     setShowSidebar(false);
     navigate(path);
+  };
+  const handleLogout = async () => {
+    await cleanStates();
+    logout();
   };
   return (
     <>
@@ -77,7 +132,7 @@ const Sidebar = () => {
             "text-white hover:cursor-pointer " +
             "hover:text-red-300"
           }
-          onClick={() => logout()}
+          onClick={() => handleLogout()}
         >
           Cerrar sesión
         </p>
