@@ -40,11 +40,15 @@ const Chat = () => {
   // state para otros
   const [showOtros, setShowOtros] = useState(false);
   const [otros, setOtros] = useState({
+    sintomas: "", // index = 0
     inflamacion: "", // index = 2
     manchas: "", // index = 3
     comezon: "", // index = 4
+    dolor: "", // index = 5
     consumeMedicamentos: "", // index = 8
+    diagnosticoContacto: "", // index = 10
     agenteInfeccioso: "", // index = 13
+    pais: "", // index = 15
     estadoAnimo: "", // index = 16
   });
   const [typeQuestion, setTypeQuestion] = useState("");
@@ -63,6 +67,7 @@ const Chat = () => {
     event.preventDefault();
     if (checked.checked.length === 0) return;
     // check otros
+    // if (objHasOnlyEmpty(otros)) return;
     if (checked.checked.includes("Otros") || checked.checked.includes("Otro")) {
       setChecked(checked.checked.splice(checked.checked.indexOf("Otros"), 1));
       setChecked(checked.checked.push(otros[typeQuestion]));
@@ -74,11 +79,15 @@ const Chat = () => {
     // clean otros
     setShowOtros(false);
     setOtros({
+      sintomas: "", // index = 0
       inflamacion: "", // index = 2
       manchas: "", // index = 3
       comezon: "", // index = 4
+      dolor: "", // index = 5
       consumeMedicamentos: "", // index = 8
+      diagnosticoContacto: "", // index = 10
       agenteInfeccioso: "", // index = 13
+      pais: "", // index = 15
       estadoAnimo: "", // index = 16
     });
     setTypeQuestion("");
@@ -86,6 +95,9 @@ const Chat = () => {
 
   const configTypeQuestions = () => {
     switch (checked.index) {
+      case 0:
+        setTypeQuestion("sintomas");
+        break;
       case 2:
         setTypeQuestion("inflamacion");
         break;
@@ -95,11 +107,20 @@ const Chat = () => {
       case 4:
         setTypeQuestion("comezon");
         break;
+      case 5:
+        setTypeQuestion("dolor");
+        break;
       case 8:
         setTypeQuestion("consumeMedicamentos");
         break;
+      case 10:
+        setTypeQuestion("diagnosticoContacto");
+        break;
       case 13:
         setTypeQuestion("agenteInfeccioso");
+        break;
+      case 15:
+        setTypeQuestion("pais");
         break;
       case 16:
         setTypeQuestion("estadoAnimo");
@@ -130,6 +151,10 @@ const Chat = () => {
       case 13:
         setOtros({ ...otros, agenteInfeccioso: event.target.value });
         setTypeQuestion("agenteInfeccioso");
+        break;
+      case 15:
+        setOtros({ ...otros, agenteInfeccioso: event.target.value });
+        setTypeQuestion("pais");
         break;
       case 16:
         setOtros({ ...otros, estadoAnimo: event.target.value });
@@ -189,6 +214,7 @@ const Chat = () => {
     };
     try {
       const responseGeneracion = await api.post("/prediccion/generar", data);
+      console.log(data)
       const dataResponse = responseGeneracion.data;
       setPrediction(dataResponse);
       await api.post("/prediccion/guardar", {

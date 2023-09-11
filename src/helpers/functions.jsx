@@ -193,10 +193,8 @@ export const generateData = (
 };
 
 export const objHasOnlyEmpty = (obj) => {
-  let cont = 0;
-  Object.values(obj).every((value) => {
-    if (value === "") cont++;
-  });
-  if (cont == Object.values(obj)) return true;
-  return false;
+  for (var key in obj) {
+    if (obj[key] !== null && obj[key] != "") return false;
+  }
+  return true;
 };
