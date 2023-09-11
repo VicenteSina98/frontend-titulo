@@ -221,11 +221,11 @@ const Chat = () => {
         id: informacionPersonal.user,
         preguntas: questions,
         respuestas: answers,
-        enfermedad1: dataResponse.response[1] ?? "",
-        enfermedad2: dataResponse.response[2] ?? "",
-        enfermedad3: dataResponse.response[3] ?? "",
-        enfermedad4: dataResponse.response[4] ?? "",
-        enfermedad5: dataResponse.response[5] ?? "",
+        enfermedad1: dataResponse.response[0] ?? "",
+        enfermedad2: dataResponse.response[1] ?? "",
+        enfermedad3: dataResponse.response[2] ?? "",
+        enfermedad4: dataResponse.response[3] ?? "",
+        enfermedad5: dataResponse.response[4] ?? "",
       });
     } catch (error) {
       console.log(error);
