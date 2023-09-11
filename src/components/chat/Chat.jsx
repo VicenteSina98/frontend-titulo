@@ -214,7 +214,7 @@ const Chat = () => {
     };
     try {
       const responseGeneracion = await api.post("/prediccion/generar", data);
-      console.log(data)
+      console.log(responseGeneracion)
       const dataResponse = responseGeneracion.data;
       setPrediction(dataResponse);
       await api.post("/prediccion/guardar", {
