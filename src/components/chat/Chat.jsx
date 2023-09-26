@@ -67,6 +67,7 @@ const Chat = () => {
     event.preventDefault();
     if (checked.checked.length === 0) return;
     // check otros
+    if (showOtros && objHasOnlyEmpty(otros)) return;
     // if (objHasOnlyEmpty(otros)) return;
     if (checked.checked.includes("Otros") || checked.checked.includes("Otro")) {
       setChecked(checked.checked.splice(checked.checked.indexOf("Otros"), 1));
@@ -376,7 +377,7 @@ const Chat = () => {
           {/* opciones */}
           <div className={`${finish ? "hidden" : ""}`}>
             <form
-              className={`flex h-max flex-col items-center justify-center gap-12 ${
+              className={`flex h-max w-full flex-col items-center justify-center gap-12 ${
                 ok ? "hidden" : ""
               }`}
               onSubmit={handleSubmit}
@@ -416,11 +417,9 @@ const Chat = () => {
                 placeholder="Especifique"
                 onChange={handleChange}
                 value={otros[typeQuestion]}
-                className={
-                  "w-full rounded-lg border-2 p-4 text-lg focus:border-blue-600 focus:outline-none " +
-                  "dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 " +
-                  `md:w-auto lg:text-lg ${!showOtros ? "hidden" : ""}`
-                }
+                className={`lg:text-lg" w-full rounded-lg border-2 p-4 text-lg focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300  dark:focus:border-blue-500 ${
+                  !showOtros ? "hidden" : ""
+                }`}
               />
               <div className="flex w-7/12 flex-col-reverse items-center justify-center gap-4 sm:w-1/2 md:w-5/12">
                 {/* cancelar prediccion */}
