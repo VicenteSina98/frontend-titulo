@@ -49,7 +49,7 @@ const Sidebar = () => {
     setAnswers([]);
     setError(false);
     setErrorMessage("");
-    setPrediction({});
+    setPrediction([]);
     setOk(false);
     setAnswer("");
     setQuestions([QUESTIONS_ARRAY[0]]);
@@ -65,6 +65,7 @@ const Sidebar = () => {
   const handleLogout = async () => {
     await cleanStates();
     logout();
+    navigate("/");
   };
   return (
     <>
@@ -105,12 +106,12 @@ const Sidebar = () => {
           showSidebar ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <h2 className="mb-4 text-md font-bold text-white">
+        <h2 className="text-md mb-4 font-bold text-white">
           {`${informacionPersonal.nombres} ${informacionPersonal.primer_apellido} ${informacionPersonal.segundo_apellido}`}
         </h2>
         <div
           className={
-            "mt-4 rounded-sm px-2 text-md transition-all " +
+            "text-md mt-4 rounded-sm px-2 transition-all " +
             "text-white hover:cursor-pointer hover:text-neutral-300"
           }
         >
@@ -118,7 +119,7 @@ const Sidebar = () => {
         </div>
         <div
           className={
-            "mt-4 rounded-sm px-2 text-md transition " +
+            "text-md mt-4 rounded-sm px-2 transition " +
             "text-white hover:cursor-pointer hover:text-neutral-300"
           }
         >
@@ -128,7 +129,7 @@ const Sidebar = () => {
         </div>
         <p
           className={
-            "mt-4 rounded-md   px-2 text-md " +
+            "text-md mt-4   rounded-md px-2 " +
             "text-white hover:cursor-pointer " +
             "hover:text-red-300"
           }
