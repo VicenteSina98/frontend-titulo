@@ -250,7 +250,7 @@ const Chat = () => {
     setQuestions([QUESTIONS_ARRAY[0]]);
     setAnswers([]);
     setAnswer("");
-    setPrediction({});
+    setPrediction([]);
     setChecked({ index: 0, checked: [] });
     setError(false);
     setShowOtros(false);
@@ -439,7 +439,7 @@ const Chat = () => {
                       : "hover:cursor-pointer"
                   }`}
                   type="submit"
-                  value="Enviar respuesta"
+                  value="Siguiente"
                 />
               </div>
             </form>
