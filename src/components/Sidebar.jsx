@@ -72,8 +72,8 @@ const Sidebar = () => {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="icon icon-tabler icon-tabler-circle-x fixed left-4 top-4 z-50 duration-300 ease-in-out  hover:cursor-pointer"
-          width="44"
-          height="44"
+          width="32"
+          height="32"
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="#FFF"
@@ -90,10 +90,10 @@ const Sidebar = () => {
         <svg
           onClick={() => setShowSidebar(!showSidebar)}
           className="fixed left-8 top-8 z-50 flex items-center duration-300 ease-in-out  hover:cursor-pointer"
-          fill={isDark ? "#fff" : "#0a0a0a"}
+          fill={isDark ? "#fff" : "#000"}
           viewBox="0 0 100 80"
-          width="40"
-          height="40"
+          width="24"
+          height="24"
         >
           <rect width="100" height="10"></rect>
           <rect y="30" width="100" height="10"></rect>
@@ -105,12 +105,12 @@ const Sidebar = () => {
           showSidebar ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <h2 className="mb-4 text-xl font-bold text-white">
+        <h2 className="mb-4 text-md font-bold text-white">
           {`${informacionPersonal.nombres} ${informacionPersonal.primer_apellido} ${informacionPersonal.segundo_apellido}`}
         </h2>
         <div
           className={
-            "mt-4 rounded-sm px-2 text-lg transition-all " +
+            "mt-4 rounded-sm px-2 text-md transition-all " +
             "text-white hover:cursor-pointer hover:text-neutral-300"
           }
         >
@@ -118,7 +118,7 @@ const Sidebar = () => {
         </div>
         <div
           className={
-            "mt-4 rounded-sm px-2 text-lg transition " +
+            "mt-4 rounded-sm px-2 text-md transition " +
             "text-white hover:cursor-pointer hover:text-neutral-300"
           }
         >
@@ -128,7 +128,7 @@ const Sidebar = () => {
         </div>
         <p
           className={
-            "mt-4 rounded-md   px-2 text-lg " +
+            "mt-4 rounded-md   px-2 text-md " +
             "text-white hover:cursor-pointer " +
             "hover:text-red-300"
           }

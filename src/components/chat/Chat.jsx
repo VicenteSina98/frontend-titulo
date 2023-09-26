@@ -132,6 +132,10 @@ const Chat = () => {
 
   const handleChange = (event) => {
     switch (checked.index) {
+      case 0:
+        setOtros({ ...otros, sintomas: event.target.value });
+        setTypeQuestion("sintomas");
+        break;
       case 2:
         setOtros({ ...otros, inflamacion: event.target.value });
         setTypeQuestion("inflamacion");
@@ -214,7 +218,7 @@ const Chat = () => {
     };
     try {
       const responseGeneracion = await api.post("/prediccion/generar", data);
-      console.log(responseGeneracion)
+      console.log(responseGeneracion);
       const dataResponse = responseGeneracion.data;
       setPrediction(dataResponse);
       await api.post("/prediccion/guardar", {
@@ -249,6 +253,13 @@ const Chat = () => {
     setPrediction({});
     setChecked({ index: 0, checked: [] });
     setError(false);
+    setShowOtros(false);
+  };
+
+  // cancel prediction
+  const cancelPrediction = () => {
+    newPrediction();
+    setChatStarted(false);
   };
 
   // effects
@@ -277,7 +288,7 @@ const Chat = () => {
   }, []);
 
   return (
-    <main className="mx-auto mb-8 mt-20 flex w-3/4 flex-col justify-between gap-8">
+    <main className="mx-auto mb-8 mt-24 flex w-10/12 flex-col justify-between gap-8 sm:w-8/12 md:w-7/12">
       {/* mensajes del chat */}
       <section ref={scrollRef} className="flex flex-col gap-4 overflow-y-auto">
         <div className={chatStarted ? "hidden" : ""}>
@@ -289,10 +300,10 @@ const Chat = () => {
             <BlockError message={errorMessage} />
           </div>
           {/* chat */}
-          <div className={error ? "hidden" : ""}>
+          <div className={`flex flex-col gap-4 ${error ? "hidden" : ""}`}>
             {!spinner ? (
               questions.map((question, index) => (
-                <div key={index}>
+                <div key={index} className="flex flex-col gap-4">
                   <Message data={question} isIA={true} />
                   <div className={index >= answers.length ? "hidden" : ""}>
                     <Message data={answers[index]} isIA={false} />
@@ -345,6 +356,15 @@ const Chat = () => {
               value="Nueva predicción"
               onClick={() => newPrediction()}
             />
+            {/* cancelar prediccion */}
+            <input
+              className={`text-md w-full rounded-sm py-4 text-lg text-red-700 hover:cursor-pointer dark:text-red-400 md:w-auto md:px-16 ${
+                ok || spinner ? "hidden" : ""
+              }`}
+              type="submit"
+              value="Cancelar predicción"
+              onClick={() => cancelPrediction()}
+            />
             <p
               className={`text-center text-3xl font-bold dark:text-white ${
                 !spinner ? "hidden" : ""
@@ -354,36 +374,33 @@ const Chat = () => {
             </p>
           </div>
           {/* opciones */}
-          <div className={finish ? "hidden" : ""}>
+          <div className={`${finish ? "hidden" : ""}`}>
             <form
-              className={`flex h-max flex-col items-center justify-center gap-8 ${
+              className={`flex h-max flex-col items-center justify-center gap-12 ${
                 ok ? "hidden" : ""
               }`}
               onSubmit={handleSubmit}
             >
+              {/* checkbox */}
               <div
-                className={`grid items-center justify-center ${
-                  OPTIONS_ARRAY[checked.index] % 2 === 0
-                    ? "grid-cols-4"
-                    : "grid-cols-3"
-                } md:text-md gap-4 text-center text-xs sm:text-sm md:gap-6 lg:gap-x-8 lg:gap-y-6 lg:text-lg`}
+                className={`grid w-full grid-cols-2 items-center justify-center gap-x-4 gap-y-4 text-center text-xs sm:grid-cols-4 sm:gap-y-8 sm:text-sm md:gap-x-6 md:gap-y-12 lg:gap-x-8 lg:gap-y-8`}
               >
                 {OPTIONS_ARRAY[checked.index]?.map((option, index) => (
-                  <div className={`flex gap-2 overflow-clip `} key={index}>
+                  <div className={`flex w-full overflow-clip `} key={index}>
                     <input
                       type="checkbox"
                       name={`option-${index}`}
                       id={`option-${index}`}
                       onChange={handleCheck}
                       value={option}
-                      className="absolute h-8 w-8 opacity-0"
+                      className="absolute h-8 w-10 opacity-0"
                     />
                     <label
                       htmlFor={`option-${index}`}
                       className={`w-full rounded-lg px-2 py-2 hover:cursor-pointer ${
                         checked.checked.includes(option)
-                          ? "bg-cyan-700 font-bold text-white shadow-md"
-                          : "border-2 border-neutral-400 bg-transparent text-neutral-300"
+                          ? "bg-cyan-700 text-white shadow-md"
+                          : "border-2 border-cyan-800 bg-transparent text-cyan-800 dark:border-neutral-300 dark:text-neutral-300"
                       }`}
                     >
                       {option}
@@ -391,28 +408,40 @@ const Chat = () => {
                   </div>
                 ))}
               </div>
+              {/* input text otros */}
               <input
                 type="text"
                 name={OPTIONS_ARRAY[checked.index]}
                 id={OPTIONS_ARRAY[checked.index]}
                 placeholder="Especifique"
                 onChange={handleChange}
-                value={otros[typeQuestion]}
+                value={""}
                 className={
                   "w-full rounded-lg border-2 p-4 text-lg focus:border-blue-600 focus:outline-none " +
                   "dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 " +
                   `md:w-auto lg:text-lg ${!showOtros ? "hidden" : ""}`
                 }
               />
-              <input
-                className={`text-md w-full rounded-sm bg-cyan-700 py-4 text-lg font-bold text-white dark:bg-cyan-800 md:w-auto md:px-16 ${
-                  checked.checked.length === 0 || objHasOnlyEmpty(otros)
-                    ? "hover:cursor-not-allowed"
-                    : "hover:cursor-pointer"
-                }`}
-                type="submit"
-                value="Enviar respuesta"
-              />
+              <div className="flex w-7/12 flex-col-reverse items-center justify-center gap-4 sm:w-1/2 md:w-5/12">
+                {/* cancelar prediccion */}
+                <input
+                  className={`w-full cursor-pointer rounded-sm px-2 py-4 text-center text-sm text-red-700 dark:text-red-400 sm:text-base`}
+                  type="submit"
+                  value="Cancelar predicción"
+                  onClick={() => cancelPrediction()}
+                />
+                {/* submit */}
+                <input
+                  className={`w-full rounded-sm bg-cyan-700 py-4 text-center text-sm font-bold text-white dark:bg-cyan-800 sm:text-base ${
+                    checked.checked.length === 0 ||
+                    (showOtros && objHasOnlyEmpty(otros))
+                      ? "hover:cursor-not-allowed"
+                      : "hover:cursor-pointer"
+                  }`}
+                  type="submit"
+                  value="Enviar respuesta"
+                />
+              </div>
             </form>
           </div>
         </div>

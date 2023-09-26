@@ -44,7 +44,7 @@ const History = () => {
   return loading ? (
     <Spinner />
   ) : (
-    <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col justify-start gap-8 dark:bg-neutral-800">
+    <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col justify-start gap-8">
       <h2 className="text-left text-2xl font-bold dark:text-white">
         Mis predicciones
       </h2>
