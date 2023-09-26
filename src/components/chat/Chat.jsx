@@ -415,7 +415,7 @@ const Chat = () => {
                 id={OPTIONS_ARRAY[checked.index]}
                 placeholder="Especifique"
                 onChange={handleChange}
-                value={""}
+                value={otros[typeQuestion]}
                 className={
                   "w-full rounded-lg border-2 p-4 text-lg focus:border-blue-600 focus:outline-none " +
                   "dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500 " +
