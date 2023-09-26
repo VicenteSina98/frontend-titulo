@@ -179,7 +179,7 @@ const Chat = () => {
     }
     setChecked({ ...checked, checked: updatedList });
     // mostrar input texto otros
-    if (updatedList.includes("Otros") || checked.checked.includes("Otro"))
+    if (updatedList.includes("Otros") || updatedList.includes("Otro"))
       setShowOtros(true);
     else setShowOtros(false);
     configTypeQuestions();
@@ -417,7 +417,7 @@ const Chat = () => {
                 placeholder="Especifique"
                 onChange={handleChange}
                 value={otros[typeQuestion]}
-                className={`lg:text-lg" w-full rounded-lg border-2 p-4 text-lg focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300  dark:focus:border-blue-500 ${
+                className={`lg:text-lg w-full rounded-lg border-2 p-4 text-lg focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300  dark:focus:border-blue-500 ${
                   !showOtros ? "hidden" : ""
                 }`}
               />
