@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import Logo from "../../img/logo.png";
 
 const Prediction = ({ data }) => {
-  console.log(data);
   return (
     <div className="mb-1 flex max-w-max flex-col gap-2 break-words rounded-md bg-slate-200 px-4 py-2 shadow-md dark:bg-neutral-700 dark:shadow-lg">
       <div className="flex items-center gap-2">
@@ -13,7 +12,7 @@ const Prediction = ({ data }) => {
         </p>
       </div>
       <div className="ml-10 flex flex-col gap-2">
-        {data.posibles_enfermedades?.map((enfermedad, index) => (
+        {data.map((enfermedad, index) => (
           <p
             className="text-left text-sm dark:text-white sm:text-base"
             key={index}

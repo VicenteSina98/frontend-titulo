@@ -220,7 +220,7 @@ const Chat = () => {
       const responseGeneracion = await api.post("/prediccion/generar", data);
       console.log(responseGeneracion);
       const dataResponse = responseGeneracion.data;
-      setPrediction(dataResponse);
+      setPrediction(dataResponse.response);
       await api.post("/prediccion/guardar", {
         id: informacionPersonal.user,
         preguntas: questions,
