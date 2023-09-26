@@ -51,7 +51,7 @@ const Chat = () => {
     pais: "", // index = 15
     estadoAnimo: "", // index = 16
   });
-  const [typeQuestion, setTypeQuestion] = useState("");
+  const [typeQuestion, setTypeQuestion] = useState("sintomas");
   // ref
   const scrollRef = useRef(null);
 
@@ -68,13 +68,22 @@ const Chat = () => {
     if (checked.checked.length === 0) return;
     // check otros
     if (showOtros && objHasOnlyEmpty(otros)) return;
-    // if (objHasOnlyEmpty(otros)) return;
-    if (checked.checked.includes("Otros") || checked.checked.includes("Otro")) {
-      setChecked(checked.checked.splice(checked.checked.indexOf("Otros"), 1));
-      setChecked(checked.checked.push(otros[typeQuestion]));
-    }
     // save data
-    let saveAnswer = checked.checked.join(", ");
+    let updateList = [...checked.checked];
+    if (updateList.includes("Otros") || updateList.includes("Otro")) {
+      updateList.splice(
+        updateList.indexOf(
+          `${updateList.includes("Otros") ? "Otros" : "Otro"}`
+        ),
+        1
+      );
+      updateList.push(otros[typeQuestion]);
+      setChecked({
+        ...checked,
+        checked: updateList,
+      });
+    }
+    let saveAnswer = updateList.join(", ");
     setChecked({ index: checked.index + 1, checked: [] });
     setAnswers([...answers, saveAnswer]);
     // clean otros
@@ -85,50 +94,13 @@ const Chat = () => {
       manchas: "", // index = 3
       comezon: "", // index = 4
       dolor: "", // index = 5
+      haceCuanto: "", // index = 6
       consumeMedicamentos: "", // index = 8
       diagnosticoContacto: "", // index = 10
       agenteInfeccioso: "", // index = 13
       pais: "", // index = 15
       estadoAnimo: "", // index = 16
     });
-    setTypeQuestion("");
-  };
-
-  const configTypeQuestions = () => {
-    switch (checked.index) {
-      case 0:
-        setTypeQuestion("sintomas");
-        break;
-      case 2:
-        setTypeQuestion("inflamacion");
-        break;
-      case 3:
-        setTypeQuestion("manchas");
-        break;
-      case 4:
-        setTypeQuestion("comezon");
-        break;
-      case 5:
-        setTypeQuestion("dolor");
-        break;
-      case 8:
-        setTypeQuestion("consumeMedicamentos");
-        break;
-      case 10:
-        setTypeQuestion("diagnosticoContacto");
-        break;
-      case 13:
-        setTypeQuestion("agenteInfeccioso");
-        break;
-      case 15:
-        setTypeQuestion("pais");
-        break;
-      case 16:
-        setTypeQuestion("estadoAnimo");
-        break;
-      default:
-        break;
-    }
   };
 
   const handleChange = (event) => {
@@ -149,16 +121,24 @@ const Chat = () => {
         setOtros({ ...otros, comezon: event.target.value });
         setTypeQuestion("comezon");
         break;
+      case 5:
+        setOtros({ ...otros, dolor: event.target.value });
+        setTypeQuestion("dolor");
+        break;
       case 8:
         setOtros({ ...otros, consumeMedicamentos: event.target.value });
         setTypeQuestion("consumeMedicamentos");
+        break;
+      case 10:
+        setOtros({ ...otros, diagnosticoContacto: event.target.value });
+        setTypeQuestion("diagnosticoContacto");
         break;
       case 13:
         setOtros({ ...otros, agenteInfeccioso: event.target.value });
         setTypeQuestion("agenteInfeccioso");
         break;
       case 15:
-        setOtros({ ...otros, agenteInfeccioso: event.target.value });
+        setOtros({ ...otros, pais: event.target.value });
         setTypeQuestion("pais");
         break;
       case 16:
@@ -172,17 +152,14 @@ const Chat = () => {
 
   const handleCheck = (event) => {
     let updatedList = [...checked.checked];
-    if (event.target.checked) {
+    if (event.target.checked)
       updatedList = [...checked.checked, event.target.value];
-    } else {
-      updatedList.splice(checked.checked.indexOf(event.target.value), 1);
-    }
+    else updatedList.splice(checked.checked.indexOf(event.target.value), 1);
     setChecked({ ...checked, checked: updatedList });
     // mostrar input texto otros
     if (updatedList.includes("Otros") || updatedList.includes("Otro"))
       setShowOtros(true);
     else setShowOtros(false);
-    configTypeQuestions();
   };
 
   // consult API
@@ -417,7 +394,7 @@ const Chat = () => {
                 placeholder="Especifique"
                 onChange={handleChange}
                 value={otros[typeQuestion]}
-                className={`lg:text-lg w-full rounded-lg border-2 p-4 text-lg focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300  dark:focus:border-blue-500 ${
+                className={`w-full rounded-lg border-2 p-4 text-lg focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500  lg:text-lg ${
                   !showOtros ? "hidden" : ""
                 }`}
               />
