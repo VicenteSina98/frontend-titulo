@@ -1,5 +1,4 @@
 import Welcome from "./Welcome";
-// import Error from "../SigninFormError";
 import Spinner from "../Spinner";
 import Message from "./Message";
 import useQuoter from "../../hooks/useQuoter";
@@ -8,7 +7,7 @@ import Prediction from "./Prediction";
 import useAxios from "../../hooks/useAxios";
 import BlockError from "../error/BlockError";
 import { OPTIONS_ARRAY, QUESTIONS_ARRAY } from "../../helpers/constants";
-import { objHasOnlyEmpty } from "../../helpers/functions";
+import { matrixToObject } from "../../helpers/functions";
 
 const Chat = () => {
   // states
@@ -34,8 +33,8 @@ const Chat = () => {
     setAnswer,
     questions,
     setQuestions,
-    checked,
-    setChecked,
+    index,
+    setIndex,
   } = useQuoter();
   // state para otros
   const [showOtros, setShowOtros] = useState(false);
@@ -52,6 +51,9 @@ const Chat = () => {
     estadoAnimo: "", // index = 16
   });
   const [typeQuestion, setTypeQuestion] = useState("sintomas");
+  const [check, setCheck] = useState(matrixToObject(OPTIONS_ARRAY));
+  const [countCheck, setCountCheck] = useState(0);
+
   // ref
   const scrollRef = useRef(null);
 
@@ -65,28 +67,24 @@ const Chat = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (checked.checked.length === 0) return;
+    if (countCheck === 0) return;
     // check otros
-    if (showOtros && objHasOnlyEmpty(otros)) return;
+    if (showOtros && otros[typeQuestion] === "") return;
     // save data
-    let updateList = [...checked.checked];
-    if (updateList.includes("Otros") || updateList.includes("Otro")) {
-      updateList.splice(
-        updateList.indexOf(
-          `${updateList.includes("Otros") ? "Otros" : "Otro"}`
-        ),
-        1
-      );
-      updateList.push(otros[typeQuestion]);
-      setChecked({
-        ...checked,
-        checked: updateList,
-      });
+    const newIndex = index + 1;
+    const responsesFlags = check[index];
+    let answerList = [];
+    for (let option in responsesFlags) {
+      if (responsesFlags[option]) {
+        if (option === "Otro" || option === "Otros")
+          answerList.push(otros[typeQuestion]);
+        else answerList.push(option);
+      }
     }
-    let saveAnswer = updateList.join(", ");
-    setChecked({ index: checked.index + 1, checked: [] });
+    const saveAnswer = answerList.join(", ");
+    setIndex(newIndex);
     setAnswers([...answers, saveAnswer]);
-    // clean otros
+    setCountCheck(0);
     setShowOtros(false);
     setOtros({
       sintomas: "", // index = 0
@@ -103,46 +101,46 @@ const Chat = () => {
     });
   };
 
-  const handleChange = (event) => {
-    switch (checked.index) {
+  const updateOtros = (value) => {
+    switch (index) {
       case 0:
-        setOtros({ ...otros, sintomas: event.target.value });
+        setOtros({ ...otros, sintomas: value });
         setTypeQuestion("sintomas");
         break;
       case 2:
-        setOtros({ ...otros, inflamacion: event.target.value });
+        setOtros({ ...otros, inflamacion: value });
         setTypeQuestion("inflamacion");
         break;
       case 3:
-        setOtros({ ...otros, manchas: event.target.value });
+        setOtros({ ...otros, manchas: value });
         setTypeQuestion("manchas");
         break;
       case 4:
-        setOtros({ ...otros, comezon: event.target.value });
+        setOtros({ ...otros, comezon: value });
         setTypeQuestion("comezon");
         break;
       case 5:
-        setOtros({ ...otros, dolor: event.target.value });
+        setOtros({ ...otros, dolor: value });
         setTypeQuestion("dolor");
         break;
       case 8:
-        setOtros({ ...otros, consumeMedicamentos: event.target.value });
+        setOtros({ ...otros, consumeMedicamentos: value });
         setTypeQuestion("consumeMedicamentos");
         break;
       case 10:
-        setOtros({ ...otros, diagnosticoContacto: event.target.value });
+        setOtros({ ...otros, diagnosticoContacto: value });
         setTypeQuestion("diagnosticoContacto");
         break;
       case 13:
-        setOtros({ ...otros, agenteInfeccioso: event.target.value });
+        setOtros({ ...otros, agenteInfeccioso: value });
         setTypeQuestion("agenteInfeccioso");
         break;
       case 15:
-        setOtros({ ...otros, pais: event.target.value });
+        setOtros({ ...otros, pais: value });
         setTypeQuestion("pais");
         break;
       case 16:
-        setOtros({ ...otros, estadoAnimo: event.target.value });
+        setOtros({ ...otros, estadoAnimo: value });
         setTypeQuestion("estadoAnimo");
         break;
       default:
@@ -150,16 +148,57 @@ const Chat = () => {
     }
   };
 
+  const handleChange = (event) => {
+    updateOtros(event.target.value);
+  };
+
+  const updateCheck = (option) => {
+    let copyCheck = { ...check };
+    copyCheck[index][option] = !check[index][option];
+    setCheck(copyCheck);
+  };
+
   const handleCheck = (event) => {
-    let updatedList = [...checked.checked];
-    if (event.target.checked)
-      updatedList = [...checked.checked, event.target.value];
-    else updatedList.splice(checked.checked.indexOf(event.target.value), 1);
-    setChecked({ ...checked, checked: updatedList });
-    // mostrar input texto otros
-    if (updatedList.includes("Otros") || updatedList.includes("Otro"))
+    const option = event.target.innerText;
+    if (
+      (index === 6 || index === 7) &&
+      countCheck === 1 &&
+      !check[index][option]
+    )
+      return;
+    if (
+      (option === "Otro" || option === "Otros" || option === "Ninguno") &&
+      multipleOptionsSelected() &&
+      !check[index][option]
+    )
+      return;
+    if (
+      (option !== "Otro" || option !== "Otros" || option !== "Ninguno") &&
+      !check[index][option]
+    ) {
+      if (check[index]["Otro"] || check[index]["Otros"]) return;
+      if (check[index]["Otro"] || check[index]["Otros"]) return;
+      if (check[index]["Ninguno"]) return;
+    }
+    if ((option === "Otro" || option === "Otros") && check[index][option]) {
+      updateCheck(option);
+      updateOtros("");
+      setShowOtros(false);
+      setCountCheck(countCheck - 1);
+    } else if (
+      (option === "Otro" || option === "Otros") &&
+      !check[index][option]
+    ) {
+      updateCheck(option);
       setShowOtros(true);
-    else setShowOtros(false);
+      setCountCheck(countCheck + 1);
+    } else if (check[index][option]) {
+      updateCheck(option);
+      setCountCheck(countCheck - 1);
+    } else {
+      updateCheck(option);
+      setCountCheck(countCheck + 1);
+    }
   };
 
   // consult API
@@ -221,17 +260,40 @@ const Chat = () => {
     setOk(true);
   };
 
+  const multipleOptionsSelected = () => {
+    const optionsFlags = check[index];
+    for (let option in optionsFlags)
+      if (option !== "Otro" || option !== "Otros" || option !== "Ninguno")
+        if (optionsFlags[option]) return true;
+    return false;
+  };
+
   // reset states
   const newPrediction = () => {
     setFinish(false);
     setOk(false);
     setQuestions([QUESTIONS_ARRAY[0]]);
+    setTypeQuestion("sintomas");
     setAnswers([]);
     setAnswer("");
     setPrediction([]);
-    setChecked({ index: 0, checked: [] });
+    setIndex(0);
     setError(false);
     setShowOtros(false);
+    setOtros({
+      sintomas: "", // index = 0
+      inflamacion: "", // index = 2
+      manchas: "", // index = 3
+      comezon: "", // index = 4
+      dolor: "", // index = 5
+      consumeMedicamentos: "", // index = 8
+      diagnosticoContacto: "", // index = 10
+      agenteInfeccioso: "", // index = 13
+      pais: "", // index = 15
+      estadoAnimo: "", // index = 16
+    });
+    setCheck(matrixToObject(OPTIONS_ARRAY));
+    setCountCheck(0);
   };
 
   // cancel prediction
@@ -280,11 +342,11 @@ const Chat = () => {
           {/* chat */}
           <div className={`flex flex-col gap-4 ${error ? "hidden" : ""}`}>
             {!spinner ? (
-              questions.map((question, index) => (
-                <div key={index} className="flex flex-col gap-4">
+              questions.map((question, i) => (
+                <div key={i} className="flex flex-col gap-4">
                   <Message data={question} isIA={true} />
-                  <div className={index >= answers.length ? "hidden" : ""}>
-                    <Message data={answers[index]} isIA={false} />
+                  <div className={i >= answers.length ? "hidden" : ""}>
+                    <Message data={answers[i]} isIA={false} />
                   </div>
                 </div>
               ))
@@ -311,6 +373,7 @@ const Chat = () => {
           Comenzar predicción
         </button>
         <div className={!chatStarted ? "hidden" : ""}>
+          {/* botones */}
           <div
             className={`flex flex-col items-center justify-center ${
               !finish ? "hidden" : ""
@@ -363,34 +426,39 @@ const Chat = () => {
               <div
                 className={`grid w-full grid-cols-2 items-center justify-center gap-x-4 gap-y-4 text-center text-xs sm:grid-cols-4 sm:gap-y-8 sm:text-sm md:gap-x-6 md:gap-y-12 lg:gap-x-8 lg:gap-y-8`}
               >
-                {OPTIONS_ARRAY[checked.index]?.map((option, index) => (
-                  <div className={`flex w-full overflow-clip `} key={index}>
-                    <input
-                      type="checkbox"
-                      name={`option-${index}`}
-                      id={`option-${index}`}
-                      onChange={handleCheck}
-                      value={option}
-                      className="absolute h-8 w-10 opacity-0"
-                    />
-                    <label
-                      htmlFor={`option-${index}`}
-                      className={`w-full rounded-lg px-2 py-2 hover:cursor-pointer ${
-                        checked.checked.includes(option)
-                          ? "bg-cyan-700 text-white shadow-md"
-                          : "border-2 border-cyan-800 bg-transparent text-cyan-800 dark:border-neutral-300 dark:text-neutral-300"
-                      }`}
-                    >
-                      {option}
-                    </label>
+                {OPTIONS_ARRAY[index]?.map((option, i) => (
+                  <div
+                    key={i}
+                    onClick={handleCheck}
+                    className={`w-full rounded-lg border-2 px-2 py-2 ${
+                      check[index][option]
+                        ? "border-cyan-700 bg-cyan-700 text-white shadow-md"
+                        : "border-cyan-800 bg-transparent text-cyan-800 dark:border-neutral-300 dark:text-neutral-300"
+                    } ${
+                      ((option !== "Otro" || option !== "Otros") &&
+                        (check[index]["Otro"] || check[index]["Otros"])) ||
+                      (option !== "Ninguno" && check[index]["Ninguno"]) ||
+                      ((option === "Otro" ||
+                        option === "Otros" ||
+                        option === "Ninguno") &&
+                        multipleOptionsSelected() &&
+                        !check[index][option]) ||
+                      ((index === 6 || index === 7) &&
+                        countCheck === 1 &&
+                        !check[index][option])
+                        ? "hover:cursor-not-allowed"
+                        : "hover:cursor-pointer"
+                    }`}
+                  >
+                    {option}
                   </div>
                 ))}
               </div>
               {/* input text otros */}
               <input
                 type="text"
-                name={OPTIONS_ARRAY[checked.index]}
-                id={OPTIONS_ARRAY[checked.index]}
+                name={OPTIONS_ARRAY[index]}
+                id={OPTIONS_ARRAY[index]}
                 placeholder="Especifique"
                 onChange={handleChange}
                 value={otros[typeQuestion]}
@@ -409,8 +477,8 @@ const Chat = () => {
                 {/* submit */}
                 <input
                   className={`w-full rounded-sm bg-cyan-700 py-4 text-center text-sm font-bold text-white dark:bg-cyan-800 sm:text-base ${
-                    checked.checked.length === 0 ||
-                    (showOtros && objHasOnlyEmpty(otros))
+                    countCheck === 0 ||
+                    (showOtros && otros[typeQuestion] === "")
                       ? "hover:cursor-not-allowed"
                       : "hover:cursor-pointer"
                   }`}

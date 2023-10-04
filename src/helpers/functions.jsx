@@ -198,3 +198,14 @@ export const objHasOnlyEmpty = (obj) => {
   }
   return true;
 };
+
+export const matrixToObject = (matrix) => {
+  let obj = {};
+  matrix.forEach((row, index) => {
+    obj[index] = {};
+    row.forEach((value) => {
+      obj[index][value] = false;
+    });
+  });
+  return obj;
+};

@@ -39,7 +39,7 @@ const QuoterProvider = ({ children }) => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [checked, setChecked] = useState({ index: 0, checked: [] });
+  const [index, setIndex] = useState(0);
 
   return (
     <QuoterContext.Provider
@@ -72,8 +72,8 @@ const QuoterProvider = ({ children }) => {
         setAnswer,
         questions,
         setQuestions,
-        checked,
-        setChecked,
+        index,
+        setIndex,
       }}
     >
       {children}
