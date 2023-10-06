@@ -19,7 +19,7 @@ const PredictionUI = () => {
   const [loading, setLoading] = useState(true);
   const [mensajes, setMensajes] = useState([]);
   const [correlative, setCorrelative] = useState(0);
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   const [queryParameters] = useSearchParams();
   const api = useAxios();
   const setInfoPersonal = async () => {
@@ -36,15 +36,13 @@ const PredictionUI = () => {
     );
     const prediction = filterPrediction[0];
     setMensajes(prediction.mensajes);
-    setData({
-      posibles_enfermedades: [
-        prediction.enfermedad1,
-        prediction.enfermedad2,
-        prediction.enfermedad3,
-        prediction.enfermedad4,
-        prediction.enfermedad5,
-      ],
-    });
+    setData([
+      prediction.enfermedad1,
+      prediction.enfermedad2,
+      prediction.enfermedad3,
+      prediction.enfermedad4,
+      prediction.enfermedad5,
+    ]);
     setLoading(false);
   };
   const setBaseData = async () => {

@@ -53,6 +53,12 @@ const Chat = () => {
   const [typeQuestion, setTypeQuestion] = useState("sintomas");
   const [check, setCheck] = useState(matrixToObject(OPTIONS_ARRAY));
   const [countCheck, setCountCheck] = useState(0);
+  const [extraAnswers, setExtraAnswers] = useState({
+    10: "",
+    11: "",
+    13: "",
+    15: "",
+  });
 
   // ref
   const scrollRef = useRef(null);
@@ -61,29 +67,23 @@ const Chat = () => {
   const api = useAxios();
 
   // handlers
-  const handleClick = async () => {
-    await queryAPI();
+  const supportHandleClick = async () => {
+    let copyAnswers = [...answers];
+    if (extraAnswers[10] !== "") copyAnswers.splice(10, 0, extraAnswers[10]);
+    if (extraAnswers[11] !== "") copyAnswers.splice(11, 0, extraAnswers[11]);
+    if (extraAnswers[13] !== "") copyAnswers.splice(13, 0, extraAnswers[13]);
+    if (extraAnswers[15] !== "") copyAnswers.splice(15, 0, extraAnswers[15]);
+    setAnswers(copyAnswers);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (countCheck === 0) return;
-    // check otros
-    if (showOtros && otros[typeQuestion] === "") return;
-    // save data
-    const newIndex = index + 1;
-    const responsesFlags = check[index];
-    let answerList = [];
-    for (let option in responsesFlags) {
-      if (responsesFlags[option]) {
-        if (option === "Otro" || option === "Otros")
-          answerList.push(otros[typeQuestion]);
-        else answerList.push(option);
-      }
-    }
-    const saveAnswer = answerList.join(", ");
+  const handleClick = async () => {
+    await supportHandleClick();
+    await queryAPI();
+    1;
+  };
+
+  const cleanOnSubmit = async (newIndex) => {
     setIndex(newIndex);
-    setAnswers([...answers, saveAnswer]);
     setCountCheck(0);
     setShowOtros(false);
     setOtros({
@@ -99,6 +99,53 @@ const Chat = () => {
       pais: "", // index = 15
       estadoAnimo: "", // index = 16
     });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // chequear que haya al menos una opcion seleccionada
+    if (countCheck === 0) return;
+    // chequear que si esta seleccionado otros, el input text no este vacio
+    if (showOtros && otros[typeQuestion] === "") return;
+    // guardar respuestas
+    let newIndex = index + 1;
+    const responsesFlags = check[index];
+    let answerList = [];
+    for (let option in responsesFlags) {
+      if (responsesFlags[option]) {
+        if (option === "Otro" || option === "Otros")
+          answerList.push(otros[typeQuestion]);
+        else answerList.push(option);
+      }
+    }
+    // saltar preguntas dependientes
+    let auxExtraAnswers = { ...extraAnswers };
+    if (index === 9 && answerList.includes("No")) {
+      auxExtraAnswers[10] = "No aplica";
+      newIndex += 1;
+      auxExtraAnswers[11] = "No aplica";
+      newIndex += 1;
+    } else if (index === 12 && answerList.includes("No")) {
+      auxExtraAnswers[13] = "No aplica";
+      newIndex += 1;
+    } else if (index === 14 && answerList.includes("No")) {
+      auxExtraAnswers[15] = "No aplica";
+      newIndex += 1;
+    }
+    const saveAnswer = answerList.join(", ");
+    if (newIndex === 17) {
+      let copyAnswers = [...answers, saveAnswer];
+      if (extraAnswers[10] !== "") copyAnswers.splice(10, 0, extraAnswers[10]);
+      if (extraAnswers[11] !== "") copyAnswers.splice(11, 0, extraAnswers[11]);
+      if (extraAnswers[13] !== "") copyAnswers.splice(13, 0, extraAnswers[13]);
+      if (extraAnswers[15] !== "") copyAnswers.splice(15, 0, extraAnswers[15]);
+      setAnswers(copyAnswers);
+      await cleanOnSubmit(newIndex);
+      return;
+    }
+    setExtraAnswers(auxExtraAnswers);
+    setAnswers([...answers, saveAnswer]);
+    await cleanOnSubmit(newIndex);
   };
 
   const updateOtros = (value) => {
@@ -160,18 +207,21 @@ const Chat = () => {
 
   const handleCheck = (event) => {
     const option = event.target.innerText;
+    // chequear preguntas con respuesta unica
     if (
       (index === 6 || index === 7) &&
       countCheck === 1 &&
       !check[index][option]
     )
       return;
+    // chequear seleccion de otros o ninguno cuando ya hay otras opciones seleccionadas
     if (
       (option === "Otro" || option === "Otros" || option === "Ninguno") &&
       multipleOptionsSelected() &&
       !check[index][option]
     )
       return;
+    // chequear seleccion de opciones cuando otros o ninguno estan seleccionadas
     if (
       (option !== "Otro" || option !== "Otros" || option !== "Ninguno") &&
       !check[index][option]
@@ -181,6 +231,7 @@ const Chat = () => {
       if (check[index]["Ninguno"]) return;
     }
     if ((option === "Otro" || option === "Otros") && check[index][option]) {
+      // deseleccionar otros
       updateCheck(option);
       updateOtros("");
       setShowOtros(false);
@@ -189,13 +240,16 @@ const Chat = () => {
       (option === "Otro" || option === "Otros") &&
       !check[index][option]
     ) {
+      // seleccionar otros
       updateCheck(option);
       setShowOtros(true);
       setCountCheck(countCheck + 1);
     } else if (check[index][option]) {
+      // deseleccionar opcion
       updateCheck(option);
       setCountCheck(countCheck - 1);
     } else {
+      // seleccionar opcion
       updateCheck(option);
       setCountCheck(countCheck + 1);
     }
@@ -304,17 +358,14 @@ const Chat = () => {
 
   // effects
   useEffect(() => {
-    if (answers.length === 17) setFinish(true);
-  }, [answers]);
+    if (index === 17) setFinish(true);
+  }, [index]);
 
   useEffect(() => {
-    if (
-      answers.length > 0 &&
-      !questions.includes(QUESTIONS_ARRAY[questions.length])
-    ) {
+    if (answers.length > 0 && !questions.includes(QUESTIONS_ARRAY[index])) {
       setAnswer("");
-      if (QUESTIONS_ARRAY[questions.length] !== undefined)
-        setQuestions([...questions, QUESTIONS_ARRAY[questions.length]]);
+      if (QUESTIONS_ARRAY[index] !== undefined)
+        setQuestions([...questions, QUESTIONS_ARRAY[index]]);
     }
   }, [answers]);
 

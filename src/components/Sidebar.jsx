@@ -21,7 +21,7 @@ const Sidebar = () => {
     setOk,
     setAnswer,
     setQuestions,
-    setChecked,
+    setIndex,
   } = useQuoter();
   const cleanStates = async () => {
     setInformacionPersonal({
@@ -53,7 +53,7 @@ const Sidebar = () => {
     setOk(false);
     setAnswer("");
     setQuestions([QUESTIONS_ARRAY[0]]);
-    setChecked({ index: 0, checked: [] });
+    setIndex(0);
   };
   // hooks
   const navigate = useNavigate();
