@@ -1,12 +1,16 @@
+// librerias
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+// layouts
 import LayoutInitSession from "./layout/LayoutInitSession";
 import MainWrapper from "./layout/MainWrapper";
 import PrivateRoute from "./layout/PrivateRoute";
+import LayoutMain from "./layout/LayoutMain";
+// paginas
 import Login from "./pages/Login";
 import Signin from "./pages/Signin";
 import Home from "./pages/Home";
 import History from "./pages/History";
-import LayoutMain from "./layout/LayoutMain";
+// componentes
 import PredictionUI from "./components/PredictionUI";
 
 const SafeApp = () => (

@@ -1,27 +1,27 @@
+// librerias
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../helpers/auth";
+// funciones auxiliares
 import { useAuthStore } from "../store/Auth";
+import { login } from "../helpers/auth";
+// componentes
 import BlockError from "../components/error/BlockError";
 import Logo from "../img/logo.png";
 
 const Login = () => {
-  // states
+  // estados
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [sessionError, setSessionError] = useState("");
-
+  // hooks
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const navigate = useNavigate();
+  // handlers
   const cleanStates = async () => {
     setEmail("");
     setPassword("");
     setSessionError("");
   };
-
-  // hooks
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  const navigate = useNavigate();
-
-  // handlers
   const handleLogin = async (event) => {
     event.preventDefault();
     const { error } = await login(email, password);
@@ -30,16 +30,14 @@ const Login = () => {
       navigate("/home");
     } else setSessionError(error);
   };
-
   // effects
   useEffect(() => {
     if (isLoggedIn()) {
       navigate("/home");
     }
   }, []);
-
   return (
-    <main className="overflow-auto flex h-full flex-col items-cente justify-start gap-2 rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-800 lg:grid-cols-2">
+    <main className="items-cente flex h-full flex-col justify-start gap-2 overflow-auto rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-800 lg:grid-cols-2">
       <section className="overflow-auto rounded-md bg-cyan-700 p-4 dark:bg-cyan-900 lg:flex lg:items-center lg:justify-center">
         <div className="mx-auto flex flex-col items-center gap-2">
           <img src={Logo} alt="logo" className="w-12 rounded-full lg:w-24" />

@@ -1,13 +1,15 @@
+// librerias
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+// componentes
+import Success from "../components/Success";
 import PersonalDataForm from "../components/signinForm/PersonalDataForm";
 import MedicalDataForm from "../components/signinForm/MedicalDataForm";
-import Success from "../components/Success";
 import BlockError from "../components/error/BlockError";
 import Logo from "../img/logo.png";
 
 const Signin = () => {
-  // states
+  // estados
   const [password, setPassword] = useState("");
   const [nextSection, setNextSection] = useState(false);
   const [accountCreated, setAccountCreated] = useState(false);
@@ -31,7 +33,9 @@ const Signin = () => {
     historialEnfermedadesInfecciosas: "",
     historialHabitosSalud: "",
   });
-
+  // hooks
+  const navigate = useNavigate();
+  // handlers
   const cleanStates = async () => {
     setPassword("");
     setNextSection("");
@@ -40,16 +44,10 @@ const Signin = () => {
     setInformacionPersonal({});
     setAntecedentesMedicos({});
   };
-
-  // hooks
-  const navigate = useNavigate();
-
-  // handlers
   const handleClick = async () => {
     await cleanStates();
     navigate("/");
   };
-
   return (
     <main className="flex h-full flex-col gap-4 rounded-lg bg-white p-1 shadow-lg dark:bg-neutral-800">
       <section className="flex flex-col items-center justify-center gap-1">
@@ -60,6 +58,7 @@ const Signin = () => {
         <h2 className="text-center text-sm text-black dark:text-gray-200">
           Regístrate y obtén predicciones de enfermedades
         </h2>
+        {/* mensajes de error y exito */}
         <div>
           {sessionError?.email?.map((error, index) => (
             <BlockError key={index} message={`Error en el correo: ${error}`} />

@@ -89,12 +89,12 @@ export const OPTIONS_ARRAY = [
     "Ninguno",
   ], // 8
   ["Si", "No"], // 9
-  ["Covid-19", "Gripe", "ITS", "Otros", "Ninguno", "No aplica"], // 10
-  ["Si", "No", "No aplica"], // 11
+  ["Covid-19", "Gripe", "ITS", "Otros", "Ninguno"], // 10
+  ["Si", "No"], // 11
   ["Si", "No"], // 12
-  ["Químico", "Biológico", "Otro", "No aplica"], // 13
+  ["Químico", "Biológico", "Otro"], // 13
   ["Si", "No"], // 14
-  ["Australia", "Brasil", "China", "India", "Sudáfrica", "Otros", "No aplica"], // 15
+  ["Australia", "Brasil", "China", "India", "Sudáfrica", "Otros"], // 15
   [
     "Decaido",
     "Cansado",
