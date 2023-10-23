@@ -555,7 +555,7 @@ const Chat = () => {
             {/* solo nuevo chat */}
             <div
               className={`flex w-full flex-col ${
-                !ok || spinner || !saved ? "hidden" : ""
+                ok && !spinner && (saved || error) ? "" : "hidden"
               }`}
             >
               <PrimaryButton
