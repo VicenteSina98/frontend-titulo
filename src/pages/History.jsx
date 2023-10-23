@@ -81,11 +81,19 @@ const History = () => {
       >
         Aun no tienes predicciones realizadas...
       </p>
-      <SecondaryButton
-        valueContent="Ir al chat actual"
-        onClickFunction={goTo}
-        onClickFnParameters={["/home"]}
-      />
+      {history.length > 0 ? (
+        <SecondaryButton
+          valueContent="Ir al chat actual"
+          onClickFunction={goTo}
+          onClickFnParameters={["/home"]}
+        />
+      ) : (
+        <PrimaryButton
+          valueContent="Ir al chat actual"
+          onClickFunction={goTo}
+          onClickFnParameters={["/home"]}
+        />
+      )}
     </main>
   );
 };

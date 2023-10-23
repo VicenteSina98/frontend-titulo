@@ -31,7 +31,7 @@ const QuoterProvider = ({ children }) => {
   const [answers, setAnswers] = useState([]);
   const [chatStarted, setChatStarted] = useState(false);
   const [answer, setAnswer] = useState("");
-  const [prediction, setPrediction] = useState([]);
+  const [prediction, setPrediction] = useState('');
   const [spinner, setSpinner] = useState(false);
   const [isDark, setIsDark] = useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches ? true : false
@@ -40,6 +40,7 @@ const QuoterProvider = ({ children }) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [index, setIndex] = useState(0);
+  const [saved, setSaved] = useState(false);
 
   return (
     <QuoterContext.Provider
@@ -74,6 +75,8 @@ const QuoterProvider = ({ children }) => {
         setQuestions,
         index,
         setIndex,
+        saved,
+        setSaved,
       }}
     >
       {children}

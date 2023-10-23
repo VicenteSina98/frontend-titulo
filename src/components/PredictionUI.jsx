@@ -1,8 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import Message from "./chat/Message";
-import PropTypes from "prop-types";
 import useQuoter from "../hooks/useQuoter";
-import Prediction from "./chat/Prediction";
 import { useAuthStore } from "../store/Auth";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -21,7 +19,6 @@ const PredictionUI = () => {
   const [mensajes, setMensajes] = useState([]);
   const [name, setName] = useState("");
   const [createdAt, setCreatedAt] = useState("");
-  const [data, setData] = useState([]);
   const [queryParameters] = useSearchParams();
   const api = useAxios();
   const setInfoPersonal = async () => {
@@ -39,13 +36,6 @@ const PredictionUI = () => {
     setName(prediction.nombre);
     setMensajes(prediction.mensajes);
     setCreatedAt(formatDatetime(prediction.creado_el));
-    setData([
-      prediction.enfermedad1,
-      prediction.enfermedad2,
-      prediction.enfermedad3,
-      prediction.enfermedad4,
-      prediction.enfermedad5,
-    ]);
     setLoading(false);
   };
   const setBaseData = async () => {
@@ -81,7 +71,6 @@ const PredictionUI = () => {
             isIA={mensaje.enviado_por_bot}
           />
         ))}
-        <Prediction data={data} />
       </section>
       <PrimaryButton
         valueContent="Volver al historial"
@@ -89,10 +78,6 @@ const PredictionUI = () => {
       />
     </main>
   );
-};
-
-Prediction.propTypes = {
-  prediction: PropTypes.object,
 };
 
 export default PredictionUI;

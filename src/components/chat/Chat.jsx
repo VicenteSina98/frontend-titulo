@@ -3,7 +3,6 @@ import Spinner from "../Spinner";
 import Message from "./Message";
 import useQuoter from "../../hooks/useQuoter";
 import { useEffect, useRef, useState } from "react";
-import Prediction from "./Prediction";
 import useAxios from "../../hooks/useAxios";
 import BlockError from "../error/BlockError";
 import { OPTIONS_ARRAY, QUESTIONS_ARRAY } from "../../helpers/constants";
@@ -35,11 +34,14 @@ const Chat = () => {
     setPrediction,
     ok,
     setOk,
+    answer,
     setAnswer,
     questions,
     setQuestions,
     index,
     setIndex,
+    saved,
+    setSaved,
   } = useQuoter();
   const [showOtros, setShowOtros] = useState(false);
   const [otros, setOtros] = useState({
@@ -94,11 +96,7 @@ const Chat = () => {
   });
   const [savePrediction, setSavePrediction] = useState(false);
   const [continueChat, setContinueChat] = useState(false);
-  const [continueMessages, setContinueMessages] = useState([]);
-  const [currentMessage, setCurrentMessage] = useState("");
-  const [continueResponses, setContinueResponses] = useState([]);
   const [waiting, setWaiting] = useState(false);
-  const [saved, setSaved] = useState(false);
 
   // ref
   const scrollRef = useRef(null);
@@ -276,7 +274,7 @@ const Chat = () => {
 
   const handleSubmitMessage = async (event) => {
     event.preventDefault();
-    if (currentMessage.length === 0) return;
+    if (answer.length === 0) return;
     await queryGetMessageResponse();
   };
 
@@ -345,13 +343,14 @@ const Chat = () => {
     setMedicalData(data);
     try {
       const responseGeneracion = await api.post("/prediccion/generar", data);
-      const dataResponse = responseGeneracion.data;
-      setPrediction(dataResponse.response);
+      const dataResponse = responseGeneracion.data.response;
+      setPrediction(dataResponse);
+      setQuestions([...questions, dataResponse]);
     } catch (error) {
       console.log(error);
       setError(true);
       setErrorMessage(
-        "Ha ocurrido un error de servidor. Por favor inténtelo más tarde"
+        "Ha ocurrido un error de servidor. Por favor inténtelo nuevamente"
       );
     }
     setSpinner(false);
@@ -360,21 +359,24 @@ const Chat = () => {
   };
 
   const queryGetMessageResponse = async () => {
-    setContinueMessages([...continueMessages, currentMessage]);
-    setCurrentMessage("");
+    setAnswers([...answers, answer]);
+    setAnswer("");
     setWaiting(true);
     const data = {
-      message: currentMessage,
+      message: answer,
       prediction: prediction,
       medicalData: medicalData,
     };
     try {
       const responseMessage = await api.post("/chat/mensaje", data);
-      console.log(responseMessage);
       const answerMessage = responseMessage.data.response;
-      setContinueResponses([...continueResponses, answerMessage]);
+      setQuestions([...questions, answerMessage]);
     } catch (error) {
       console.log(error);
+      setError(true);
+      setErrorMessage(
+        "Ouch... ha ocurrido un error en el servidor. Su chat se ha perdido, por favor inténtelo nuevamente"
+      );
     }
     setWaiting(false);
   };
@@ -416,10 +418,8 @@ const Chat = () => {
     setCountCheck(0);
     setSavePrediction(false);
     setContinueChat(false);
-    setContinueMessages([]);
-    setCurrentMessage("");
-    setContinueResponses([]);
     setWaiting(false);
+    setSaved(false);
   };
 
   // cancel prediction
@@ -460,11 +460,11 @@ const Chat = () => {
         setSaved={setSaved}
       />
       {/* mensajes del chat */}
-      <section className="flex flex-col gap-4 overflow-y-auto">
+      <section ref={scrollRef} className="flex flex-col gap-4 overflow-y-auto">
         <div className={chatStarted ? "hidden" : ""}>
           <Welcome />
         </div>
-        <div ref={scrollRef} className={!chatStarted ? "hidden" : ""}>
+        <div className={!chatStarted ? "hidden" : ""}>
           {/* mensaje de error en caso de que la API muera */}
           <div className={!error ? "hidden" : ""}>
             <BlockError message={errorMessage} />
@@ -483,36 +483,8 @@ const Chat = () => {
             ) : (
               <div className="flex flex-col gap-4">
                 <Spinner />
-                <p
-                  className={`text-center text-3xl font-bold dark:text-white ${
-                    !spinner ? "hidden" : ""
-                  }`}
-                >
-                  Generando la predicción...
-                </p>
               </div>
             )}
-            {/* resultado */}
-            <div
-              className={Object.keys(prediction).length === 0 ? "hidden" : ""}
-            >
-              <Prediction data={prediction} />
-            </div>
-            {/* continuacion chat */}
-            <div
-              className={`flex flex-col gap-4 ${!continueChat ? "hidden" : ""}`}
-            >
-              {continueMessages.map((answer, i) => (
-                <div key={i} className="flex flex-col gap-4">
-                  <Message data={answer} isIA={false} />
-                  <div
-                    className={i >= continueResponses.length ? "hidden" : ""}
-                  >
-                    <Message data={continueResponses[i]} isIA={true} />
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
@@ -560,7 +532,7 @@ const Chat = () => {
             {/* guardar prediccion, continuar y nuevo chat */}
             <div
               className={`flex w-full flex-col gap-4 ${
-                !ok || spinner || error || continueChat ? "hidden" : ""
+                !ok || spinner || error || continueChat || saved ? "hidden" : ""
               }`}
             >
               <div className="flex w-full flex-col gap-4 md:flex-row-reverse md:gap-8">
@@ -581,12 +553,23 @@ const Chat = () => {
               />
             </div>
             {/* solo nuevo chat */}
-            <div className={ok && !spinner && error ? "" : "hidden"}>
+            <div
+              className={`flex w-full flex-col ${
+                !ok || spinner || !saved ? "hidden" : ""
+              }`}
+            >
               <PrimaryButton
                 valueContent="Nuevo chat"
                 onClickFunction={newPrediction}
               />
             </div>
+            <p
+              className={`text-center text-3xl font-bold dark:text-white ${
+                !spinner ? "hidden" : ""
+              }`}
+            >
+              Generando predicción...
+            </p>
           </div>
           {/* opciones */}
           <div className={finish ? "hidden" : ""}>
@@ -668,15 +651,15 @@ const Chat = () => {
           <div className={saved ? "hidden" : ""}>
             <form
               className={`flex h-max w-full flex-col items-center justify-center gap-12 ${
-                !continueChat || waiting ? "hidden" : ""
+                !continueChat || waiting || error || saved ? "hidden" : ""
               }`}
               onSubmit={handleSubmitMessage}
             >
               <TextInput
                 nameInput="message"
                 placeholderContent="¡Consulte lo que desee!"
-                valueContent={currentMessage}
-                onChangeFunction={setCurrentMessage}
+                valueContent={answer}
+                onChangeFunction={setAnswer}
               />
               <div className="flex w-full flex-col items-center justify-center gap-4">
                 <div className="flex w-full flex-col-reverse items-center justify-center gap-4 md:flex-row md:gap-8">
@@ -687,7 +670,7 @@ const Chat = () => {
                   />
                   <input
                     className={`my-2 w-full rounded border-2 border-cyan-700 bg-cyan-700 px-2 py-4 text-center text-xs font-bold capitalize text-white transition dark:border-cyan-800 dark:bg-cyan-800 sm:text-sm md:mx-auto md:w-1/2 md:text-base lg:text-lg ${
-                      currentMessage.length === 0
+                      answer.length === 0
                         ? "hover:cursor-not-allowed"
                         : "hover:cursor-pointer hover:bg-cyan-800 dark:hover:bg-cyan-700"
                     }`}
@@ -706,18 +689,12 @@ const Chat = () => {
               </div>
             </form>
           </div>
-          {/* solo nuevo chat */}
-          <div
-            className={!saved ? "hidden" : ""}
-          >
-            <PrimaryButton
-              valueContent="Nuevo chat"
-              onClickFunction={newPrediction}
-            />
-          </div>
           {/* esperando respuesta */}
-          <div className={!waiting ? "hidden" : ""}>
+          <div className={`flex w-full flex-col ${!waiting ? "hidden" : ""}`}>
             <Spinner />
+            <p className="text-center text-3xl font-bold dark:text-white">
+              Generando respuesta...
+            </p>
           </div>
         </div>
       </section>
