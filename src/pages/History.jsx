@@ -1,10 +1,12 @@
 import useQuoter from "../hooks/useQuoter";
 import { useAuthStore } from "../store/Auth";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAxios from "../hooks/useAxios";
 import Spinner from "../components/Spinner";
 import { getUserFromToken } from "../helpers/auth";
+import PrimaryButton from "../components/buttons/PrimaryButton";
+import SecondaryButton from "../components/buttons/SecondaryButton";
 
 const History = () => {
   const { setIsDark, setInformacionPersonal, setAntecedentesMedicos } =
@@ -29,6 +31,9 @@ const History = () => {
   const setBaseData = async () => {
     await setInfoPersonal();
   };
+  const goTo = (navTo) => {
+    navigate(navTo);
+  };
   useEffect(() => {
     setBaseData();
   }, []);
@@ -48,30 +53,39 @@ const History = () => {
       <h2 className="text-left text-2xl font-bold dark:text-white">
         Mis predicciones
       </h2>
-      <div className="grid w-2/3  grid-cols-1 gap-6 overflow-y-auto md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-x-12 mx-auto  mt-4">
-        {history.length > 0 ? (
-          history.map((prediction, index) => (
-            <div
-              key={index}
-              className="flex w-full flex-col gap-16 p-2 dark:bg-neutral-600 items-center justify-center py-8 rounded-md shadow-md bg-gray-200"
-            >
-              <h3 className="text-left text-lg font-bold dark:text-white">
-                Predicción {index + 1}
-              </h3>
-              <Link
-                className="w-fit rounded-md bg-cyan-700 p-2 text-md text-white hover:bg-cyan-800"
-                to={`/home/prediction?pred=${prediction.id}&ind=${index + 1}`}
-              >
-                Ver predicción
-              </Link>
-            </div>
-          ))
-        ) : (
-          <p className="text-center text-lg dark:text-white">
-            Aun no tienes predicciones realizadas...
-          </p>
-        )}
+      <div
+        className={`mx-auto mt-4  grid w-2/3 grid-cols-1 gap-6 overflow-y-auto md:grid-cols-2 md:gap-8 lg:grid-cols-3  lg:gap-x-12 ${
+          history.length === 0 ? "hidden" : ""
+        }`}
+      >
+        {history.map((prediction, index) => (
+          <div
+            key={index}
+            className="flex w-full flex-col items-center justify-center gap-8 rounded-md bg-gray-200 p-2 py-8 shadow-md dark:bg-neutral-600"
+          >
+            <h3 className="text-left text-lg font-bold dark:text-white">
+              {prediction.nombre}
+            </h3>
+            <PrimaryButton
+              valueContent="Ver chat"
+              onClickFunction={goTo}
+              onClickFnParameters={[`/home/prediction?pred=${prediction.id}`]}
+            />
+          </div>
+        ))}
       </div>
+      <p
+        className={`text-center text-lg dark:text-white ${
+          history.length > 0 ? "hidden" : ""
+        }`}
+      >
+        Aun no tienes predicciones realizadas...
+      </p>
+      <SecondaryButton
+        valueContent="Ir al chat actual"
+        onClickFunction={goTo}
+        onClickFnParameters={["/home"]}
+      />
     </main>
   );
 };

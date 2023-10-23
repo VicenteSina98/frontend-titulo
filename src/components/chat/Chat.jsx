@@ -8,6 +8,11 @@ import useAxios from "../../hooks/useAxios";
 import BlockError from "../error/BlockError";
 import { OPTIONS_ARRAY, QUESTIONS_ARRAY } from "../../helpers/constants";
 import { matrixToObject } from "../../helpers/functions";
+import PrimaryButton from "../buttons/PrimaryButton";
+import SecondaryButton from "../buttons/SecondaryButton";
+import TertiaryButton from "../buttons/TertiaryButton";
+import SavePrediction from "./SavePrediction";
+import TextInput from "../inputs/TextInput";
 
 const Chat = () => {
   // states
@@ -36,7 +41,6 @@ const Chat = () => {
     index,
     setIndex,
   } = useQuoter();
-  // state para otros
   const [showOtros, setShowOtros] = useState(false);
   const [otros, setOtros] = useState({
     sintomas: "", // index = 0
@@ -53,12 +57,48 @@ const Chat = () => {
   const [typeQuestion, setTypeQuestion] = useState("sintomas");
   const [check, setCheck] = useState(matrixToObject(OPTIONS_ARRAY));
   const [countCheck, setCountCheck] = useState(0);
+  const [medicalData, setMedicalData] = useState({
+    informacion_personal: {
+      informacion_personal: informacionPersonal,
+      antecedentes_medicos: antecedentesMedicos,
+    },
+    sintomas: "",
+    problemas_sentidos: "",
+    inflamacion: "",
+    manchas: "",
+    comezon: "",
+    dolor: "",
+    tiempo_sintomas: "",
+    frecuencia_sintomas: "",
+    consumo_medicamentos: "",
+    contacto_enfermo: {
+      ha_tenido_contacto: "",
+      diagnostico: "",
+      sintomas_relacionados: "",
+    },
+    contacto_toxico: {
+      ha_tenido_contacto: "",
+      tipo: "",
+    },
+    viaje_extranjero: {
+      ha_viajado: "",
+      paises: "",
+    },
+    estado_animo: "",
+  });
   const [extraAnswers, setExtraAnswers] = useState({
     10: "",
     11: "",
     13: "",
     15: "",
   });
+  const [savePrediction, setSavePrediction] = useState(false);
+  const [continueChat, setContinueChat] = useState(false);
+  const [continueMessages, setContinueMessages] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState("");
+  const [continueResponses, setContinueResponses] = useState([]);
+  const [waiting, setWaiting] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   // ref
   const scrollRef = useRef(null);
@@ -67,19 +107,8 @@ const Chat = () => {
   const api = useAxios();
 
   // handlers
-  const supportHandleClick = async () => {
-    let copyAnswers = [...answers];
-    if (extraAnswers[10] !== "") copyAnswers.splice(10, 0, extraAnswers[10]);
-    if (extraAnswers[11] !== "") copyAnswers.splice(11, 0, extraAnswers[11]);
-    if (extraAnswers[13] !== "") copyAnswers.splice(13, 0, extraAnswers[13]);
-    if (extraAnswers[15] !== "") copyAnswers.splice(15, 0, extraAnswers[15]);
-    setAnswers(copyAnswers);
-  };
-
-  const handleClick = async () => {
-    await supportHandleClick();
-    await queryAPI();
-    1;
+  const handleGetPrediction = async () => {
+    await queryGetPrediction();
   };
 
   const cleanOnSubmit = async (newIndex) => {
@@ -101,7 +130,7 @@ const Chat = () => {
     });
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmitAnswer = async (event) => {
     event.preventDefault();
     // chequear que haya al menos una opcion seleccionada
     if (countCheck === 0) return;
@@ -133,16 +162,6 @@ const Chat = () => {
       newIndex += 1;
     }
     const saveAnswer = answerList.join(", ");
-    if (newIndex === 17) {
-      let copyAnswers = [...answers, saveAnswer];
-      if (extraAnswers[10] !== "") copyAnswers.splice(10, 0, extraAnswers[10]);
-      if (extraAnswers[11] !== "") copyAnswers.splice(11, 0, extraAnswers[11]);
-      if (extraAnswers[13] !== "") copyAnswers.splice(13, 0, extraAnswers[13]);
-      if (extraAnswers[15] !== "") copyAnswers.splice(15, 0, extraAnswers[15]);
-      setAnswers(copyAnswers);
-      await cleanOnSubmit(newIndex);
-      return;
-    }
     setExtraAnswers(auxExtraAnswers);
     setAnswers([...answers, saveAnswer]);
     await cleanOnSubmit(newIndex);
@@ -195,17 +214,17 @@ const Chat = () => {
     }
   };
 
-  const handleChange = (event) => {
+  const handleChangeOtros = (event) => {
     updateOtros(event.target.value);
   };
 
-  const updateCheck = (option) => {
+  const updateOptionsSelected = (option) => {
     let copyCheck = { ...check };
     copyCheck[index][option] = !check[index][option];
     setCheck(copyCheck);
   };
 
-  const handleCheck = (event) => {
+  const handleOptionSelect = (event) => {
     const option = event.target.innerText;
     // chequear preguntas con respuesta unica
     if (
@@ -232,7 +251,7 @@ const Chat = () => {
     }
     if ((option === "Otro" || option === "Otros") && check[index][option]) {
       // deseleccionar otros
-      updateCheck(option);
+      updateOptionsSelected(option);
       updateOtros("");
       setShowOtros(false);
       setCountCheck(countCheck - 1);
@@ -241,22 +260,28 @@ const Chat = () => {
       !check[index][option]
     ) {
       // seleccionar otros
-      updateCheck(option);
+      updateOptionsSelected(option);
       setShowOtros(true);
       setCountCheck(countCheck + 1);
     } else if (check[index][option]) {
       // deseleccionar opcion
-      updateCheck(option);
+      updateOptionsSelected(option);
       setCountCheck(countCheck - 1);
     } else {
       // seleccionar opcion
-      updateCheck(option);
+      updateOptionsSelected(option);
       setCountCheck(countCheck + 1);
     }
   };
 
+  const handleSubmitMessage = async (event) => {
+    event.preventDefault();
+    if (currentMessage.length === 0) return;
+    await queryGetMessageResponse();
+  };
+
   // consult API
-  const queryAPI = async () => {
+  const queryGetPrediction = async () => {
     setSpinner(true);
     const data = {
       informacion_personal: {
@@ -274,34 +299,54 @@ const Chat = () => {
       consumo_medicamentos: answers[8],
       contacto_enfermo: {
         ha_tenido_contacto: answers[9],
-        diagnostico: answers[10],
-        sintomas_relacionados: answers[11],
+        diagnostico: answers[9] === "No" ? answers[10] : extraAnswers[10],
+        sintomas_relacionados:
+          answers[9] === "No" ? answers[11] : extraAnswers[11],
       },
       contacto_toxico: {
-        ha_tenido_contacto: answers[12],
-        tipo: answers[13],
+        ha_tenido_contacto: answers[9] === "No" ? answers[10] : answers[12],
+        tipo:
+          answers[9] === "No"
+            ? answers[10] === "No"
+              ? extraAnswers[13]
+              : answers[11]
+            : answers[12] === "No"
+            ? extraAnswers[13]
+            : answers[13],
       },
       viaje_extranjero: {
-        ha_viajado: answers[14],
-        paises: answers[15],
+        ha_viajado:
+          answers[9] === "No"
+            ? answers[10] === "No"
+              ? answers[11]
+              : answers[12]
+            : answers[12] === "No"
+            ? answers[13]
+            : answers[14],
+        paises:
+          answers[9] === "No"
+            ? answers[10] === "No"
+              ? answers[11] === "No"
+                ? extraAnswers[15]
+                : answers[12]
+              : answers[12] === "No"
+              ? extraAnswers[15]
+              : answers[13]
+            : answers[12] === "No"
+            ? answers[13] === "No"
+              ? extraAnswers[15]
+              : answers[14]
+            : answers[14] === "No"
+            ? extraAnswers[15]
+            : answers[15],
       },
-      estado_animo: answers[16],
+      estado_animo: answers[12],
     };
+    setMedicalData(data);
     try {
       const responseGeneracion = await api.post("/prediccion/generar", data);
-      console.log(responseGeneracion);
       const dataResponse = responseGeneracion.data;
       setPrediction(dataResponse.response);
-      await api.post("/prediccion/guardar", {
-        id: informacionPersonal.user,
-        preguntas: questions,
-        respuestas: answers,
-        enfermedad1: dataResponse.response[0] ?? "",
-        enfermedad2: dataResponse.response[1] ?? "",
-        enfermedad3: dataResponse.response[2] ?? "",
-        enfermedad4: dataResponse.response[3] ?? "",
-        enfermedad5: dataResponse.response[4] ?? "",
-      });
     } catch (error) {
       console.log(error);
       setError(true);
@@ -314,6 +359,27 @@ const Chat = () => {
     setOk(true);
   };
 
+  const queryGetMessageResponse = async () => {
+    setContinueMessages([...continueMessages, currentMessage]);
+    setCurrentMessage("");
+    setWaiting(true);
+    const data = {
+      message: currentMessage,
+      prediction: prediction,
+      medicalData: medicalData,
+    };
+    try {
+      const responseMessage = await api.post("/chat/mensaje", data);
+      console.log(responseMessage);
+      const answerMessage = responseMessage.data.response;
+      setContinueResponses([...continueResponses, answerMessage]);
+    } catch (error) {
+      console.log(error);
+    }
+    setWaiting(false);
+  };
+
+  // check if multiple options are selected
   const multipleOptionsSelected = () => {
     const optionsFlags = check[index];
     for (let option in optionsFlags)
@@ -348,6 +414,12 @@ const Chat = () => {
     });
     setCheck(matrixToObject(OPTIONS_ARRAY));
     setCountCheck(0);
+    setSavePrediction(false);
+    setContinueChat(false);
+    setContinueMessages([]);
+    setCurrentMessage("");
+    setContinueResponses([]);
+    setWaiting(false);
   };
 
   // cancel prediction
@@ -380,12 +452,19 @@ const Chat = () => {
 
   return (
     <main className="mx-auto mb-8 mt-24 flex w-10/12 flex-col justify-between gap-8 sm:w-8/12 md:w-7/12">
+      {/* guardar prediccion */}
+      <SavePrediction
+        show={savePrediction}
+        setShow={setSavePrediction}
+        saved={saved}
+        setSaved={setSaved}
+      />
       {/* mensajes del chat */}
-      <section ref={scrollRef} className="flex flex-col gap-4 overflow-y-auto">
+      <section className="flex flex-col gap-4 overflow-y-auto">
         <div className={chatStarted ? "hidden" : ""}>
           <Welcome />
         </div>
-        <div className={!chatStarted ? "hidden" : ""}>
+        <div ref={scrollRef} className={!chatStarted ? "hidden" : ""}>
           {/* mensaje de error en caso de que la API muera */}
           <div className={!error ? "hidden" : ""}>
             <BlockError message={errorMessage} />
@@ -402,7 +481,16 @@ const Chat = () => {
                 </div>
               ))
             ) : (
-              <Spinner />
+              <div className="flex flex-col gap-4">
+                <Spinner />
+                <p
+                  className={`text-center text-3xl font-bold dark:text-white ${
+                    !spinner ? "hidden" : ""
+                  }`}
+                >
+                  Generando la predicción...
+                </p>
+              </div>
             )}
             {/* resultado */}
             <div
@@ -410,19 +498,37 @@ const Chat = () => {
             >
               <Prediction data={prediction} />
             </div>
+            {/* continuacion chat */}
+            <div
+              className={`flex flex-col gap-4 ${!continueChat ? "hidden" : ""}`}
+            >
+              {continueMessages.map((answer, i) => (
+                <div key={i} className="flex flex-col gap-4">
+                  <Message data={answer} isIA={false} />
+                  <div
+                    className={i >= continueResponses.length ? "hidden" : ""}
+                  >
+                    <Message data={continueResponses[i]} isIA={true} />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
-      {/* Inputs */}
+      {/* Inputs & Buttons */}
       <section className="flex flex-col gap-4">
-        <button
-          className={`text-md w-full rounded-sm bg-cyan-700 py-4 text-lg font-bold text-white hover:cursor-pointer dark:bg-cyan-800 md:mx-auto md:w-96 md:px-16 ${
+        <div
+          className={`flex w-full flex-col items-center justify-center ${
             chatStarted ? "hidden" : ""
           }`}
-          onClick={() => setChatStarted(!chatStarted)}
         >
-          Comenzar predicción
-        </button>
+          <PrimaryButton
+            valueContent="Comenzar chat"
+            onClickFunction={setChatStarted}
+            onClickFnParameters={[!chatStarted]}
+          />
+        </div>
         <div className={!chatStarted ? "hidden" : ""}>
           {/* botones */}
           <div
@@ -431,47 +537,64 @@ const Chat = () => {
             }`}
           >
             {/* obtener prediccion */}
-            <input
-              className={`text-md w-full rounded-sm bg-cyan-700 py-4 text-lg font-bold text-white hover:cursor-pointer dark:bg-cyan-800 md:w-auto md:px-16 ${
-                ok || spinner ? "hidden" : ""
-              }`}
-              type="submit"
-              value="Obtener predicción"
-              onClick={() => handleClick()}
-            />
-            {/* nueva prediccion */}
-            <input
-              className={`text-md w-full rounded-sm bg-cyan-700 py-4 text-lg font-bold text-white hover:cursor-pointer dark:bg-cyan-800 md:w-auto md:px-16 ${
-                !ok || spinner ? "hidden" : ""
-              }`}
-              type="submit"
-              value="Nueva predicción"
-              onClick={() => newPrediction()}
-            />
-            {/* cancelar prediccion */}
-            <input
-              className={`text-md w-full rounded-sm py-4 text-lg text-red-700 hover:cursor-pointer dark:text-red-400 md:w-auto md:px-16 ${
-                ok || spinner ? "hidden" : ""
-              }`}
-              type="submit"
-              value="Cancelar predicción"
-              onClick={() => cancelPrediction()}
-            />
-            <p
-              className={`text-center text-3xl font-bold dark:text-white ${
-                !spinner ? "hidden" : ""
+            <div
+              className={`flex w-full  flex-col-reverse items-center justify-center gap-4 md:flex-row md:gap-8 ${
+                ok || spinner || continueChat ? "hidden" : ""
               }`}
             >
-              Generando la predicción...
-            </p>
+              <SecondaryButton
+                valueContent="Cancelar chat"
+                onClickFunction={cancelPrediction}
+                textColorBase="text-red-700"
+                textColorDark="dark:text-red-400"
+                borderColorBase="border-red-700"
+                borderColorDark="dark:border-red-400"
+                hoverBgBase="hover:bg-red-700"
+                hoverBgDark="dark:hover:bg-red-800"
+              />
+              <PrimaryButton
+                valueContent="Obtener predicción"
+                onClickFunction={handleGetPrediction}
+              />
+            </div>
+            {/* guardar prediccion, continuar y nuevo chat */}
+            <div
+              className={`flex w-full flex-col gap-4 ${
+                !ok || spinner || error || continueChat ? "hidden" : ""
+              }`}
+            >
+              <div className="flex w-full flex-col gap-4 md:flex-row-reverse md:gap-8">
+                <PrimaryButton
+                  valueContent="Guardar predicción"
+                  onClickFunction={setSavePrediction}
+                  onClickFnParameters={[!savePrediction]}
+                />
+                <SecondaryButton
+                  valueContent="Continuar chat"
+                  onClickFunction={setContinueChat}
+                  onClickFnParameters={[!continueChat]}
+                />
+              </div>
+              <TertiaryButton
+                valueContent="Nuevo chat"
+                onClickFunction={newPrediction}
+              />
+            </div>
+            {/* solo nuevo chat */}
+            <div className={ok && !spinner && error ? "" : "hidden"}>
+              <PrimaryButton
+                valueContent="Nuevo chat"
+                onClickFunction={newPrediction}
+              />
+            </div>
           </div>
           {/* opciones */}
-          <div className={`${finish ? "hidden" : ""}`}>
+          <div className={finish ? "hidden" : ""}>
             <form
               className={`flex h-max w-full flex-col items-center justify-center gap-12 ${
                 ok ? "hidden" : ""
               }`}
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmitAnswer}
             >
               {/* checkbox */}
               <div
@@ -480,7 +603,7 @@ const Chat = () => {
                 {OPTIONS_ARRAY[index]?.map((option, i) => (
                   <div
                     key={i}
-                    onClick={handleCheck}
+                    onClick={handleOptionSelect}
                     className={`w-full rounded-lg border-2 px-2 py-2 ${
                       check[index][option]
                         ? "border-cyan-700 bg-cyan-700 text-white shadow-md"
@@ -511,33 +634,90 @@ const Chat = () => {
                 name={OPTIONS_ARRAY[index]}
                 id={OPTIONS_ARRAY[index]}
                 placeholder="Especifique"
-                onChange={handleChange}
+                onChange={handleChangeOtros}
                 value={otros[typeQuestion]}
                 className={`w-full rounded-lg border-2 p-4 text-lg focus:border-blue-600 focus:outline-none dark:border-neutral-400 dark:bg-neutral-800 dark:text-gray-300 dark:focus:border-blue-500  lg:text-lg ${
                   !showOtros ? "hidden" : ""
                 }`}
               />
-              <div className="flex w-7/12 flex-col-reverse items-center justify-center gap-4 sm:w-1/2 md:w-5/12">
-                {/* cancelar prediccion */}
-                <input
-                  className={`w-full cursor-pointer rounded-sm px-2 py-4 text-center text-sm text-red-700 dark:text-red-400 sm:text-base`}
-                  type="submit"
-                  value="Cancelar predicción"
-                  onClick={() => cancelPrediction()}
+              <div className="flex w-full flex-col-reverse items-center justify-center gap-4  md:flex-row md:gap-8">
+                <SecondaryButton
+                  valueContent="Cancelar chat"
+                  onClickFunction={cancelPrediction}
+                  textColorBase="text-red-700"
+                  textColorDark="dark:text-red-400"
+                  borderColorBase="border-red-700"
+                  borderColorDark="dark:border-red-400"
+                  hoverBgBase="hover:bg-red-700"
+                  hoverBgDark="dark:hover:bg-red-800"
                 />
-                {/* submit */}
                 <input
-                  className={`w-full rounded-sm bg-cyan-700 py-4 text-center text-sm font-bold text-white dark:bg-cyan-800 sm:text-base ${
+                  className={`my-2 w-full rounded border-2 border-cyan-700 bg-cyan-700 px-2 py-4 text-center text-xs font-bold capitalize text-white transition dark:border-cyan-800 dark:bg-cyan-800 sm:text-sm md:mx-auto md:w-1/2 md:text-base lg:text-lg ${
                     countCheck === 0 ||
                     (showOtros && otros[typeQuestion] === "")
                       ? "hover:cursor-not-allowed"
-                      : "hover:cursor-pointer"
+                      : "hover:cursor-pointer hover:bg-cyan-800 dark:hover:bg-cyan-700"
                   }`}
                   type="submit"
-                  value="Siguiente"
+                  value="Siguiente pregunta"
                 />
               </div>
             </form>
+          </div>
+          {/* continuacion mensajes */}
+          <div className={saved ? "hidden" : ""}>
+            <form
+              className={`flex h-max w-full flex-col items-center justify-center gap-12 ${
+                !continueChat || waiting ? "hidden" : ""
+              }`}
+              onSubmit={handleSubmitMessage}
+            >
+              <TextInput
+                nameInput="message"
+                placeholderContent="¡Consulte lo que desee!"
+                valueContent={currentMessage}
+                onChangeFunction={setCurrentMessage}
+              />
+              <div className="flex w-full flex-col items-center justify-center gap-4">
+                <div className="flex w-full flex-col-reverse items-center justify-center gap-4 md:flex-row md:gap-8">
+                  <SecondaryButton
+                    valueContent="Finalizar y guardar chat"
+                    onClickFunction={setSavePrediction}
+                    onClickFnParameters={[!savePrediction]}
+                  />
+                  <input
+                    className={`my-2 w-full rounded border-2 border-cyan-700 bg-cyan-700 px-2 py-4 text-center text-xs font-bold capitalize text-white transition dark:border-cyan-800 dark:bg-cyan-800 sm:text-sm md:mx-auto md:w-1/2 md:text-base lg:text-lg ${
+                      currentMessage.length === 0
+                        ? "hover:cursor-not-allowed"
+                        : "hover:cursor-pointer hover:bg-cyan-800 dark:hover:bg-cyan-700"
+                    }`}
+                    type="submit"
+                    value="Enviar mensaje"
+                  />
+                </div>
+                <TertiaryButton
+                  valueContent="Cancelar chat"
+                  onClickFunction={cancelPrediction}
+                  textColorBase="text-red-700"
+                  hoverTextColorBase="hover:text-red-600"
+                  textColorDark="dark:text-red-400"
+                  hoverTextColorDark="dark:hover:text-red-500"
+                />
+              </div>
+            </form>
+          </div>
+          {/* solo nuevo chat */}
+          <div
+            className={!saved ? "hidden" : ""}
+          >
+            <PrimaryButton
+              valueContent="Nuevo chat"
+              onClickFunction={newPrediction}
+            />
+          </div>
+          {/* esperando respuesta */}
+          <div className={!waiting ? "hidden" : ""}>
+            <Spinner />
           </div>
         </div>
       </section>

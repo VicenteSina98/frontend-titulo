@@ -3,9 +3,9 @@ import Logo from "../../img/logo.png";
 const Welcome = () => (
   <div className="flex flex-col gap-6">
     <img src={Logo} alt="logo" className="mx-auto w-24 rounded-full" />
-    <h2 className="text-center text-2xl font-bold dark:text-white">
+    <h1 className="text-center text-2xl font-bold dark:text-white">
       HealthDiagAI
-    </h2>
+    </h1>
     <p className="text-center text-lg dark:text-white">
       Realice, mediante el uso de la Inteligencia Artificial, una predicción de
       posibles enfermedades que pueda tener según sus antecedentes médicos,
