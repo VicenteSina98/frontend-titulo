@@ -4,14 +4,14 @@ import Message from "./Message";
 import useQuoter from "../../hooks/useQuoter";
 import { useEffect, useRef, useState } from "react";
 import useAxios from "../../hooks/useAxios";
-import BlockError from "../error/BlockError";
+import BlockError from "../UI/notifications/BlockError";
 import { OPTIONS_ARRAY, QUESTIONS_ARRAY } from "../../helpers/constants";
 import { matrixToObject } from "../../helpers/functions";
-import PrimaryButton from "../buttons/PrimaryButton";
-import SecondaryButton from "../buttons/SecondaryButton";
-import TertiaryButton from "../buttons/TertiaryButton";
+import PrimaryButton from "../UI/buttons/PrimaryButton";
+import SecondaryButton from "../UI/buttons/SecondaryButton";
+import TertiaryButton from "../UI/buttons/TertiaryButton";
 import SavePrediction from "./SavePrediction";
-import TextInput from "../inputs/TextInput";
+import TextInput from "../UI/inputs/TextInput";
 
 const Chat = () => {
   // states

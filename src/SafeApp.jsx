@@ -11,7 +11,7 @@ import Signin from "./pages/Signin";
 import Home from "./pages/Home";
 import History from "./pages/History";
 // componentes
-import PredictionUI from "./components/PredictionUI";
+import PredictionUI from "./components/prediction/PredictionUI";
 
 const SafeApp = () => (
   <BrowserRouter>

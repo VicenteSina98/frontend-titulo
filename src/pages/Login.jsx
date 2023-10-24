@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/Auth";
 import { login } from "../helpers/auth";
 // componentes
-import BlockError from "../components/error/BlockError";
+import BlockError from "../components/UI/notifications/BlockError";
 import Logo from "../img/logo.png";
 
 const Login = () => {

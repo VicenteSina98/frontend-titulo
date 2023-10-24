@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
-import SecondaryButton from "../buttons/SecondaryButton";
-import TextInput from "../inputs/TextInput";
+import SecondaryButton from "../UI/buttons/SecondaryButton";
+import TextInput from "../UI/inputs/TextInput";
 import { useState } from "react";
 import useQuoter from "../../hooks/useQuoter";
 import Spinner from "../Spinner";
 import useAxios from "../../hooks/useAxios";
 import Check from "../../img/comprobar.png";
-import PrimaryButton from "../buttons/PrimaryButton";
+import PrimaryButton from "../UI/buttons/PrimaryButton";
 
 const SavePrediction = ({ show, setShow, saved, setSaved }) => {
   const { informacionPersonal, questions, answers } = useQuoter();

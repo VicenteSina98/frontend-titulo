@@ -2,10 +2,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // componentes
-import Success from "../components/Success";
+import Success from "../components/UI/notifications/Success";
 import PersonalDataForm from "../components/signinForm/PersonalDataForm";
 import MedicalDataForm from "../components/signinForm/MedicalDataForm";
-import BlockError from "../components/error/BlockError";
+import BlockError from "../components/UI/notifications/BlockError";
 import Logo from "../img/logo.png";
 
 const Signin = () => {

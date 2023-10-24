@@ -209,3 +209,11 @@ export const matrixToObject = (matrix) => {
   });
   return obj;
 };
+
+export  const formatDatetime = (datetime) => {
+  const splitDatetime = datetime.split("-");
+  const year = splitDatetime[0];
+  const month = splitDatetime[1];
+  const day = splitDatetime[2].split("T")[0];
+  return [day, month, year].join("-");
+};

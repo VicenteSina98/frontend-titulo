@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Field } from "formik";
-import FormError from "../error/FormError";
+import FormError from "../UI/notifications/FormError";
 
 const InputPersonalDataForm = ({
   labelContent,

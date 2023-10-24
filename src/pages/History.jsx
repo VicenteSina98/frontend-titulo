@@ -1,19 +1,29 @@
 import useQuoter from "../hooks/useQuoter";
-import { useAuthStore } from "../store/Auth";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/Auth";
 import { useEffect, useState } from "react";
 import useAxios from "../hooks/useAxios";
 import Spinner from "../components/Spinner";
 import { getUserFromToken } from "../helpers/auth";
-import PrimaryButton from "../components/buttons/PrimaryButton";
-import SecondaryButton from "../components/buttons/SecondaryButton";
+import PrimaryButton from "../components/UI/buttons/PrimaryButton";
+import SecondaryButton from "../components/UI/buttons/SecondaryButton";
+import BlockError from "../components/UI/notifications/BlockError";
+import PredictionCard from "../components/prediction/PredictionCard";
+import Title from "../components/UI/Title";
 
 const History = () => {
-  const { setIsDark, setInformacionPersonal, setAntecedentesMedicos } =
-    useQuoter();
+  const navigate = useNavigate();
+  const {
+    error,
+    errorMessage,
+    setIsDark,
+    setInformacionPersonal,
+    setAntecedentesMedicos,
+    setError,
+    setErrorMessage,
+  } = useQuoter();
   // check user session
   const [isLoggedIn] = useAuthStore((state) => [state.isLoggedIn]);
-  const navigate = useNavigate();
   if (!isLoggedIn()) navigate("/");
   const [loading, setLoading] = useState(true);
   const [history, setHistory] = useState([]);
@@ -22,10 +32,18 @@ const History = () => {
     const dataUser = await getUserFromToken();
     setInformacionPersonal(dataUser.informacion_personal);
     setAntecedentesMedicos(dataUser.antecedentes_medicos);
-    const predictions = await api.get(
-      "/prediccion/" + dataUser.informacion_personal.user
-    );
-    setHistory(predictions.data);
+    try {
+      const predictions = await api.get(
+        "/prediccion/" + dataUser.informacion_personal.user
+      );
+      setHistory(predictions.data);
+    } catch (error) {
+      console.log(error);
+      setError(true);
+      setErrorMessage(
+        "Ha ocurrido un error de servidor. Por favor inténtelo nuevamente"
+      );
+    }
     setLoading(false);
   };
   const setBaseData = async () => {
@@ -50,38 +68,32 @@ const History = () => {
     <Spinner />
   ) : (
     <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col justify-start gap-8">
-      <h2 className="text-left text-2xl font-bold dark:text-white">
-        Mis predicciones
-      </h2>
+      <Title content="Mis Predicciones" />
+      {/* mensaje de error en caso de que la API muera */}
+      <div className={!error ? "hidden" : ""}>
+        <BlockError message={errorMessage} />
+      </div>
       <div
-        className={`mx-auto mt-4  grid w-2/3 grid-cols-1 gap-6 overflow-y-auto md:grid-cols-2 md:gap-8 lg:grid-cols-3  lg:gap-x-12 ${
-          history.length === 0 ? "hidden" : ""
+        className={`flex w-full flex-col gap-8 overflow-y-auto ${
+          error || history.length === 0 ? "hidden" : ""
         }`}
       >
-        {history.map((prediction, index) => (
-          <div
-            key={index}
-            className="flex w-full flex-col items-center justify-center gap-8 rounded-md bg-gray-200 p-2 py-8 shadow-md dark:bg-neutral-600"
-          >
-            <h3 className="text-left text-lg font-bold dark:text-white">
-              {prediction.nombre}
-            </h3>
-            <PrimaryButton
-              valueContent="Ver chat"
-              onClickFunction={goTo}
-              onClickFnParameters={[`/home/prediction?pred=${prediction.id}`]}
-            />
-          </div>
+        {history.map((prediction) => (
+          <PredictionCard
+            key={prediction.id}
+            id={prediction.id}
+            name={prediction.nombre}
+          />
         ))}
       </div>
       <p
         className={`text-center text-lg dark:text-white ${
-          history.length > 0 ? "hidden" : ""
+          error || history.length > 0 ? "hidden" : ""
         }`}
       >
         Aun no tienes predicciones realizadas...
       </p>
-      {history.length > 0 ? (
+      {!error && history.length > 0 ? (
         <SecondaryButton
           valueContent="Ir al chat actual"
           onClickFunction={goTo}
