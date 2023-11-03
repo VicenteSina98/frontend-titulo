@@ -105,3 +105,203 @@ export const OPTIONS_ARRAY = [
     "Ninguno",
   ], // 16
 ];
+export const SIGNIN_OPTIONS = {
+  enfermedadesCronicas: [
+    {
+      label: "Enfermedades cardiovasculares",
+      value: "Enfermedades cardiovasculares",
+    },
+    {
+      label: "Diabetes tipo 2",
+      value: "Diabetes tipo 2",
+    },
+    {
+      label: "EPOC",
+      value: "EPOC",
+    },
+    {
+      label: "Cáncer",
+      value: "Cáncer",
+    },
+    {
+      label: "Alzheimer",
+      value: "Alzheimer",
+    },
+    {
+      label: "Artritis",
+      value: "Artritis",
+    },
+    {
+      label: "Obesidad",
+      value: "Obesidad",
+    },
+    {
+      label: "Parkinson",
+      value: "Parkinson",
+    },
+  ],
+  historialAlergias: [
+    {
+      label: "Alergia al polen",
+      value: "Alergia al polen",
+    },
+    {
+      label: "Alergia polvo",
+      value: "Alergia polvo",
+    },
+    {
+      label: "Alergia al pelo de mascotas",
+      value: "Alergia al pelo de mascotas",
+    },
+    {
+      label: "Alergia a los insectos",
+      value: "Alergia a los insectos",
+    },
+    {
+      label: "Alergia al látex",
+      value: "Alergia al látex",
+    },
+  ],
+  historialCirugias: [
+    {
+      label: "Cirugía de cataratas",
+      value: "Cirugía de cataratas",
+    },
+    {
+      label: "Cirugía de apéndice",
+      value: "Cirugía de apéndice",
+    },
+    {
+      label: "Cirugía de hernia inguinal",
+      value: "Cirugía de hernia inguinal",
+    },
+    {
+      label: "Cirugía de vesícula biliar",
+      value: "Cirugía de vesícula biliar",
+    },
+    {
+      label: "Cirugía de corazón abierto",
+      value: "Cirugía de corazón abierto",
+    },
+    {
+      label: "Cirugía de bypass gástrico",
+      value: "Cirugía de bypass gástrico",
+    },
+    {
+      label: "Cirugía de tiroides",
+      value: "Cirugía de tiroides",
+    },
+  ],
+  historialMedicamentos: [
+    {
+      label: "Paracetamol",
+      value: "Paracetamol",
+    },
+    {
+      label: "Ibuprofeno",
+      value: "Ibuprofeno",
+    },
+    {
+      label: "Lisinopril",
+      value: "Lisinopril",
+    },
+    {
+      label: "Atorvastatina",
+      value: "Atorvastatina",
+    },
+    {
+      label: "Levothyroxine",
+      value: "Levothyroxine",
+    },
+    {
+      label: "Metformina",
+      value: "Metformina",
+    },
+    {
+      label: "Omeprazol",
+      value: "Omeprazol",
+    },
+    {
+      label: "Simvastatina",
+      value: "Simvastatina",
+    },
+    {
+      label: "Amlodipina",
+      value: "Amlodipina",
+    },
+    {
+      label: "Alprazolam",
+      value: "Alprazolam",
+    },
+  ],
+  historialEnfermedadesFamilia: [
+    {
+      label: "influenza",
+      value: "influenza",
+    },
+    {
+      label: "Hipertensión arterial",
+      value: "Hipertensión arterial",
+    },
+    {
+      label: "Depresión",
+      value: "Depresión",
+    },
+  ],
+  historialEnfermedadesInfecciosas: [
+    {
+      label: "Infecciones de las vías respiratorias superiores",
+      value: "Infecciones de las vías respiratorias superiores",
+    },
+    {
+      label: "Infecciones del tracto urinario",
+      value: "Infecciones del tracto urinario",
+    },
+    {
+      label: "Infecciones de la piel",
+      value: "Infecciones de la piel",
+    },
+    {
+      label: "Infecciones por hongos",
+      value: "Infecciones por hongos",
+    },
+    {
+      label: "Infecciones de transmisión sexual",
+      value: "Infecciones de transmisión sexual",
+    },
+    {
+      label: "Infecciones gastrointestinales",
+      value: "Infecciones gastrointestinales",
+    },
+    {
+      label: "Tuberculosis",
+      value: "Tuberculosis",
+    },
+    {
+      label: "Malaria",
+      value: "Malaria",
+    },
+  ],
+  historialHabitosSalud: [
+    {
+      label: "Fumar tabaco",
+      value: "Fumar tabaco",
+    },
+    {
+      label: "Consumir en exceso alcohol",
+      value: "Consumir en exceso alcohol",
+    },
+    {
+      label: "Comer en exceso y llevar una dieta poco saludable",
+      value: "Comer en exceso y llevar una dieta poco saludable",
+    },
+    {
+      label: "Faltar al ejercicio regular",
+      value: "Faltar al ejercicio regular",
+    },
+    {
+      label: "No dormir lo suficiente",
+      value: "No dormir lo suficiente",
+    },
+  ],
+};

@@ -1,12 +1,13 @@
 // librerias
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 // componentes
-import Success from "../components/UI/notifications/Success";
-import PersonalDataForm from "../components/signinForm/PersonalDataForm";
-import MedicalDataForm from "../components/signinForm/MedicalDataForm";
-import BlockError from "../components/UI/notifications/BlockError";
-import Logo from "../img/logo.png";
+import Sentence from "../components/UI/base/Sentence";
+import GoTo from "../components/UI/base/GoTo";
+import BlockNotification from "../components/UI/notifications/BlockNotification";
+import PersonalDataForm from "../components/outSession/signinForm/PersonalDataForm";
+import MedicalDataForm from "../components/outSession/signinForm/MedicalDataForm";
+import MainContainer from "../components/outSession/outSessionBase/MainContainer";
+import Header from "../components/outSession/outSessionBase/Header";
 
 const Signin = () => {
   // estados
@@ -33,52 +34,35 @@ const Signin = () => {
     historialEnfermedadesInfecciosas: "",
     historialHabitosSalud: "",
   });
-  // hooks
-  const navigate = useNavigate();
-  // handlers
-  const cleanStates = async () => {
-    setPassword("");
-    setNextSection("");
-    setAccountCreated(false);
-    setSessionError(false);
-    setInformacionPersonal({});
-    setAntecedentesMedicos({});
-  };
-  const handleClick = async () => {
-    await cleanStates();
-    navigate("/");
-  };
   return (
-    <main className="flex h-full flex-col gap-4 rounded-lg bg-white p-1 shadow-lg dark:bg-neutral-800">
-      <section className="flex flex-col items-center justify-center gap-1">
-        <img src={Logo} alt="logo" className="w-24 rounded-full" />
-        <h1 className="text-xl font-bold text-black dark:text-gray-200">
-          HealthDiagAI
-        </h1>
-        <h2 className="text-center text-sm text-black dark:text-gray-200">
-          Regístrate y obtén predicciones de enfermedades
-        </h2>
-        {/* mensajes de error y exito */}
-        <div>
+    <MainContainer>
+      <Header content="Regístrate y utiliza la aplicación" />
+      <section className="h-full w-full overflow-auto px-8 py-4 xl:flex xl:flex-col xl:items-center xl:justify-center">
+        <div className="flex flex-col items-center justify-center">
           {sessionError?.email?.map((error, index) => (
-            <BlockError key={index} message={`Error en el correo: ${error}`} />
+            <BlockNotification
+              key={index}
+              content={`Error en el correo: ${error}`}
+              textColor="text-white"
+              backgroundColor="bg-red-700"
+            />
           ))}
           {sessionError?.password?.map((error, index) => (
-            <BlockError
+            <BlockNotification
               key={index}
-              message={`Error en la contraseña: ${error}`}
+              content={`Error en la contraseña: ${error}`}
+              textColor="text-white"
+              backgroundColor="bg-red-700"
             />
           ))}
           {accountCreated ? (
-            <Success
-              message={
-                "Cuenta creada, dirígete a la página de inicio de sesión"
-              }
+            <BlockNotification
+              content="Cuenta creada, dirígete a la página de inicio de sesión"
+              textColor="text-white"
+              backgroundColor="bg-green-700"
             />
           ) : null}
         </div>
-      </section>
-      <section className="overflow-auto">
         {nextSection ? (
           <MedicalDataForm
             informacionPersonal={informacionPersonal}
@@ -100,17 +84,16 @@ const Signin = () => {
             setInformacionPersonal={setInformacionPersonal}
           />
         )}
+        <Sentence
+          content={
+            <>
+              ¿Ya tienes una cuenta?{" "}
+              <GoTo content="Inicia sesión aquí" toPath="/" />
+            </>
+          }
+        />
       </section>
-      <p className="text-center text-xs dark:text-gray-200 lg:text-sm">
-        ¿Ya tienes una cuenta?{" "}
-        <span
-          onClick={() => handleClick()}
-          className="text-blue-600 hover:cursor-pointer dark:text-blue-400 lg:text-sm"
-        >
-          Inicia sesión aquí
-        </span>
-      </p>
-    </main>
+    </MainContainer>
   );
 };
 

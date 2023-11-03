@@ -1,15 +1,18 @@
-import useQuoter from "../hooks/useQuoter";
+// librerias
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/Auth";
 import { useEffect, useState } from "react";
+// auxiliares
+import useQuoter from "../hooks/useQuoter";
+import { useAuthStore } from "../store/Auth";
 import useAxios from "../hooks/useAxios";
-import Spinner from "../components/Spinner";
 import { getUserFromToken } from "../helpers/auth";
+// componentes
+import Spinner from "../components/Spinner";
+import Title from "../components/UI/base/Title";
 import PrimaryButton from "../components/UI/buttons/PrimaryButton";
 import SecondaryButton from "../components/UI/buttons/SecondaryButton";
-import BlockError from "../components/UI/notifications/BlockError";
+import BlockNotification from "../components/UI/notifications/BlockNotification";
 import PredictionCard from "../components/prediction/PredictionCard";
-import Title from "../components/UI/Title";
 
 const History = () => {
   const navigate = useNavigate();
@@ -71,7 +74,11 @@ const History = () => {
       <Title content="Mis Predicciones" />
       {/* mensaje de error en caso de que la API muera */}
       <div className={!error ? "hidden" : ""}>
-        <BlockError message={errorMessage} />
+        <BlockNotification
+          content={errorMessage}
+          textColor="text-white"
+          backgroundColor="bg-red-700"
+        />
       </div>
       <div
         className={`flex w-full flex-col gap-8 overflow-y-auto ${

@@ -1,17 +1,20 @@
-import Welcome from "./Welcome";
-import Spinner from "../Spinner";
-import Message from "./Message";
-import useQuoter from "../../hooks/useQuoter";
+// librerias
 import { useEffect, useRef, useState } from "react";
+// auxiliares
+import useQuoter from "../../hooks/useQuoter";
 import useAxios from "../../hooks/useAxios";
-import BlockError from "../UI/notifications/BlockError";
-import { OPTIONS_ARRAY, QUESTIONS_ARRAY } from "../../helpers/constants";
 import { matrixToObject } from "../../helpers/functions";
+import { OPTIONS_ARRAY, QUESTIONS_ARRAY } from "../../helpers/constants";
+// componentes
+import Welcome from "./Welcome";
+import Message from "./Message";
+import SavePrediction from "./SavePrediction";
+import Spinner from "../Spinner";
+import Input from "../UI/base/Input";
+import BlockNotification from "../UI/notifications/BlockNotification";
 import PrimaryButton from "../UI/buttons/PrimaryButton";
 import SecondaryButton from "../UI/buttons/SecondaryButton";
 import TertiaryButton from "../UI/buttons/TertiaryButton";
-import SavePrediction from "./SavePrediction";
-import TextInput from "../UI/inputs/TextInput";
 
 const Chat = () => {
   // states
@@ -467,7 +470,11 @@ const Chat = () => {
         <div className={!chatStarted ? "hidden" : ""}>
           {/* mensaje de error en caso de que la API muera */}
           <div className={!error ? "hidden" : ""}>
-            <BlockError message={errorMessage} />
+            <BlockNotification
+              content={errorMessage}
+              textColor="text-white"
+              backgroundColor="bg-red-700"
+            />
           </div>
           {/* chat */}
           <div className={`flex flex-col gap-4 ${error ? "hidden" : ""}`}>
@@ -655,11 +662,12 @@ const Chat = () => {
               }`}
               onSubmit={handleSubmitMessage}
             >
-              <TextInput
+              <Input
+                typeInput="text"
                 nameInput="message"
-                placeholderContent="¡Consulte lo que desee!"
-                valueContent={answer}
-                onChangeFunction={setAnswer}
+                placeholderInput="¡Consulte lo que desee!"
+                valueInput={answer}
+                onChangeFn={setAnswer}
               />
               <div className="flex w-full flex-col items-center justify-center gap-4">
                 <div className="flex w-full flex-col-reverse items-center justify-center gap-4 md:flex-row md:gap-8">

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import SecondaryButton from "../UI/buttons/SecondaryButton";
-import TextInput from "../UI/inputs/TextInput";
+import Input from "../UI/base/Input";
 import { useState } from "react";
 import useQuoter from "../../hooks/useQuoter";
 import Spinner from "../Spinner";
@@ -49,11 +49,12 @@ const SavePrediction = ({ show, setShow, saved, setSaved }) => {
               <h1 className="mb-4 text-center text-xl font-bold dark:text-white">
                 Define un nombre para reconocer este chat en tu historial
               </h1>
-              <TextInput
+              <Input
+                typeInput='text'
                 nameInput="namePrediction"
-                placeholderContent="Ej: Probable resfrío común"
-                valueContent={namePrediction}
-                onChangeFunction={setNamePrediction}
+                placeholderInput="Ej: Probable resfrío común"
+                valueInput={namePrediction}
+                onChangeFn={setNamePrediction}
               />
               <p className="mb-2 mt-4 text-center text-lg dark:text-white">
                 Al guardar el chat en el historial, no podrá volver continuarlo.

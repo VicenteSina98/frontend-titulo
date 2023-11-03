@@ -1,19 +1,21 @@
-import { useSearchParams } from "react-router-dom";
-import Message from "../chat/Message";
-import useQuoter from "../../hooks/useQuoter";
-import { useAuthStore } from "../../store/Auth";
-import { useNavigate } from "react-router-dom";
+// librerias
 import { useState, useEffect } from "react";
-import useAxios from "../../hooks/useAxios";
-import Spinner from "../Spinner";
-import { getUserFromToken } from "../../helpers/auth";
-import SecondaryButton from "../UI/buttons/SecondaryButton";
-import PrimaryButton from "../UI/buttons/PrimaryButton";
-import { formatDatetime } from "../../helpers/functions";
-// import TertiaryButton from "../UI/buttons/TertiaryButton";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import fileDownload from "js-file-download";
-import BlockError from "../UI/notifications/BlockError";
+// auxiliares
+import { useAuthStore } from "../../store/Auth";
+import { getUserFromToken } from "../../helpers/auth";
+import useAxios from "../../hooks/useAxios";
+import useQuoter from "../../hooks/useQuoter";
+import { formatDatetime } from "../../helpers/functions";
+// componentes
+import Spinner from "../Spinner";
+import Message from "../chat/Message";
+import PrimaryButton from "../UI/buttons/PrimaryButton";
+import SecondaryButton from "../UI/buttons/SecondaryButton";
+// import TertiaryButton from "../UI/buttons/TertiaryButton";
+import BlockNotification from "../UI/notifications/BlockNotification";
 
 const PredictionUI = () => {
   const {
@@ -65,19 +67,19 @@ const PredictionUI = () => {
     await setInfoPersonal();
   };
   const backToHistory = () => {
-    setError(false)
-    setErrorMessage('')
+    setError(false);
+    setErrorMessage("");
     navigate("/home/history");
   };
   const generatePDF = async () => {
-    setError(false)
-    setErrorMessage('')
+    setError(false);
+    setErrorMessage("");
     await queryToPDF();
   };
   const queryToPDF = async () => {
     try {
       const media = await api.get(`/pdf/${id}`);
-      console.log(media.data)
+      console.log(media.data);
       if (media.data.status === 400) {
         setError(true);
         setErrorMessage(
@@ -88,7 +90,7 @@ const PredictionUI = () => {
       const path = media.data.path;
       await axios
         .get(`${import.meta.env.VITE_API_URL}${path}`, { responseType: "blob" })
-        .then((res) => fileDownload(res.data, name+'.pdf'));
+        .then((res) => fileDownload(res.data, name + ".pdf"));
     } catch (error) {
       console.log(error);
       setError(true);
@@ -107,7 +109,11 @@ const PredictionUI = () => {
     <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col justify-between gap-8">
       {/* mensaje de error en caso de que la API muera */}
       <div className={!error ? "hidden" : ""}>
-        <BlockError message={errorMessage} />
+        <BlockNotification
+          content={errorMessage}
+          textColor="text-white"
+          backgroundColor="bg-red-700"
+        />
       </div>
       <div className="flex flex-col gap-2">
         <h1 className="text-left text-2xl font-bold dark:text-white">{name}</h1>
@@ -128,7 +134,10 @@ const PredictionUI = () => {
           onClickFunction={backToHistory}
         />
         {/* <SecondaryButton valueContent="Enviar por email" /> */}
-        <PrimaryButton valueContent="Exportar chat a PDF" onClickFunction={generatePDF}/>
+        <PrimaryButton
+          valueContent="Exportar chat a PDF"
+          onClickFunction={generatePDF}
+        />
       </div>
     </main>
   );

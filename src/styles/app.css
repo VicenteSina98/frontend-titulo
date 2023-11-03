@@ -1,0 +1,92 @@
+/* spinner */
+.spinner {
+  width: 40px;
+  height: 40px;
+
+  position: relative;
+  margin: 5rem auto;
+}
+
+.double-bounce1,
+.double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #aaa;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  -webkit-animation: sk-bounce 2s infinite ease-in-out;
+  animation: sk-bounce 2s infinite ease-in-out;
+}
+
+.double-bounce2 {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
+}
+
+@-webkit-keyframes sk-bounce {
+  0%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes sk-bounce {
+  0%,
+  100% {
+    transform: scale(0);
+    -webkit-transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+    -webkit-transform: scale(1);
+  }
+}
+
+/* modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-main {
+  position: fixed;
+  width: 80%;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* informacion medica :: registro :: multi select */
+.rmsc {
+  --rmsc-main: #0e7490;
+  --rmsc-hover: #f1f3f5;
+  --rmsc-selected: #e2e8f0;
+  --rmsc-border: #9ca3af;
+  --rmsc-gray: #1f2937;
+  --rmsc-bg: #fff;
+  --rmsc-p: 16px; /* Spacing */
+  --rmsc-radius: 6px; /* Radius */
+  --rmsc-h: 40px; /* Height */
+}
+
+.rmsc.dark {
+  --rmsc-main: #0e7490; /* ok */
+  --rmsc-hover: #525252;
+  --rmsc-selected: #404040;
+  --rmsc-border: #525252; /* ok */
+  --rmsc-gray: #d4d4d4; /* ok */
+  --rmsc-bg: #262626; /* ok */
+  color: #d4d4d4;
+}
