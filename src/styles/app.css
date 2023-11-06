@@ -70,11 +70,11 @@
 
 /* informacion medica :: registro :: multi select */
 .rmsc {
-  --rmsc-main: #0e7490;
-  --rmsc-hover: #f1f3f5;
-  --rmsc-selected: #e2e8f0;
-  --rmsc-border: #9ca3af;
-  --rmsc-gray: #1f2937;
+  --rmsc-main: #0f766e; /* teal-700 */
+  --rmsc-hover: #e5e5e5; /* neutral-200 */
+  --rmsc-selected: #e2e8f0; /* slate-200 */
+  --rmsc-border: #a3a3a3; /* neutral-400 */
+  --rmsc-gray: #a3a3a3;
   --rmsc-bg: #fff;
   --rmsc-p: 16px; /* Spacing */
   --rmsc-radius: 6px; /* Radius */
@@ -82,11 +82,11 @@
 }
 
 .rmsc.dark {
-  --rmsc-main: #0e7490; /* ok */
-  --rmsc-hover: #525252;
-  --rmsc-selected: #404040;
-  --rmsc-border: #525252; /* ok */
-  --rmsc-gray: #d4d4d4; /* ok */
-  --rmsc-bg: #262626; /* ok */
-  color: #d4d4d4;
+  --rmsc-main: #0f766e; /* teal-700  */
+  --rmsc-hover: #404040; /* neutral-700 */
+  --rmsc-selected: #525252; /* neutral-600 */
+  --rmsc-border: #a3a3a3; /* neutral-400 */
+  --rmsc-gray: #a3a3a3; /* neutral-400 */
+  --rmsc-bg: #262626; /* neutral-800 */
+  color: #a3a3a3; /* neutral-400 */
 }
