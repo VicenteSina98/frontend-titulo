@@ -210,10 +210,81 @@ export const matrixToObject = (matrix) => {
   return obj;
 };
 
-export  const formatDatetime = (datetime) => {
+export const formatDatetime = (datetime) => {
   const splitDatetime = datetime.split("-");
   const year = splitDatetime[0];
   const month = splitDatetime[1];
   const day = splitDatetime[2].split("T")[0];
   return [day, month, year].join("-");
 };
+
+export const multipleOptionsSelected = (check, index) => {
+  const optionsFlags = check[index];
+  for (let option in optionsFlags)
+    if (option !== "Ninguno") if (optionsFlags[option]) return true;
+  return false;
+};
+
+export const updateOtrosBySubmit = ({
+  informacionPersonal,
+  antecedentesMedicos,
+  answers,
+  extraAnswers,
+}) => ({
+  informacion_personal: {
+    informacion_personal: informacionPersonal,
+    antecedentes_medicos: antecedentesMedicos,
+  },
+  sintomas: answers[0],
+  problemas_sentidos: answers[1],
+  inflamacion: answers[2],
+  manchas: answers[3],
+  comezon: answers[4],
+  dolor: answers[5],
+  tiempo_sintomas: answers[6],
+  frecuencia_sintomas: answers[7],
+  consumo_medicamentos: answers[8],
+  contacto_enfermo: {
+    ha_tenido_contacto: answers[9],
+    diagnostico: answers[9] === "No" ? answers[10] : extraAnswers[10],
+    sintomas_relacionados: answers[9] === "No" ? answers[11] : extraAnswers[11],
+  },
+  contacto_toxico: {
+    ha_tenido_contacto: answers[9] === "No" ? answers[10] : answers[12],
+    tipo:
+      answers[9] === "No"
+        ? answers[10] === "No"
+          ? extraAnswers[13]
+          : answers[11]
+        : answers[12] === "No"
+        ? extraAnswers[13]
+        : answers[13],
+  },
+  viaje_extranjero: {
+    ha_viajado:
+      answers[9] === "No"
+        ? answers[10] === "No"
+          ? answers[11]
+          : answers[12]
+        : answers[12] === "No"
+        ? answers[13]
+        : answers[14],
+    paises:
+      answers[9] === "No"
+        ? answers[10] === "No"
+          ? answers[11] === "No"
+            ? extraAnswers[15]
+            : answers[12]
+          : answers[12] === "No"
+          ? extraAnswers[15]
+          : answers[13]
+        : answers[12] === "No"
+        ? answers[13] === "No"
+          ? extraAnswers[15]
+          : answers[14]
+        : answers[14] === "No"
+        ? extraAnswers[15]
+        : answers[15],
+  },
+  estado_animo: answers[12],
+});

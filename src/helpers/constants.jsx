@@ -95,7 +95,7 @@ export const OPTIONS_ARRAY = [
   ["Químico", "Biológico", "Otro"], // 13
   ["Si", "No"], // 14
   ["Australia", "Brasil", "China", "India", "Sudáfrica", "Otros"], // 15
-  [
+  [ 
     "Decaido",
     "Cansado",
     "Ansioso",
@@ -304,4 +304,45 @@ export const SIGNIN_OPTIONS = {
       value: "No dormir lo suficiente",
     },
   ],
+};
+export const EMPTY_OTROS = {
+  sintomas: "", // index = 0
+  inflamacion: "", // index = 2
+  manchas: "", // index = 3
+  comezon: "", // index = 4
+  dolor: "", // index = 5
+  consumeMedicamentos: "", // index = 8
+  diagnosticoContacto: "", // index = 10
+  agenteInfeccioso: "", // index = 13
+  pais: "", // index = 15
+  estadoAnimo: "", // index = 16
+};
+export const EMPTY_MEDICAL_DATA = {
+  informacion_personal: {
+    informacion_personal: "",
+    antecedentes_medicos: "",
+  },
+  sintomas: "",
+  problemas_sentidos: "",
+  inflamacion: "",
+  manchas: "",
+  comezon: "",
+  dolor: "",
+  tiempo_sintomas: "",
+  frecuencia_sintomas: "",
+  consumo_medicamentos: "",
+  contacto_enfermo: {
+    ha_tenido_contacto: "",
+    diagnostico: "",
+    sintomas_relacionados: "",
+  },
+  contacto_toxico: {
+    ha_tenido_contacto: "",
+    tipo: "",
+  },
+  viaje_extranjero: {
+    ha_viajado: "",
+    paises: "",
+  },
+  estado_animo: "",
 };
