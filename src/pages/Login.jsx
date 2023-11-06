@@ -5,19 +5,17 @@ import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/Auth";
 import { login } from "../helpers/auth";
 // componentes
-import Sentence from "../components/UI/base/Sentence";
-import Label from "../components/UI/base/Label";
-import Input from "../components/UI/base/Input";
-import GoTo from "../components/UI/base/GoTo";
-import PrimaryButton from "../components/UI/buttons/PrimaryButton";
-import BlockNotification from "../components/UI/notifications/BlockNotification";
-import MainContainer from "../components/outSession/outSessionBase/MainContainer";
-import Header from "../components/outSession/outSessionBase/Header";
-import Subtitle from "../components/UI/base/Subtitle";
-import FieldContainer from "../components/outSession/outSessionBase/FieldContainer";
-import FormContainer from "../components/outSession/outSessionBase/FormContainer";
+import { Subtitle, Sentence, Label, Input, GoTo } from "../components/UI/base";
+import { PrimaryButton } from "../components/UI/buttons";
+import { BlockNotification } from "../components/UI/notifications";
+import {
+  Header,
+  MainContainer,
+  FormContainer,
+  FieldContainer,
+} from "../components/outSession/outSessionBase";
 
-const Login = () => {
+export const Login = () => {
   // estados
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,20 +55,19 @@ const Login = () => {
             Facilita la toma de decisiones informada y la atención médica
             eficiente"
       />
-      {sessionError ? (
-        <BlockNotification
-          content={sessionError}
-          textColor="text-white"
-          backgroundColor="bg-red-700"
-        />
-      ) : null}
-      <section className="h-full w-full overflow-auto px-8 py-4 xl:flex xl:flex-col xl:items-center xl:justify-center">
+      <section className="h-full w-full overflow-auto px-16 lg:w-7/12 xl:flex xl:w-6/12 xl:flex-col xl:items-center xl:justify-center xl:px-20">
         <FormContainer>
           <Subtitle
             content="Inicia sesión  y utiliza la aplicación"
             textWeight="font-bold"
           />
-          <form className="flex flex-col gap-6" onSubmit={handleLogin}>
+          {sessionError ? (
+            <BlockNotification
+              content={sessionError}
+              typeNotification="error"
+            />
+          ) : null}
+          <form className="flex w-full flex-col gap-6" onSubmit={handleLogin}>
             <div className="flex flex-col gap-4">
               <FieldContainer>
                 <Label
@@ -103,7 +100,10 @@ const Login = () => {
                 />
               </FieldContainer>
             </div>
-            <PrimaryButton valueButton="Iniciar sesión" />
+            <PrimaryButton
+              valueButton="Iniciar sesión"
+              textColor="text-white"
+            />
           </form>
           <Sentence
             content={
