@@ -1,29 +1,24 @@
 import PropTypes from "prop-types";
 
-const PrimaryButton = ({
-  // button properties
+export const PrimaryButton = ({
   valueButton,
   onClickFn = () => {},
   onClickParams = [],
-  // button styles
-  textSize = "text-base",
+  textSize = "text-sm sm:text-base",
   textColor = "text-white",
   textWeight = "font-normal",
   textAlign = "text-center",
   width = "w-full",
   padding = "px-4 py-2",
-  border = "border-2",
+  border = "border",
   borderRadius = "rounded-md",
-  borderColor = "border-cyan-700",
-  backgroundColor = "bg-cyan-700",
+  borderColor = "border-teal-700",
+  backgroundColor = "bg-teal-700",
   transition = "transition",
-  hover = "hover:cursor-pointer hover:bg-cyan-800 hover:border-cyan-800",
-  dark = "dark:bg-cyan-700 dark:border-cyan-700 dark:hover:bg-cyan-600 dark:hover:border-cyan-600",
+  hover = "hover:cursor-pointer hover:bg-teal-800 hover:border-teal-800 dark:hover:bg-teal-700 dark:hover:border-teal-700",
+  dark = "dark:bg-teal-600 dark:border-teal-600",
 }) => {
   const classes = [
-    valueButton,
-    onClickFn,
-    onClickParams,
     textSize,
     textColor,
     textWeight,
