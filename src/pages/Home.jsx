@@ -5,12 +5,9 @@ import useQuoter from "../hooks/useQuoter";
 import { useAuthStore } from "../store/Auth";
 import { getUserFromToken } from "../helpers/auth";
 
-const Home = () => {
-  const {
-    setIsDark,
-    setInformacionPersonal,
-    setAntecedentesMedicos,
-  } = useQuoter();
+export const Home = () => {
+  const { setIsDark, setInformacionPersonal, setAntecedentesMedicos } =
+    useQuoter();
   // check user session
   const [isLoggedIn] = useAuthStore((state) => [state.isLoggedIn]);
   const navigate = useNavigate();
