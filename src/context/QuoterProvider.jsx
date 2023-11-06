@@ -37,6 +37,7 @@ const QuoterProvider = ({ children }) => {
     window.matchMedia("(prefers-color-scheme: dark)").matches ? true : false
   );
   const [showSidebar, setShowSidebar] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [index, setIndex] = useState(0);
@@ -53,6 +54,8 @@ const QuoterProvider = ({ children }) => {
         setIsDark,
         showSidebar,
         setShowSidebar,
+        showUserMenu,
+        setShowUserMenu,
         chatStarted,
         setChatStarted,
         finish,
