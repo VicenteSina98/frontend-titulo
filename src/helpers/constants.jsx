@@ -95,7 +95,7 @@ export const OPTIONS_ARRAY = [
   ["Químico", "Biológico", "Otro"], // 13
   ["Si", "No"], // 14
   ["Australia", "Brasil", "China", "India", "Sudáfrica", "Otros"], // 15
-  [ 
+  [
     "Decaido",
     "Cansado",
     "Ansioso",
@@ -316,6 +316,16 @@ export const EMPTY_OTROS = {
   agenteInfeccioso: "", // index = 13
   pais: "", // index = 15
   estadoAnimo: "", // index = 16
+};
+export const EMPTY_PERSONAL_DATA = {
+  email: "",
+  nombres: "",
+  primerApellido: "",
+  segundoApellido: "",
+  fechaNacimiento: "",
+  altura: "",
+  peso: "",
+  sexo: "",
 };
 export const EMPTY_MEDICAL_DATA = {
   informacion_personal: {
