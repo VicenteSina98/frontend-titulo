@@ -1,14 +1,14 @@
 import PropTypes from "prop-types";
 
-const FormContainer = ({ children }) => {
+export const FormContainer = ({ children }) => {
   const classes = [
     "w-full",
     "px-8 py-4",
     "flex",
     "flex-col",
-    "gap-2",
-    'justify-center',
-    'items-center',
+    "gap-6",
+    "justify-center",
+    "items-center",
     "xl:px-7",
     "2xl:px-24",
   ].join(" ");

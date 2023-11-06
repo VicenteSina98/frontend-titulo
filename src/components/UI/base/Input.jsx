@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const Input = ({
+export const Input = ({
   // input properties
   typeInput,
   nameInput,
@@ -9,17 +9,19 @@ const Input = ({
   valueInput,
   onChangeFn,
   options = [],
+  textColor = "text-neutral-400",
   textSize = "text-base",
   width = "w-full",
   padding = "px-4 py-2",
   border = "border",
   borderRadius = "rounded-md",
-  borderColor = "border-gray-400",
+  borderColor = "border-neutral-400",
   backgroundColor = "bg-transparent",
-  focus = "focus:outline-none focus:border-2 focus:border-cyan-700",
-  dark = "dark:border-neutral-600 dark:text-neutral-300",
+  focus = "focus:outline-none focus:border-2 focus:border-teal-700",
+  hidden = "",
 }) => {
   const classes = [
+    textColor,
     textSize,
     width,
     padding,
@@ -28,7 +30,7 @@ const Input = ({
     borderColor,
     backgroundColor,
     focus,
-    dark,
+    hidden,
   ].join(" ");
   return typeInput === "select" ? (
     <select className={classes}>
@@ -62,6 +64,7 @@ Input.propTypes = {
   valueInput: PropTypes.string,
   onChangeFn: PropTypes.func,
   options: PropTypes.array,
+  textColor: PropTypes.string,
   textSize: PropTypes.string,
   width: PropTypes.string,
   padding: PropTypes.string,
@@ -70,7 +73,7 @@ Input.propTypes = {
   borderColor: PropTypes.string,
   backgroundColor: PropTypes.string,
   focus: PropTypes.string,
-  dark: PropTypes.string,
+  hidden: PropTypes.string,
 };
 
 export default Input;

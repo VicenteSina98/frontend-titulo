@@ -1,12 +1,10 @@
 // librerias
 import PropTypes from "prop-types";
 // componentes
-import Img from "../../UI/base/Img";
-import Title from "../../UI/base/Title";
-import Subtitle from "../../UI/base/Subtitle";
+import { Img, Title, Subtitle } from "../../UI/base";
 import Logo from "../../../img/Logo.png";
 
-const Header = ({ content }) => {
+export const Header = ({ content }) => {
   const headerClasses = [
     "bg-cyan-700",
     "shadow",

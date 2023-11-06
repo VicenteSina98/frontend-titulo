@@ -1,9 +1,11 @@
+// librereias
 import PropTypes from "prop-types";
 import { Field } from "formik";
-import FormError from "../outSessionBase/FormError";
-import Label from "../../UI/base/Label";
+// componentes
+import { FormError } from "../outSessionBase";
+import { Label } from "../../UI/base";
 
-const InputPersonalDataForm = ({
+export const InputPersonalDataForm = ({
   labelContent,
   nameField,
   typeField,
@@ -15,20 +17,21 @@ const InputPersonalDataForm = ({
 }) => {
   const fieldClasses = [
     "text-base",
+    "text-neutral-400",
     "w-full",
     "px-4 py-2",
     "border",
     "rounded-md",
-    "border-gray-400",
+    "border-neutral-400",
     "bg-transparent",
-    "focus:outline-none focus:border-2 focus:border-cyan-700",
-    "dark:border-neutral-600 dark:text-neutral-300",
+    "focus:outline-none focus:border-2 focus:border-teal-700",
   ].join(" ");
   const optionClasses = [
     "text-base",
+    "text-black",
     "px-2 py-1",
-    "bg-slate-200",
-    "dark:bg-neutral-700",
+    "bg-neutral-100",
+    'dark:text-white dark:bg-neutral-700'
   ].join(" ");
   return (
     <div className="flex flex-col gap-1">

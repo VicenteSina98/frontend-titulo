@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 
-const FormError = ({
+export const FormError = ({
   message,
   textSize = "text-base",
   textColor = "text-red-500",
-  dark = 'dark:text-red-300'
+  dark = "dark:text-red-300",
 }) => {
   const classes = [textSize, textColor, dark].join(" ");
   return <p className={classes}>{message}</p>;

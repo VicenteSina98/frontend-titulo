@@ -1,13 +1,12 @@
 import PropTypes from "prop-types";
 
-const Title = ({
+export const Title = ({
   content,
   textColor = "text-black",
   textAlign = "text-center",
-  textSize = "text-xl",
+  textSize = "text-lg sm:text-xl",
   textWeight = "font-bold",
   dark = "dark:text-white",
-  responsive = "sm:text-2xl",
 }) => {
   const classes = [
     textColor,
@@ -15,7 +14,6 @@ const Title = ({
     textSize,
     textWeight,
     dark,
-    responsive,
   ].join(" ");
   return <h1 className={classes}>{content}</h1>;
 };
@@ -27,7 +25,6 @@ Title.propTypes = {
   textSize: PropTypes.string,
   textWeight: PropTypes.string,
   dark: PropTypes.string,
-  responsive: PropTypes.string,
 };
 
 export default Title;

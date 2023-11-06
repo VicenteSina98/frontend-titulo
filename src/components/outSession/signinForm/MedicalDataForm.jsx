@@ -1,22 +1,23 @@
 // librerias
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { MultiSelect } from "react-multi-select-component";
 // auxiliares
 import { register } from "../../../helpers/auth";
 import { SIGNIN_OPTIONS } from "../../../helpers/constants";
 import useQuoter from "../../../hooks/useQuoter";
 // componentes
-import FormContainer from "../outSessionBase/FormContainer";
-import FieldContainer from "../outSessionBase/FieldContainer";
-import Subtitle from "../../UI/base/Subtitle";
-import Label from "../../UI/base/Label";
-import PrimaryButton from "../../UI/buttons/PrimaryButton";
-import SecondaryButton from "../../UI/buttons/SecondaryButton";
-import { MultiSelect } from "react-multi-select-component";
+import { FormContainer, FieldContainer } from "../outSessionBase";
+import { Subtitle, Label } from "../../UI/base";
+import { PrimaryButton, SecondaryButton } from "../../UI/buttons";
+import { BlockNotification } from "../../UI/notifications";
+import { MultiselectItem } from "./MultiselectItem";
 
-const MedicalDataForm = ({
+export const MedicalDataForm = ({
   informacionPersonal,
   password,
+  sessionError,
+  accountCreated,
   setInformacionPersonal,
   setPassword,
   setAntecedentesMedicos,
@@ -57,7 +58,9 @@ const MedicalDataForm = ({
   };
   const valueRenderer = (value) => {
     if (!value.length) return "Seleccione";
-    return value.value;
+    return value.map(({ label, value }) => (
+      <MultiselectItem key={label} content={value} />
+    ));
   };
   const getValues = (arrOptions) =>
     arrOptions.map(({ value }) => value).join(", ");
@@ -104,118 +107,146 @@ const MedicalDataForm = ({
   return (
     <FormContainer>
       <Subtitle content="Información Médica" textWeight="font-bold" />
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <div
+        className={`flex w-full flex-col items-center justify-center gap-2 ${
+          sessionError?.email?.length === 0 &&
+          sessionError?.password?.length === 0 &&
+          !accountCreated
+            ? "hidden"
+            : ""
+        }`}
+      >
+        {sessionError?.email?.map((error, index) => (
+          <BlockNotification
+            key={index}
+            content={`Error en el correo: ${error}`}
+            typeNotification="error"
+          />
+        ))}
+        {sessionError?.password?.map((error, index) => (
+          <BlockNotification
+            key={index}
+            content={`Error en la contraseña: ${error}`}
+            typeNotification="error"
+          />
+        ))}
+        {accountCreated ? (
+          <BlockNotification
+            content="Cuenta creada, dirígete a la página de inicio de sesión"
+            typeNotification="success"
+          />
+        ) : null}
+      </div>
+      <form onSubmit={handleSubmit} className="flex w-full flex-col gap-6">
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2">
-            {/* enfermedades cronicas */}
-            <FieldContainer>
-              <Label
-                forInput="enfermedadesCronicas"
-                content="Enfermedades crónicas"
-                required={false}
-              />
-              <MultiSelect
-                options={SIGNIN_OPTIONS.enfermedadesCronicas}
-                value={enfermedadesCronicas}
-                onChange={setEnfermedadesCronicas}
-                isCreatable={true}
-                onCreateOption={handleNewField}
-                valueRenderer={valueRenderer}
-                className={isDark ? "dark" : ""}
-                overrideStrings={strings}
-              />
-            </FieldContainer>
-            {/* historial alergias */}
-            <FieldContainer>
-              <Label
-                forInput="historialAlergias"
-                content="Historial de alergias"
-                required={false}
-              />
-              <MultiSelect
-                options={SIGNIN_OPTIONS.historialAlergias}
-                value={historialAlergias}
-                onChange={setHistorialAlergias}
-                isCreatable={true}
-                onCreateOption={handleNewField}
-                valueRenderer={valueRenderer}
-                className={isDark ? "dark" : ""}
-                overrideStrings={strings}
-              />
-            </FieldContainer>
-            {/* historial cirugias */}
-            <FieldContainer>
-              <Label
-                forInput="historialCirugias"
-                content="Historial de cirugías"
-                required={false}
-              />
-              <MultiSelect
-                options={SIGNIN_OPTIONS.historialCirugias}
-                value={historialCirugias}
-                onChange={setHistorialCirugias}
-                isCreatable={true}
-                onCreateOption={handleNewField}
-                valueRenderer={valueRenderer}
-                className={isDark ? "dark" : ""}
-                overrideStrings={strings}
-              />
-            </FieldContainer>
-            {/* historial medicamentos */}
-            <FieldContainer>
-              <Label
-                forInput="historialMedicamentos"
-                content="Historial de uso de medicamentos"
-                required={false}
-              />
-              <MultiSelect
-                options={SIGNIN_OPTIONS.historialMedicamentos}
-                value={historialMedicamentos}
-                onChange={setHistorialMedicamentos}
-                isCreatable={true}
-                onCreateOption={handleNewField}
-                valueRenderer={valueRenderer}
-                className={isDark ? "dark" : ""}
-                overrideStrings={strings}
-              />
-            </FieldContainer>
-            {/* historial enfermedades familia */}
-            <FieldContainer>
-              <Label
-                forInput="historialEnfermedadesFamilia"
-                content="Historial de enfermedades en la familia"
-                required={false}
-              />
-              <MultiSelect
-                options={SIGNIN_OPTIONS.historialEnfermedadesFamilia}
-                value={historialEnfermedadesFamilia}
-                onChange={setHistorialEnfermedadesFamilia}
-                isCreatable={true}
-                onCreateOption={handleNewField}
-                valueRenderer={valueRenderer}
-                className={isDark ? "dark" : ""}
-                overrideStrings={strings}
-              />
-            </FieldContainer>
-            {/* historial enfermedades infecciosas */}
-            <FieldContainer>
-              <Label
-                forInput="historialEnfermedadesInfecciosas"
-                content="Historial de enfermedades infecciosas"
-                required={false}
-              />
-              <MultiSelect
-                options={SIGNIN_OPTIONS.historialEnfermedadesInfecciosas}
-                value={historialEnfermedadesInfecciosas}
-                onChange={setHistorialEnfermedadesInfecciosas}
-                isCreatable={true}
-                onCreateOption={handleNewField}
-                valueRenderer={valueRenderer}
-                className={isDark ? "dark" : ""}
-                overrideStrings={strings}
-              />
-            </FieldContainer>
-          </div>
+          {/* enfermedades cronicas */}
+          <FieldContainer>
+            <Label
+              forInput="enfermedadesCronicas"
+              content="Enfermedades crónicas"
+              required={false}
+            />
+            <MultiSelect
+              options={SIGNIN_OPTIONS.enfermedadesCronicas}
+              value={enfermedadesCronicas}
+              onChange={setEnfermedadesCronicas}
+              isCreatable={true}
+              onCreateOption={handleNewField}
+              valueRenderer={valueRenderer}
+              className={isDark ? "dark" : ""}
+              overrideStrings={strings}
+            />
+          </FieldContainer>
+          {/* historial alergias */}
+          <FieldContainer>
+            <Label
+              forInput="historialAlergias"
+              content="Historial de alergias"
+              required={false}
+            />
+            <MultiSelect
+              options={SIGNIN_OPTIONS.historialAlergias}
+              value={historialAlergias}
+              onChange={setHistorialAlergias}
+              isCreatable={true}
+              onCreateOption={handleNewField}
+              valueRenderer={valueRenderer}
+              className={isDark ? "dark" : ""}
+              overrideStrings={strings}
+            />
+          </FieldContainer>
+          {/* historial cirugias */}
+          <FieldContainer>
+            <Label
+              forInput="historialCirugias"
+              content="Historial de cirugías"
+              required={false}
+            />
+            <MultiSelect
+              options={SIGNIN_OPTIONS.historialCirugias}
+              value={historialCirugias}
+              onChange={setHistorialCirugias}
+              isCreatable={true}
+              onCreateOption={handleNewField}
+              valueRenderer={valueRenderer}
+              className={isDark ? "dark" : ""}
+              overrideStrings={strings}
+            />
+          </FieldContainer>
+          {/* historial medicamentos */}
+          <FieldContainer>
+            <Label
+              forInput="historialMedicamentos"
+              content="Historial de uso de medicamentos"
+              required={false}
+            />
+            <MultiSelect
+              options={SIGNIN_OPTIONS.historialMedicamentos}
+              value={historialMedicamentos}
+              onChange={setHistorialMedicamentos}
+              isCreatable={true}
+              onCreateOption={handleNewField}
+              valueRenderer={valueRenderer}
+              className={isDark ? "dark" : ""}
+              overrideStrings={strings}
+            />
+          </FieldContainer>
+          {/* historial enfermedades familia */}
+          <FieldContainer>
+            <Label
+              forInput="historialEnfermedadesFamilia"
+              content="Historial de enfermedades en la familia"
+              required={false}
+            />
+            <MultiSelect
+              options={SIGNIN_OPTIONS.historialEnfermedadesFamilia}
+              value={historialEnfermedadesFamilia}
+              onChange={setHistorialEnfermedadesFamilia}
+              isCreatable={true}
+              onCreateOption={handleNewField}
+              valueRenderer={valueRenderer}
+              className={isDark ? "dark" : ""}
+              overrideStrings={strings}
+            />
+          </FieldContainer>
+          {/* historial enfermedades infecciosas */}
+          <FieldContainer>
+            <Label
+              forInput="historialEnfermedadesInfecciosas"
+              content="Historial de enfermedades infecciosas"
+              required={false}
+            />
+            <MultiSelect
+              options={SIGNIN_OPTIONS.historialEnfermedadesInfecciosas}
+              value={historialEnfermedadesInfecciosas}
+              onChange={setHistorialEnfermedadesInfecciosas}
+              isCreatable={true}
+              onCreateOption={handleNewField}
+              valueRenderer={valueRenderer}
+              className={isDark ? "dark" : ""}
+              overrideStrings={strings}
+            />
+          </FieldContainer>
           {/* historial habitos salud */}
           <FieldContainer>
             <Label
@@ -236,11 +267,11 @@ const MedicalDataForm = ({
           </FieldContainer>
         </div>
         <div className="flex w-full flex-col gap-4 lg:flex-row-reverse">
-          <PrimaryButton valueButton="Crear mi cuenta" />
+          <PrimaryButton valueButton="Crear mi cuenta" width="w-full lg:w-3/4" />
           <SecondaryButton
             valueButton="Volver atrás"
             onClickFn={setNextSection}
-            onClickParams={[false]}
+            onClickParams={[false]} width="w-full lg:w-1/4"
           />
         </div>
       </form>
@@ -251,6 +282,8 @@ const MedicalDataForm = ({
 MedicalDataForm.propTypes = {
   informacionPersonal: PropTypes.object,
   password: PropTypes.string,
+  sessionError: PropTypes.object,
+  accountCreated: PropTypes.bool,
   antecedentesMedicos: PropTypes.object,
   setInformacionPersonal: PropTypes.func,
   setPassword: PropTypes.func,

@@ -3,16 +3,19 @@ import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 // componentes
-import InputPersonalDataForm from "./InputPersonalDataForm";
-import FormContainer from "../outSessionBase/FormContainer";
-import Subtitle from "../../UI/base/Subtitle";
-import PrimaryButton from "../../UI/buttons/PrimaryButton";
+import { FormContainer } from "../outSessionBase/";
+import { InputPersonalDataForm } from "../signinForm";
+import { Subtitle } from "../../UI/base";
+import { PrimaryButton } from "../../UI/buttons";
+import { BlockNotification } from "../../UI/notifications";
 
-const PersonalDataForm = ({
+export const PersonalDataForm = ({
   informacionPersonal,
   setPassword,
   setNextSection,
   setInformacionPersonal,
+  accountCreated,
+  sessionError,
 }) => {
   // schemas
   const personalDataSchema = Yup.object().shape({
@@ -50,6 +53,36 @@ const PersonalDataForm = ({
   return (
     <FormContainer>
       <Subtitle content="Información Personal" textWeight="font-bold" />
+      {sessionError?.email?.map((error, index) => (
+        <div
+          className="flex w-full flex-col items-center justify-center"
+          key={index}
+        >
+          <BlockNotification
+            content={`Error en el correo: ${error}`}
+            typeNotification="error"
+          />
+        </div>
+      ))}
+      {sessionError?.password?.map((error, index) => (
+        <div
+          className="flex w-full flex-col items-center justify-center"
+          key={index}
+        >
+          <BlockNotification
+            content={`Error en el correo: ${error}`}
+            typeNotification="error"
+          />
+        </div>
+      ))}
+      {accountCreated ? (
+        <div className="flex w-full flex-col items-center justify-center">
+          <BlockNotification
+            content="Cuenta creada, dirígete a la página de inicio de sesión"
+            typeNotification="success"
+          />
+        </div>
+      ) : null}
       <Formik
         enableReinitialize={true}
         initialValues={{
@@ -130,7 +163,7 @@ const PersonalDataForm = ({
                     errors={errors}
                     touched={touched}
                     options={[
-                      { valueOption: "M", contentOption: "Masuclino" },
+                      { valueOption: "M", contentOption: "Masculino" },
                       { valueOption: "F", contentOption: "Femenino" },
                     ]}
                   />
@@ -178,6 +211,8 @@ PersonalDataForm.propTypes = {
   setPassword: PropTypes.func,
   setInformacionPersonal: PropTypes.func,
   informacionPersonal: PropTypes.object,
+  accountCreated: PropTypes.bool,
+  sessionError: PropTypes.object,
 };
 
 export default PersonalDataForm;

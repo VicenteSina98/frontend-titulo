@@ -1,12 +1,13 @@
-import PropTypes from "prop-types";
-import SecondaryButton from "../UI/buttons/SecondaryButton";
-import Input from "../UI/base/Input";
+// librerias
 import { useState } from "react";
+import PropTypes from "prop-types";
+// auxiliares
 import useQuoter from "../../hooks/useQuoter";
-import Spinner from "../Spinner";
 import useAxios from "../../hooks/useAxios";
+// componentes
+import { PrimaryButton, SecondaryButton } from "../UI/buttons";
+import { Input, Spinner } from "../UI/base/";
 import Check from "../../img/comprobar.png";
-import PrimaryButton from "../UI/buttons/PrimaryButton";
 
 const SavePrediction = ({ show, setShow, saved, setSaved }) => {
   const { informacionPersonal, questions, answers } = useQuoter();
@@ -50,7 +51,7 @@ const SavePrediction = ({ show, setShow, saved, setSaved }) => {
                 Define un nombre para reconocer este chat en tu historial
               </h1>
               <Input
-                typeInput='text'
+                typeInput="text"
                 nameInput="namePrediction"
                 placeholderInput="Ej: Probable resfrío común"
                 valueInput={namePrediction}

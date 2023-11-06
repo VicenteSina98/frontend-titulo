@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const FieldContainer = ({ children }) => {
+export const FieldContainer = ({ children }) => {
   const classes = ["flex", "flex-col", "gap-1"].join(" ");
   return <div className={classes}>{children}</div>;
 };

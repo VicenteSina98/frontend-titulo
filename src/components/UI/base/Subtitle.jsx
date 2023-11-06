@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const Subtitle = ({
+export const Subtitle = ({
   content,
   textColor = "text-black",
   textAlign = "text-center",

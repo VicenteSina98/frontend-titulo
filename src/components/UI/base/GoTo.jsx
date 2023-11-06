@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const GoTo = ({
+export const GoTo = ({
   content,
   toPath,
   textColor = "text-blue-600",

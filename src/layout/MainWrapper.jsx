@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { setUser } from "../helpers/auth";
 
-const MainWrapper = ({ children }) => {
+export const MainWrapper = ({ children }) => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const handler = async () => {

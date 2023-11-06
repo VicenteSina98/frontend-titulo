@@ -10,12 +10,10 @@ import useAxios from "../../hooks/useAxios";
 import useQuoter from "../../hooks/useQuoter";
 import { formatDatetime } from "../../helpers/functions";
 // componentes
-import Spinner from "../Spinner";
+import { Spinner } from "../UI/base";
+import { PrimaryButton, SecondaryButton } from "../UI/buttons";
+import { BlockNotification } from "../UI/notifications";
 import Message from "../chat/Message";
-import PrimaryButton from "../UI/buttons/PrimaryButton";
-import SecondaryButton from "../UI/buttons/SecondaryButton";
-// import TertiaryButton from "../UI/buttons/TertiaryButton";
-import BlockNotification from "../UI/notifications/BlockNotification";
 
 const PredictionUI = () => {
   const {

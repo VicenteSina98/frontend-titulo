@@ -1,22 +1,22 @@
 import PropTypes from "prop-types";
 
-const Img = ({
+export const Img = ({
   srcImg,
   altImg,
+  height = "h-auto",
   width = "w-12",
   rounded = "rounded-full",
-  responsive = "md:w-16",
 }) => {
-  const classes = [width, rounded, responsive].join(" ");
+  const classes = [height, width, rounded].join(" ");
   return <img src={srcImg} alt={altImg} className={classes} />;
 };
 
 Img.propTypes = {
   srcImg: PropTypes.string,
   altImg: PropTypes.string,
+  height: PropTypes.string,
   width: PropTypes.string,
   rounded: PropTypes.string,
-  responsive: PropTypes.string,
 };
 
 export default Img;

@@ -7,14 +7,12 @@ import { useAuthStore } from "../store/Auth";
 import useAxios from "../hooks/useAxios";
 import { getUserFromToken } from "../helpers/auth";
 // componentes
-import Spinner from "../components/Spinner";
-import Title from "../components/UI/base/Title";
-import PrimaryButton from "../components/UI/buttons/PrimaryButton";
-import SecondaryButton from "../components/UI/buttons/SecondaryButton";
-import BlockNotification from "../components/UI/notifications/BlockNotification";
+import { Title, Spinner } from "../components/UI/base";
+import { PrimaryButton, SecondaryButton } from "../components/UI/buttons";
+import { BlockNotification } from "../components/UI/notifications";
 import PredictionCard from "../components/prediction/PredictionCard";
 
-const History = () => {
+export const History = () => {
   const navigate = useNavigate();
   const {
     error,

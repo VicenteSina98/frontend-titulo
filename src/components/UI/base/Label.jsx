@@ -1,14 +1,15 @@
 import PropTypes from "prop-types";
 
-const Label = ({
+export const Label = ({
   content,
   forInput,
   required = true,
+  textColor = "text-black",
   textAlign = "text-left",
   textSize = "text-base",
   dark = "dark:text-white",
 }) => {
-  const classes = [content, forInput, textAlign, textSize, dark].join(" ");
+  const classes = [textColor, textAlign, textSize, dark].join(" ");
   return (
     <label htmlFor={forInput} className={classes}>
       {content}{" "}
@@ -23,6 +24,7 @@ Label.propTypes = {
   content: PropTypes.string,
   forInput: PropTypes.string,
   required: PropTypes.bool,
+  textColor: PropTypes.string,
   textAlign: PropTypes.string,
   textSize: PropTypes.string,
   dark: PropTypes.string,
