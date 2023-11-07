@@ -2,7 +2,7 @@
 import PropTypes from "prop-types";
 // componentes
 import { Img, Title, Subtitle } from "../../UI/base";
-import Logo from "../../../../img/logo.png";
+import Logo from "../../../img/logo.png";
 
 export const Header = ({ content }) => {
   const headerClasses = [
