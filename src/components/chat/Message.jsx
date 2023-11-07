@@ -2,49 +2,55 @@ import PropTypes from "prop-types";
 import { Paragraph } from "../UI/base";
 
 const Message = ({ data, isIA }) => {
-  const predictionResponse = data?.split("\n").filter((d) => d !== "");
-  const msgContainerStyles = "flex flex-col  gap-2 break-words";
-  return (
-    <>
-      <div
-        className={
-          msgContainerStyles + (isIA || data == undefined ? " hidden" : "")
-        }
-      >
+  const textAlign = "text-left";
+  const padding = "px-4 py-2";
+  const width = "max-w-max";
+  const borderRadius = "rounded-md";
+  const bgIa = "bg-neutral-200 dark:bg-neutral-700";
+  const bgUser = "bg-neutral-100 dark:bg-neutral-600";
+  const shadow = "shadow-md dark:shadow-lg";
+  const baseClasses = ["w-full", "flex", "gap-2", "break-words"].join(" ");
+  const isIaClasses = [baseClasses, "flex-col"].join(" ");
+  const isUserClasses = [baseClasses, "justify-end"].join(" ");
+  const isPredictionClasses = [isIaClasses, borderRadius].join(" ");
+  return isIA ? (
+    data?.includes("\n") ? (
+      <div className={isPredictionClasses}>
         <Paragraph
-          content={data}
-          textAlign="text-left"
-          padding="px-4 py-2"
-          width="max-w-max"
-          backgroundColor="bg-slate-200 dark:bg-slate-600"
-          borderRadius="rounded-md"
-          shadow="shadow dark:shadow-md"
+          content={data?.split("\n").filter((d) => d !== "")}
+          textAlign={textAlign}
+          padding={padding}
+          width={width}
+          backgroundColor={bgIa}
+          shadow={shadow}
         />
       </div>
-      <div className={msgContainerStyles + (!isIA ? " hidden" : "")}>
-        {predictionResponse?.length > 0 ? (
-          <Paragraph
-            content={predictionResponse}
-            textAlign="text-left"
-            padding="px-4 py-2"
-            width="max-w-max"
-            backgroundColor="bg-slate-300 dark:bg-slate-700"
-            borderRadius="rounded-md"
-            shadow="shadow-md dark:shadow-lg"
-          />
-        ) : (
-          <Paragraph
-            content={data}
-            textAlign="text-left"
-            padding="px-4 py-2"
-            width="max-w-max"
-            backgroundColor="bg-slate-300 dark:bg-slate-700"
-            borderRadius="rounded-md"
-            shadow="shadow-md dark:shadow-lg"
-          />
-        )}
+    ) : (
+      <div className={isIaClasses}>
+        <Paragraph
+          content={data}
+          textAlign={textAlign}
+          padding={padding}
+          width={width}
+          backgroundColor={bgIa}
+          borderRadius={borderRadius}
+          shadow={shadow}
+        />
       </div>
-    </>
+    )
+  ) : (
+    <div className={isUserClasses}>
+      <Paragraph
+        content={data}
+        textAlign={textAlign}
+        padding={padding}
+        width={width}
+        backgroundColor={bgUser}
+        borderRadius={borderRadius}
+        shadow={shadow}
+        hidden={!data ? "hidden" : ""}
+      />
+    </div>
   );
 };
 

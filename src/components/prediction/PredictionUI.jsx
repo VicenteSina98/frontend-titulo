@@ -10,10 +10,11 @@ import useAxios from "../../hooks/useAxios";
 import useQuoter from "../../hooks/useQuoter";
 import { formatDatetime } from "../../helpers/functions";
 // componentes
-import { Spinner } from "../UI/base";
+import { Spinner, Subtitle, Title } from "../UI/base";
 import { PrimaryButton, SecondaryButton } from "../UI/buttons";
 import { BlockNotification } from "../UI/notifications";
 import Message from "../chat/Message";
+import FileImg from "../../img/archivo-pdf.png";
 
 const PredictionUI = () => {
   const {
@@ -100,24 +101,34 @@ const PredictionUI = () => {
   useEffect(() => {
     setBaseData();
   }, []);
+  useEffect(() => {
+    setError(false);
+    setErrorMessage("");
+  }, []);
 
   return loading ? (
     <Spinner />
   ) : (
-    <main className="mx-auto mb-8 mt-20 flex w-2/3 flex-col justify-between gap-8">
+    <section className="flex h-full w-full flex-col gap-8 px-0 py-2 sm:px-8 sm:py-4 md:py-6 lg:py-8 xl:px-36 xl:py-12 2xl:px-72 2xl:py-16">
       {/* mensaje de error en caso de que la API muera */}
-      <div className={!error ? "hidden" : ""}>
-        <BlockNotification
-          content={errorMessage}
-          textColor="text-white"
-          backgroundColor="bg-red-700"
-        />
+      <BlockNotification
+        content={errorMessage}
+        typeNotification="error"
+        hidden={!error ? "hidden" : ""}
+      />
+      <div
+        className={`flex w-full flex-col items-center justify-center gap-2 ${
+          error ? "hidden" : ""
+        }`}
+      >
+        <Title content={name} />
+        <Subtitle content={`Chat realizado el día: ${createdAt}`} />
       </div>
-      <div className="flex flex-col gap-2">
-        <h1 className="text-left text-2xl font-bold dark:text-white">{name}</h1>
-        <h2 className="dark:text-white">Chat realizado el día: {createdAt}</h2>
-      </div>
-      <div className="flex flex-col gap-4 overflow-y-auto">
+      <div
+        className={`flex flex-col gap-4 overflow-y-auto ${
+          error ? "hidden" : ""
+        }`}
+      >
         {mensajes.map((mensaje, index) => (
           <Message
             key={index}
@@ -128,16 +139,26 @@ const PredictionUI = () => {
       </div>
       <div className="flex flex-col gap-4 md:flex-row md:gap-8">
         <SecondaryButton
-          valueContent="Volver al historial"
-          onClickFunction={backToHistory}
+          valueButton="Volver al historial"
+          onClickFn={backToHistory}
+          hidden={error ? "hidden" : ""}
         />
-        {/* <SecondaryButton valueContent="Enviar por email" /> */}
         <PrimaryButton
-          valueContent="Exportar chat a PDF"
-          onClickFunction={generatePDF}
+          valueButton="Exportar chat a PDF"
+          onClickFn={generatePDF}
+          src={FileImg}
+          alt="archivo icono"
+          imgRounded="rounded-none"
+          display="flex justify-center items-center gap-3"
+          hidden={error ? "hidden" : ""}
+        />
+        <PrimaryButton
+          valueButton="Volver al historial"
+          onClickFn={backToHistory}
+          hidden={!error ? "hidden" : ""}
         />
       </div>
-    </main>
+    </section>
   );
 };
 

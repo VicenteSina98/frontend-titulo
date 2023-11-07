@@ -28,7 +28,23 @@ export const Paragraph = ({
     dark,
     hidden,
   ].join(" ");
-  return (
+  return Array.isArray(content) ? (
+    <div className="flex flex-col gap-0">
+      {content.map((c, index) => (
+        <p
+          key={index}
+          className={
+            classes +
+            (index === 0 ? " rounded-t-md" : "") +
+            (index === content.length - 1 ? " rounded-b-md" : "")
+          }
+          role={role}
+        >
+          {c}
+        </p>
+      ))}
+    </div>
+  ) : (
     <p className={classes} role={role}>
       {content}
     </p>

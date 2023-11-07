@@ -9,16 +9,17 @@ export const Input = ({
   valueInput,
   onChangeFn,
   options = [],
-  textColor = "text-neutral-400",
+  textColor = "text-neutral-700 dark:text-neutral-300",
   textSize = "text-base",
   width = "w-full",
   padding = "px-4 py-2",
   border = "border",
   borderRadius = "rounded-md",
-  borderColor = "border-neutral-400",
+  borderColor = "border-neutral-400 dark:border-neutral-600",
   backgroundColor = "bg-transparent",
-  focus = "focus:outline-none focus:border-2 focus:border-teal-700",
+  focus = "focus:outline-none focus:border-teal-700 dark:focus:border-teal-600",
   hidden = "",
+  breakWords = "",
 }) => {
   const classes = [
     textColor,
@@ -31,29 +32,35 @@ export const Input = ({
     backgroundColor,
     focus,
     hidden,
+    breakWords,
   ].join(" ");
-  return typeInput === "select" ? (
-    <select className={classes}>
-      <option value="" selected disabled>
-        -- Seleccione --
-      </option>
-      {options.map((valueOption) => (
-        <option key={[idInput, valueOption].join("-")} value={valueOption}>
-          {valueOption}
-        </option>
-      ))}
-    </select>
-  ) : (
-    <input
-      type={typeInput}
-      name={nameInput}
-      id={idInput}
-      placeholder={placeholderInput}
-      value={valueInput}
-      onChange={(event) => onChangeFn(event.target.value)}
-      className={classes}
-    />
-  );
+  switch (typeInput) {
+    case "select":
+      return (
+        <select className={classes}>
+          <option value="" selected disabled>
+            -- Seleccione --
+          </option>
+          {options.map((valueOption) => (
+            <option key={[idInput, valueOption].join("-")} value={valueOption}>
+              {valueOption}
+            </option>
+          ))}
+        </select>
+      );
+    default:
+      return (
+        <input
+          type={typeInput}
+          name={nameInput}
+          id={idInput}
+          placeholder={placeholderInput}
+          value={valueInput}
+          onChange={(event) => onChangeFn(event.target.value)}
+          className={classes}
+        />
+      );
+  }
 };
 
 Input.propTypes = {
@@ -74,6 +81,7 @@ Input.propTypes = {
   backgroundColor: PropTypes.string,
   focus: PropTypes.string,
   hidden: PropTypes.string,
+  breakWords: PropTypes.string,
 };
 
 export default Input;

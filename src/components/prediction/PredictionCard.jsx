@@ -2,11 +2,9 @@
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 // componentes
-import PredictionActionBtn from "./PredictionActionBtn";
 import { Subtitle } from "../UI/base";
 import OjoImg from "../../img/ojo.png";
-// import PapeleraImg from "../../img/papelera-xmark.png";
-// import PapeleraImgDark from "../../img/papelera-xmark-dark.png";
+import { PrimaryButton } from "../UI/buttons";
 
 const PredictionCard = ({ id, name }) => {
   const navigate = useNavigate();
@@ -14,27 +12,16 @@ const PredictionCard = ({ id, name }) => {
     navigate(navTo);
   };
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-6 rounded-xl bg-gray-200 px-4 py-4 shadow-md dark:bg-neutral-700 dark:shadow-lg md:flex-row md:justify-between lg:gap-1">
+    <div className="flex w-full flex-col items-center justify-between gap-6 rounded-xl bg-slate-200 px-4 py-4 shadow-md dark:bg-neutral-700 dark:shadow-lg">
       <Subtitle content={name} />
       <div className="flex flex-row gap-6">
-        {/* <PredictionActionBtn
-          bgColor="text-transparent"
-          borderColor="border-red-700"
-          borderColorDark="dark:border-red-500"
-          imgSrc={PapeleraImg}
-          imgSrcDark={PapeleraImgDark}
-          imgAlt="eliminar chat"
-        /> */}
-        <PredictionActionBtn
-          bgColor="bg-cyan-700"
-          bgColorDark="dark:bg-cyan-600"
-          borderColor="border-cyan-700"
-          borderColorDark="dark:border-cyan-600"
-          imgSrc={OjoImg}
-          imgAlt="ver chat"
+        <PrimaryButton
+          valueButton="Ver chat"
+          src={OjoImg}
+          alt="Icono Ojo"
+          display="flex items-center justify-center gap-3"
           onClickFn={goTo}
           onClickParams={[`/home/prediction?pred=${id}`]}
-          content="Ver chat"
         />
       </div>
     </div>

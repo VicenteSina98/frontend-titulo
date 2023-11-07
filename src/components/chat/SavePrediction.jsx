@@ -8,6 +8,7 @@ import useAxios from "../../hooks/useAxios";
 import { PrimaryButton, SecondaryButton } from "../UI/buttons";
 import { Input, Spinner } from "../UI/base/";
 import Check from "../../img/comprobar.png";
+import { Paragraph, Title } from "../UI/base";
 
 const SavePrediction = ({ show, setShow, saved, setSaved }) => {
   const { informacionPersonal, questions, answers } = useQuoter();
@@ -35,21 +36,21 @@ const SavePrediction = ({ show, setShow, saved, setSaved }) => {
     await queryAPI();
   };
   return (
-    <section className={`modal ${show ? "block" : "hidden"}`}>
+    <section className={`modal z-50 ${show ? "block" : "hidden"}`}>
       <div className="modal-main rounded-md bg-white p-8 dark:bg-neutral-900">
         {spinner ? (
           <>
             <Spinner />
-            <p className="text-center text-base font-bold dark:text-white sm:text-lg md:text-xl">
-              Guardando chat...
-            </p>
+            <Paragraph content="Guardando chat..." textWeight="font-bold" />
           </>
         ) : (
           <>
-            <div className={saved ? "hidden" : ""}>
-              <h1 className="mb-4 text-center text-xl font-bold dark:text-white">
-                Define un nombre para reconocer este chat en tu historial
-              </h1>
+            <div
+              className={`flex w-full flex-col items-center justify-center gap-6 sm:px-20 md:px-36 lg:px-56 xl:px-64 2xl:px-72 ${
+                saved ? "hidden" : ""
+              }`}
+            >
+              <Title content="Define un nombre para reconocer este chat en tu historial" />
               <Input
                 typeInput="text"
                 nameInput="namePrediction"
@@ -57,48 +58,41 @@ const SavePrediction = ({ show, setShow, saved, setSaved }) => {
                 valueInput={namePrediction}
                 onChangeFn={setNamePrediction}
               />
-              <p className="mb-2 mt-4 text-center text-lg dark:text-white">
-                Al guardar el chat en el historial, no podrá volver continuarlo.
-                Con esto en consideración, ¿Desea guardar el chat?
-              </p>
-              <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row-reverse md:gap-8">
-                <input
-                  className={`my-2 w-full rounded border-2 border-cyan-700 bg-cyan-700 px-2 py-4 text-center text-xs font-bold capitalize text-white transition dark:border-cyan-800 dark:bg-cyan-800 sm:text-sm md:mx-auto md:w-1/2 md:text-base lg:text-lg ${
+              <Paragraph
+                content="Al guardar el chat en el historial, no podrá volver continuarlo.
+                Con esto en consideración, ¿Desea guardar el chat?"
+              />
+              <div className="flex w-full flex-col items-center justify-center gap-4 xl:flex-row-reverse xl:gap-8">
+                <PrimaryButton
+                  valueButton="Si, guardar en el historial"
+                  hover={
                     namePrediction.length === 0
                       ? "hover:cursor-not-allowed"
-                      : "hover:cursor-pointer hover:bg-cyan-800 dark:hover:bg-cyan-700"
-                  }`}
-                  type="submit"
-                  value="Si, guardar en el historial"
-                  onClick={() => handleSavePrediction()}
+                      : "hover:cursor-pointer hover:bg-teal-800 hover:border-teal-800 dark:hover:bg-teal-700 dark:hover:border-teal-700"
+                  }
+                  onClickFn={handleSavePrediction}
                 />
                 <SecondaryButton
-                  valueContent="No, cancelar y volver"
-                  onClickFunction={setShow}
-                  onClickFnParameters={[!show]}
-                  textColorBase="text-red-700"
-                  textColorDark="dark:text-red-400"
-                  borderColorBase="border-red-700"
-                  borderColorDark="dark:border-red-400"
-                  hoverBgBase="hover:bg-red-700"
-                  hoverBgDark="dark:hover:bg-red-800"
+                  valueButton="No, cancelar y volver"
+                  onClickFn={setShow}
+                  onClickParams={[!show]}
                 />
               </div>
             </div>
             <div
               className={`flex flex-col items-center justify-center gap-4 ${
                 !saved ? "hidden" : ""
-              }`}
+              } sm:px-20 md:px-36 lg:px-56 xl:px-64 2xl:px-72`}
             >
               <img src={Check} alt="check imagen" className="w-2/12" />
               <p className="text-center text-sm font-bold dark:text-white sm:text-base md:text-lg">
                 ¡Predicción guardada correctamente!
               </p>
-              <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row-reverse md:gap-8">
+              <div className="w-full  ">
                 <PrimaryButton
-                  valueContent="Cerrar y volver"
-                  onClickFunction={setShow}
-                  onClickFnParameters={[!show]}
+                  valueButton="Cerrar y volver"
+                  onClickFn={setShow}
+                  onClickParams={[!show]}
                 />
               </div>
             </div>
