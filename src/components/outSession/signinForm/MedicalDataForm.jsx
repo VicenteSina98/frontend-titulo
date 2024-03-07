@@ -69,12 +69,12 @@ export const MedicalDataForm = ({
     event.preventDefault();
     const data = {
       enfermedadesCronicas: getValues(enfermedadesCronicas),
-      historialAlergias: getValues(enfermedadesCronicas),
-      historialCirugias: getValues(enfermedadesCronicas),
-      historialMedicamentos: getValues(enfermedadesCronicas),
-      historialEnfermedadesFamilia: getValues(enfermedadesCronicas),
-      historialEnfermedadesInfecciosas: getValues(enfermedadesCronicas),
-      historialHabitosSalud: getValues(enfermedadesCronicas),
+      historialAlergias: getValues(historialAlergias),
+      historialCirugias: getValues(historialCirugias),
+      historialMedicamentos: getValues(historialMedicamentos),
+      historialEnfermedadesFamiliar: getValues(historialEnfermedadesFamilia),
+      historialEnfermedadesInfecciosas: getValues(historialEnfermedadesInfecciosas),
+      historialHabitosSalud: getValues(historialHabitosSalud),
     };
     const { error } = await register({
       informacionPersonal: { ...informacionPersonal, password },
