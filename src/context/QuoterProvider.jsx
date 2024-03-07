@@ -21,7 +21,7 @@ const QuoterProvider = ({ children }) => {
     historialAlergias: "",
     historialCirugias: "",
     historialMedicamentos: "",
-    historialEnfermedadesFamiliar: "",
+    historialEnfermedadesFamilia: "",
     historialEnfermedadesInfecciosas: "",
     historialHabitosSalud: "",
   });

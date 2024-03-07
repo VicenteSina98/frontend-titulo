@@ -72,7 +72,7 @@ export const MedicalDataForm = ({
       historialAlergias: getValues(historialAlergias),
       historialCirugias: getValues(historialCirugias),
       historialMedicamentos: getValues(historialMedicamentos),
-      historialEnfermedadesFamiliar: getValues(historialEnfermedadesFamilia),
+      historialEnfermedadesFamilia: getValues(historialEnfermedadesFamilia),
       historialEnfermedadesInfecciosas: getValues(historialEnfermedadesInfecciosas),
       historialHabitosSalud: getValues(historialHabitosSalud),
     };
