@@ -109,7 +109,7 @@ export const Login = () => {
             content={
               <>
                 ¿No tienes una cuenta?{" "}
-                <GoTo content="Regístrate aquí" toPath="/register" />
+                <GoTo content="Regístrate aquí" toPath="/registro" />
               </>
             }
           />

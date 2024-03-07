@@ -19,7 +19,7 @@ const SafeApp = () => (
         {/* Rutas de inicio y registro de sesion */}
         <Route path="/" element={<LayoutInitSession />}>
           <Route index element={<Login />} />
-          <Route path="register" element={<Signin />} />
+          <Route path="registro" element={<Signin />} />
         </Route>
         {/* Rutas de la aplicacion */}
         <Route path="home" element={<LayoutMain />}>
