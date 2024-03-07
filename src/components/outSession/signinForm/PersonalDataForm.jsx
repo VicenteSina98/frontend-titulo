@@ -30,8 +30,8 @@ export const PersonalDataForm = ({
     segundoApellido: Yup.string().required(
       "El segundo apellido es obligatorio"
     ),
-    altura: Yup.string().matches(/^\d{3,}$/, "Número no válido"),
-    peso: Yup.string().matches(/^\d{2,}$/, "Número no válido"),
+    altura: Yup.number().positive(),
+    peso: Yup.number().positive(),
     sexo: Yup.string().required("El sexo es obligatorio"),
     fechaNacimiento: Yup.date().required(
       "La fecha de nacimiento es obligatoria"
@@ -53,28 +53,31 @@ export const PersonalDataForm = ({
   return (
     <FormContainer>
       <Subtitle content="Información Personal" textWeight="font-bold" />
+      {/* ERROR DE CORREO */}
       {sessionError?.email?.map((error, index) => (
         <div
           className="flex w-full flex-col items-center justify-center"
           key={index}
         >
           <BlockNotification
-            content={`Error en el correo: ${error}`}
+            content="Error en el correo"
             typeNotification="error"
           />
         </div>
       ))}
+      {/* ERROR DE PASSWORD */}
       {sessionError?.password?.map((error, index) => (
         <div
           className="flex w-full flex-col items-center justify-center"
           key={index}
         >
           <BlockNotification
-            content={`Error en el correo: ${error}`}
+            content="Error en la contraseña"
             typeNotification="error"
           />
         </div>
       ))}
+      {/* CUENTA CREADA */}
       {accountCreated ? (
         <div className="flex w-full flex-col items-center justify-center">
           <BlockNotification
@@ -104,10 +107,10 @@ export const PersonalDataForm = ({
       >
         {({ errors, touched }) => {
           return (
-            <Form className="flex flex-col gap-6">
-              <div className="flex flex-col gap-4">
+            <Form className="flex w-full flex-col gap-6">
+              <div className="flex w-full flex-col gap-4">
                 {/* nombre completo */}
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3">
                   <InputPersonalDataForm
                     labelContent="Nombres"
                     nameField="nombres"
@@ -116,27 +119,32 @@ export const PersonalDataForm = ({
                     errors={errors}
                     touched={touched}
                   />
-                  <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2">
-                    <InputPersonalDataForm
-                      labelContent="Primer apellido"
-                      nameField="primerApellido"
-                      typeField="text"
-                      placeholderField="Ej: González"
-                      errors={errors}
-                      touched={touched}
-                    />
-                    <InputPersonalDataForm
-                      labelContent="Segundo apellido"
-                      nameField="segundoApellido"
-                      typeField="text"
-                      placeholderField="Ej: Pérez"
-                      errors={errors}
-                      touched={touched}
-                    />
-                  </div>
+                  <InputPersonalDataForm
+                    labelContent="Primer apellido"
+                    nameField="primerApellido"
+                    typeField="text"
+                    placeholderField="Ej: González"
+                    errors={errors}
+                    touched={touched}
+                  />
+                  <InputPersonalDataForm
+                    labelContent="Segundo apellido"
+                    nameField="segundoApellido"
+                    typeField="text"
+                    placeholderField="Ej: Pérez"
+                    errors={errors}
+                    touched={touched}
+                  />
                 </div>
-                {/* email y contraseña */}
-                <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2">
+                {/* email y contraseña y fecha de nacimiento */}
+                <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3">
+                  <InputPersonalDataForm
+                    labelContent="Fecha de nacimiento"
+                    nameField="fechaNacimiento"
+                    typeField="date"
+                    errors={errors}
+                    touched={touched}
+                  />
                   <InputPersonalDataForm
                     labelContent="Email"
                     nameField="email"
@@ -154,8 +162,8 @@ export const PersonalDataForm = ({
                     touched={touched}
                   />
                 </div>
-                {/* sexo y fecha de nacimiento */}
-                <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2">
+                {/* peso y altura y sexo */}
+                <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3">
                   <InputPersonalDataForm
                     labelContent="Sexo"
                     nameField="sexo"
@@ -168,29 +176,19 @@ export const PersonalDataForm = ({
                     ]}
                   />
                   <InputPersonalDataForm
-                    labelContent="Fecha de nacimiento"
-                    nameField="fechaNacimiento"
-                    typeField="date"
-                    errors={errors}
-                    touched={touched}
-                  />
-                </div>
-                {/* peso y altura */}
-                <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2">
-                  <InputPersonalDataForm
-                    labelContent="Altura"
+                    labelContent="Altura (m)"
                     nameField="altura"
-                    typeField="text"
-                    placeholderField="En centímetros"
+                    typeField="number"
+                    placeholderField="Ej: 1.75"
                     errors={errors}
                     touched={touched}
                     required={false}
                   />
                   <InputPersonalDataForm
-                    labelContent="Peso"
+                    labelContent="Peso (kg)"
                     nameField="peso"
-                    typeField="text"
-                    placeholderField="En gramos"
+                    typeField="number"
+                    placeholderField="Ej: 80"
                     errors={errors}
                     touched={touched}
                     required={false}

@@ -15,7 +15,6 @@ export const Header = ({ content }) => {
     "flex-col",
     "gap-4",
     "dark:bg-cyan-900",
-    "xl:rounded-b-none xl:rounded-r-xl xl:items-center xl:justify-center xl:h-full xl:w-1/2",
   ].join(" ");
   return (
     <header className={headerClasses}>

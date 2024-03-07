@@ -10,7 +10,7 @@ export const Input = ({
   onChangeFn,
   options = [],
   textColor = "text-neutral-700 dark:text-neutral-300",
-  textSize = "text-base",
+  textSize = "text-sm sm:text-base",
   width = "w-full",
   padding = "px-4 py-2",
   border = "border",

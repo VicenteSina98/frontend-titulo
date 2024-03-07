@@ -16,22 +16,26 @@ export const InputPersonalDataForm = ({
   options = [],
 }) => {
   const fieldClasses = [
-    "text-base",
-    "text-neutral-400",
+    "text-neutral-700 dark:text-neutral-300",
+    "text-sm sm:text-base",
     "w-full",
     "px-4 py-2",
     "border",
     "rounded-md",
-    "border-neutral-400",
+    "border-neutral-400 dark:border-neutral-600",
     "bg-transparent",
-    "focus:outline-none focus:border-2 focus:border-teal-700",
+    "focus:outline-none focus:border-teal-700 dark:focus:border-teal-600",
   ].join(" ");
   const optionClasses = [
-    "text-base",
-    "text-black",
-    "px-2 py-1",
-    "bg-neutral-100",
-    'dark:text-white dark:bg-neutral-700'
+    "text-neutral-700 dark:text-neutral-300",
+    "text-sm sm:text-base",
+    "w-full",
+    "px-4 py-2",
+    "border",
+    "rounded-md",
+    "border-neutral-400 dark:border-neutral-600",
+    "bg-transparent",
+    "focus:outline-none focus:border-teal-700 dark:focus:border-teal-600",
   ].join(" ");
   return (
     <div className="flex flex-col gap-1">

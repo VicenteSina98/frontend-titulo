@@ -17,7 +17,7 @@ export const Subtitle = ({
     dark,
     responsive,
   ].join(" ");
-  return <h1 className={classes}>{content}</h1>;
+  return <h2 className={classes}>{content}</h2>;
 };
 
 Subtitle.propTypes = {

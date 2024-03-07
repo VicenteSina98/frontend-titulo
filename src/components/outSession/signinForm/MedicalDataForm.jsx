@@ -7,7 +7,7 @@ import { register } from "../../../helpers/auth";
 import { SIGNIN_OPTIONS } from "../../../helpers/constants";
 import useQuoter from "../../../hooks/useQuoter";
 // componentes
-import { FormContainer, FieldContainer } from "../outSessionBase";
+import { FieldContainer } from "../outSessionBase";
 import { Subtitle, Label } from "../../UI/base";
 import { PrimaryButton, SecondaryButton } from "../../UI/buttons";
 import { BlockNotification } from "../../UI/notifications";
@@ -18,9 +18,9 @@ export const MedicalDataForm = ({
   password,
   sessionError,
   accountCreated,
-  setInformacionPersonal,
-  setPassword,
-  setAntecedentesMedicos,
+  // setInformacionPersonal,
+  // setPassword,
+  // setAntecedentesMedicos,
   setSessionError,
   setNextSection,
   setAccountCreated,
@@ -49,13 +49,12 @@ export const MedicalDataForm = ({
     setHistorialEnfermedadesInfecciosas,
   ] = useState([]);
   const [historialHabitosSalud, setHistorialHabitosSalud] = useState([]);
-  const cleanStates = async () => {
-    setInformacionPersonal({});
-    setPassword("");
-    setNextSection(false);
-    setAccountCreated(true);
-    setSessionError({});
-  };
+  // const cleanStates = async () => {
+  //   setInformacionPersonal({});
+  //   setPassword("");
+  //   setAccountCreated(true);
+  //   setSessionError({});
+  // };
   const valueRenderer = (value) => {
     if (!value.length) return "Seleccione";
     return value.map(({ label, value }) => (
@@ -77,17 +76,16 @@ export const MedicalDataForm = ({
       historialEnfermedadesInfecciosas: getValues(enfermedadesCronicas),
       historialHabitosSalud: getValues(enfermedadesCronicas),
     };
-    setAntecedentesMedicos(data);
     const { error } = await register({
       informacionPersonal: { ...informacionPersonal, password },
       antecedentesMedicos: data,
     });
-    if (!error) {
-      await cleanStates();
+    if (error?.mail?.length > 0 || error?.password?.length > 0) {
+      setSessionError(error);
+      console.log(error);
       return;
     }
-    setSessionError(error);
-    console.log(error);
+    setAccountCreated(true);
   };
   const handleNewField = (value) => {
     return {
@@ -105,8 +103,9 @@ export const MedicalDataForm = ({
   }, [setIsDark]);
 
   return (
-    <FormContainer>
+    <div className="flex w-full flex-col items-center justify-center gap-4 p-0 xl:px-16">
       <Subtitle content="Información Médica" textWeight="font-bold" />
+      {/* NOTIFICACIONES */}
       <div
         className={`flex w-full flex-col items-center justify-center gap-2 ${
           sessionError?.email?.length === 0 &&
@@ -137,145 +136,147 @@ export const MedicalDataForm = ({
           />
         ) : null}
       </div>
-      <form onSubmit={handleSubmit} className="flex w-full flex-col gap-6">
-        <div className="flex flex-col gap-4">
-          {/* enfermedades cronicas */}
-          <FieldContainer>
-            <Label
-              forInput="enfermedadesCronicas"
-              content="Enfermedades crónicas"
-              required={false}
-            />
-            <MultiSelect
-              options={SIGNIN_OPTIONS.enfermedadesCronicas}
-              value={enfermedadesCronicas}
-              onChange={setEnfermedadesCronicas}
-              isCreatable={true}
-              onCreateOption={handleNewField}
-              valueRenderer={valueRenderer}
-              className={isDark ? "dark" : ""}
-              overrideStrings={strings}
-            />
-          </FieldContainer>
-          {/* historial alergias */}
-          <FieldContainer>
-            <Label
-              forInput="historialAlergias"
-              content="Historial de alergias"
-              required={false}
-            />
-            <MultiSelect
-              options={SIGNIN_OPTIONS.historialAlergias}
-              value={historialAlergias}
-              onChange={setHistorialAlergias}
-              isCreatable={true}
-              onCreateOption={handleNewField}
-              valueRenderer={valueRenderer}
-              className={isDark ? "dark" : ""}
-              overrideStrings={strings}
-            />
-          </FieldContainer>
-          {/* historial cirugias */}
-          <FieldContainer>
-            <Label
-              forInput="historialCirugias"
-              content="Historial de cirugías"
-              required={false}
-            />
-            <MultiSelect
-              options={SIGNIN_OPTIONS.historialCirugias}
-              value={historialCirugias}
-              onChange={setHistorialCirugias}
-              isCreatable={true}
-              onCreateOption={handleNewField}
-              valueRenderer={valueRenderer}
-              className={isDark ? "dark" : ""}
-              overrideStrings={strings}
-            />
-          </FieldContainer>
-          {/* historial medicamentos */}
-          <FieldContainer>
-            <Label
-              forInput="historialMedicamentos"
-              content="Historial de uso de medicamentos"
-              required={false}
-            />
-            <MultiSelect
-              options={SIGNIN_OPTIONS.historialMedicamentos}
-              value={historialMedicamentos}
-              onChange={setHistorialMedicamentos}
-              isCreatable={true}
-              onCreateOption={handleNewField}
-              valueRenderer={valueRenderer}
-              className={isDark ? "dark" : ""}
-              overrideStrings={strings}
-            />
-          </FieldContainer>
-          {/* historial enfermedades familia */}
-          <FieldContainer>
-            <Label
-              forInput="historialEnfermedadesFamilia"
-              content="Historial de enfermedades en la familia"
-              required={false}
-            />
-            <MultiSelect
-              options={SIGNIN_OPTIONS.historialEnfermedadesFamilia}
-              value={historialEnfermedadesFamilia}
-              onChange={setHistorialEnfermedadesFamilia}
-              isCreatable={true}
-              onCreateOption={handleNewField}
-              valueRenderer={valueRenderer}
-              className={isDark ? "dark" : ""}
-              overrideStrings={strings}
-            />
-          </FieldContainer>
-          {/* historial enfermedades infecciosas */}
-          <FieldContainer>
-            <Label
-              forInput="historialEnfermedadesInfecciosas"
-              content="Historial de enfermedades infecciosas"
-              required={false}
-            />
-            <MultiSelect
-              options={SIGNIN_OPTIONS.historialEnfermedadesInfecciosas}
-              value={historialEnfermedadesInfecciosas}
-              onChange={setHistorialEnfermedadesInfecciosas}
-              isCreatable={true}
-              onCreateOption={handleNewField}
-              valueRenderer={valueRenderer}
-              className={isDark ? "dark" : ""}
-              overrideStrings={strings}
-            />
-          </FieldContainer>
-          {/* historial habitos salud */}
-          <FieldContainer>
-            <Label
-              forInput="historialHabitosSalud"
-              content="Historial de hábitos de salud"
-              required={false}
-            />
-            <MultiSelect
-              options={SIGNIN_OPTIONS.historialHabitosSalud}
-              value={historialHabitosSalud}
-              onChange={setHistorialHabitosSalud}
-              isCreatable={true}
-              onCreateOption={handleNewField}
-              valueRenderer={valueRenderer}
-              className={isDark ? "dark" : ""}
-              overrideStrings={strings}
-            />
-          </FieldContainer>
-        </div>
+      <form
+        onSubmit={handleSubmit}
+        className="flex w-full flex-col justify-start gap-4 lg:px-24"
+      >
+        {/* enfermedades cronicas */}
+        <FieldContainer>
+          <Label
+            forInput="enfermedadesCronicas"
+            content="Enfermedades crónicas"
+            required={false}
+          />
+          <MultiSelect
+            options={SIGNIN_OPTIONS.enfermedadesCronicas}
+            value={enfermedadesCronicas}
+            onChange={setEnfermedadesCronicas}
+            isCreatable={true}
+            onCreateOption={handleNewField}
+            valueRenderer={valueRenderer}
+            className={isDark ? "dark" : ""}
+            overrideStrings={strings}
+          />
+        </FieldContainer>
+        {/* historial alergias */}
+        <FieldContainer>
+          <Label
+            forInput="historialAlergias"
+            content="Historial de alergias"
+            required={false}
+          />
+          <MultiSelect
+            options={SIGNIN_OPTIONS.historialAlergias}
+            value={historialAlergias}
+            onChange={setHistorialAlergias}
+            isCreatable={true}
+            onCreateOption={handleNewField}
+            valueRenderer={valueRenderer}
+            className={isDark ? "dark" : ""}
+            overrideStrings={strings}
+          />
+        </FieldContainer>
+        {/* historial cirugias */}
+        <FieldContainer>
+          <Label
+            forInput="historialCirugias"
+            content="Historial de cirugías"
+            required={false}
+          />
+          <MultiSelect
+            options={SIGNIN_OPTIONS.historialCirugias}
+            value={historialCirugias}
+            onChange={setHistorialCirugias}
+            isCreatable={true}
+            onCreateOption={handleNewField}
+            valueRenderer={valueRenderer}
+            className={isDark ? "dark" : ""}
+            overrideStrings={strings}
+          />
+        </FieldContainer>
+        {/* historial medicamentos */}
+        <FieldContainer>
+          <Label
+            forInput="historialMedicamentos"
+            content="Historial de uso de medicamentos"
+            required={false}
+          />
+          <MultiSelect
+            options={SIGNIN_OPTIONS.historialMedicamentos}
+            value={historialMedicamentos}
+            onChange={setHistorialMedicamentos}
+            isCreatable={true}
+            onCreateOption={handleNewField}
+            valueRenderer={valueRenderer}
+            className={isDark ? "dark" : ""}
+            overrideStrings={strings}
+          />
+        </FieldContainer>
+        {/* historial enfermedades familia */}
+        <FieldContainer>
+          <Label
+            forInput="historialEnfermedadesFamilia"
+            content="Historial de enfermedades en la familia"
+            required={false}
+          />
+          <MultiSelect
+            options={SIGNIN_OPTIONS.historialEnfermedadesFamilia}
+            value={historialEnfermedadesFamilia}
+            onChange={setHistorialEnfermedadesFamilia}
+            isCreatable={true}
+            onCreateOption={handleNewField}
+            valueRenderer={valueRenderer}
+            className={isDark ? "dark" : ""}
+            overrideStrings={strings}
+          />
+        </FieldContainer>
+        {/* historial enfermedades infecciosas */}
+        <FieldContainer>
+          <Label
+            forInput="historialEnfermedadesInfecciosas"
+            content="Historial de enfermedades infecciosas"
+            required={false}
+          />
+          <MultiSelect
+            options={SIGNIN_OPTIONS.historialEnfermedadesInfecciosas}
+            value={historialEnfermedadesInfecciosas}
+            onChange={setHistorialEnfermedadesInfecciosas}
+            isCreatable={true}
+            onCreateOption={handleNewField}
+            valueRenderer={valueRenderer}
+            className={isDark ? "dark" : ""}
+            overrideStrings={strings}
+          />
+        </FieldContainer>
+        {/* historial habitos salud */}
+        <FieldContainer>
+          <Label
+            forInput="historialHabitosSalud"
+            content="Historial de hábitos de salud"
+            required={false}
+          />
+          <MultiSelect
+            options={SIGNIN_OPTIONS.historialHabitosSalud}
+            value={historialHabitosSalud}
+            onChange={setHistorialHabitosSalud}
+            isCreatable={true}
+            onCreateOption={handleNewField}
+            valueRenderer={valueRenderer}
+            className={isDark ? "dark" : ""}
+            overrideStrings={strings}
+          />
+        </FieldContainer>
         <div className="flex w-full flex-col gap-4 lg:flex-row-reverse">
-          <PrimaryButton valueButton="Crear mi cuenta" width="w-full lg:w-3/4" />
+          <PrimaryButton valueButton="Crear mi cuenta" width="w-full" />
           <SecondaryButton
             valueButton="Volver atrás"
             onClickFn={setNextSection}
-            onClickParams={[false]} width="w-full lg:w-1/4"
+            onClickParams={[false]}
+            width="w-full"
           />
         </div>
       </form>
-    </FormContainer>
+    </div>
   );
 };
 

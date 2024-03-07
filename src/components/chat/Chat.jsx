@@ -417,6 +417,10 @@ const Chat = () => {
               <SecondaryButton
                 valueButton="Cancelar chat"
                 onClickFn={cancelPrediction}
+                textColor="text-red-700"
+                borderColor="border-red-700"
+                hover="hover:cursor-pointer hover:text-white hover:bg-red-700 hover:border-red-700"
+                dark="dark:text-red-200 dark:border-red-200 dark:hover:text-white dark:hover:bg-red-700 dark:hover:border-red-700"
               />
             </div>
             {/* guardar prediccion, continuar y nuevo chat */}
@@ -448,7 +452,7 @@ const Chat = () => {
                 width="w-1/2"
               />
               <PrimaryButton
-                valueButton="Guardar predicción"
+                valueButton="Guardar chat"
                 onClickFn={setSavePrediction}
                 onClickParams={[!savePrediction]}
                 hidden={!ok || error || saved ? "hidden" : ""}
@@ -498,6 +502,10 @@ const Chat = () => {
             <SecondaryButton
               valueButton="Cancelar chat"
               onClickFn={cancelPrediction}
+              textColor="text-red-700"
+              borderColor="border-red-700"
+              hover="hover:cursor-pointer hover:text-white hover:bg-red-700 hover:border-red-700"
+              dark="dark:text-red-200 dark:border-red-200 dark:hover:text-white dark:hover:bg-red-700 dark:hover:border-red-700"
             />
             <PrimaryButton
               valueButton="Siguiente pregunta"
@@ -538,9 +546,9 @@ const Chat = () => {
                 <TertiaryButton
                   valueButton="Cancelar chat"
                   onClickFn={cancelPrediction}
-                  textColor="text-red-700"
-                  hover="hover:cursor-pointer hover:bg-red-200 dark:hover:text-red-700 dark:hover:bg-red-200"
-                  dark="dark:text-red-200"
+                  textColor="text-red-500"
+                  hover="hover:cursor-pointer hover:text-red-700 hover:font-bold dark:hover:text-red-200"
+                  dark="dark:text-red-400"
                 />
                 <SecondaryButton
                   valueButton="Finalizar y guardar chat"
@@ -555,8 +563,8 @@ const Chat = () => {
                 onClickFn={cancelPrediction}
                 width="w-1/2"
                 textColor="text-red-700"
-                hover="hover:cursor-pointer hover:bg-red-200 dark:hover:text-red-700 dark:hover:bg-red-200"
-                dark="dark:text-red-200"
+                hover="hover:cursor-pointer hover:text-red-500 hover:font-bold dark:hover:text-red-200"
+                dark="dark:text-red-400"
               />
               <PrimaryButton
                 valueButton="Enviar mensaje"

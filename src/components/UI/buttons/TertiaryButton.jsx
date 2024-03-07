@@ -16,8 +16,8 @@ export const TertiaryButton = ({
   borderColor = "",
   backgroundColor = "bg-transparent",
   transition = "transition",
-  hover = "hover:cursor-pointer hover:text-neutral-300 hover:bg-neutral-2 00 hover:text-neutral- dark:hover:bg-neutral-700",
-  dark = "dark:text-neutral-300",
+  hover = "hover:cursor-pointer hover:text-neutral-700 hover:font-bold dark:hover:text-neutral-200",
+  dark = "dark:text-neutral-400",
 }) => {
   const classes = [
     textSize,

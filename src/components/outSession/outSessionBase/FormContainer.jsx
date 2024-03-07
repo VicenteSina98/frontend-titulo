@@ -3,14 +3,13 @@ import PropTypes from "prop-types";
 export const FormContainer = ({ children }) => {
   const classes = [
     "w-full",
-    "px-8 py-4",
+    "p-0",
     "flex",
     "flex-col",
-    "gap-6",
+    "gap-4",
     "justify-center",
     "items-center",
-    "xl:px-7",
-    "2xl:px-24",
+    "xl:px-16",
   ].join(" ");
   return <div className={classes}>{children}</div>;
 };

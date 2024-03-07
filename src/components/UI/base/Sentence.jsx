@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 export const Sentence = ({
   content,
   textAlign = "text-center",
-  textSize = "text-base",
+  textSize = "text-sm sm:text-base",
   textWeight = "font-normal",
   dark = "dark:text-white",
 }) => {

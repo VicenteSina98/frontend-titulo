@@ -39,7 +39,7 @@ export const Signin = () => {
   return (
     <MainContainer>
       <Header content="Regístrate y utiliza la aplicación" />
-      <section className="h-full w-full overflow-auto px-8 py-4 xl:flex xl:flex-col xl:items-center xl:justify-center">
+      <section className="w-full overflow-y-auto px-8 py-4 flex flex-col items-center justify-start gap-3">
         {nextSection ? (
           <MedicalDataForm
             informacionPersonal={informacionPersonal}

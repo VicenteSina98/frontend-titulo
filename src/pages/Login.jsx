@@ -55,7 +55,7 @@ export const Login = () => {
             Facilita la toma de decisiones informada y la atención médica
             eficiente"
       />
-      <section className="h-full w-full overflow-auto px-16 lg:w-7/12 xl:flex xl:w-6/12 xl:flex-col xl:items-center xl:justify-center xl:px-20">
+      <section className="h-full w-full overflow-y-auto px-16 lg:w-7/12 xl:flex xl:w-6/12 xl:flex-col xl:items-center xl:justify-center xl:px-20">
         <FormContainer>
           <Subtitle
             content="Inicia sesión  y utiliza la aplicación"

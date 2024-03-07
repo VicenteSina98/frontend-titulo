@@ -6,14 +6,14 @@ export const MainContainer = ({ children }) => {
     "h-full",
     "w-full",
     "p-0",
-    "overflow-hidden",
+    "overflow-y-auto",
     "flex",
     "flex-col",
     "items-center",
     "justify-start",
-    "gap-4",
+    "gap-4 sm:gap-1",
     "dark:bg-neutral-800",
-    "sm:rounded-xl sm:shadow-lg xl:flex-row xl:justify-center",
+    "sm:rounded-xl sm:shadow-lg",
   ].join(" ");
   return <div className={classes}>{children}</div>;
 };
